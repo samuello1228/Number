@@ -14,5 +14,7 @@ int main()
 	PositiveInteger* x = new PositiveInteger(1);
 	x->printBinary();
 	
+	
+	
 	return 0;
 }
