@@ -7,10 +7,12 @@
 //
 
 #include <iostream>
+#include "PositiveInteger.hpp"
 using namespace std;
-
 int main()
 {
-	cout << "Hello, World!\n";
+	PositiveInteger* x = new PositiveInteger(1);
+	x->printBinary();
+	
 	return 0;
 }
