@@ -108,21 +108,59 @@ PositiveInteger::PositiveInteger(unsigned int x)
 		leftEnd->setRight(rightEnd);
 		numberOfDigit = nullptr;
 	}
-	else
+	else if(x>=3)
 	{
 		setIsOne(false);
 		setIsTwo(false);
+		
+		int count=1;
+		rightEnd = new Bit;
+		rightEnd->setDigit(x%2);
+		x = (x - rightEnd->getDigit())/2;
+		
+		Bit* digit1 = rightEnd;
+		Bit* digit2;
+		while(x>=1)
+		{
+			count++;
+			digit2 = new Bit;
+			digit2->setDigit(x%2);
+			digit1->setLeft(digit2);
+			digit2->setRight(digit1);
+			x = (x - digit2->getDigit())/2;
+			digit1 = digit2;
+		}
+		leftEnd = digit1;
+		
+		numberOfDigit = new PositiveInteger(count);
 	}
 }
 
 void PositiveInteger::printBinary()
 {
-	Bit* digit1 = leftEnd;
-	cout<<digit1->getDigit();
-	while(!digit1->isRightEnd())
+	PositiveInteger* x = this;
+	Bit* digit;
+	while(!x->getIsOne() && !x->getIsTwo())
 	{
-		digit1 = digit1->getRight();
-		cout<<digit1->getDigit();
+		digit = x->getLeftEnd();
+		cout<<digit->getDigit();
+		while(!digit->isRightEnd())
+		{
+			digit = digit->getRight();
+			cout<<digit->getDigit();
+		}
+		cout<<" - ";
+		
+		x = x->getNumberOfDigit();
 	}
-	cout<<endl;
+	
+	if(x->getIsOne())
+	{
+		cout<<"1"<<endl;
+	}
+	else if(x->getIsTwo())
+	{
+		cout<<"10"<<endl;
+	}
+	
 }
