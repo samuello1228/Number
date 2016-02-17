@@ -35,7 +35,7 @@ PositiveInteger::~PositiveInteger()
 
 	if(numberOfDigit != nullptr)
 	{
-		delete numberOfDigit;
+		//delete numberOfDigit;
 	}
 }
 
@@ -90,12 +90,15 @@ PositiveInteger::PositiveInteger(unsigned int x)
 	if(x==1)
 	{
 		setIsOne(true);
+		setIsTwo(false);
 		rightEnd = new Bit;
 		rightEnd->setDigit(1);
 		leftEnd = rightEnd;
+		numberOfDigit = nullptr;
 	}
 	else if(x==2)
 	{
+		setIsOne(false);
 		setIsTwo(true);
 		rightEnd = new Bit;
 		leftEnd = new Bit;
@@ -103,10 +106,12 @@ PositiveInteger::PositiveInteger(unsigned int x)
 		leftEnd->setDigit(1);
 		rightEnd->setLeft(leftEnd);
 		leftEnd->setRight(rightEnd);
+		numberOfDigit = nullptr;
 	}
 	else
 	{
-		
+		setIsOne(false);
+		setIsTwo(false);
 	}
 }
 

@@ -13,7 +13,7 @@ int main()
 {
 	PositiveInteger* x = new PositiveInteger(2);
 	x->printBinary();
-	
+	delete x;
 	
 	return 0;
 }

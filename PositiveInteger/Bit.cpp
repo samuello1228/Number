@@ -17,14 +17,6 @@ Bit::Bit()
 
 Bit::~Bit()
 {
-	if(left!=nullptr)
-	{
-		delete left;
-	}
-	if(right!=nullptr)
-	{
-		delete right;
-	}
 }
 
 bool Bit::getDigit()
