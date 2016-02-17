@@ -94,6 +94,20 @@ PositiveInteger::PositiveInteger(unsigned int x)
 		rightEnd->setDigit(1);
 		leftEnd = rightEnd;
 	}
+	else if(x==2)
+	{
+		setIsTwo(true);
+		rightEnd = new Bit;
+		leftEnd = new Bit;
+		rightEnd->setDigit(0);
+		leftEnd->setDigit(1);
+		rightEnd->setLeft(leftEnd);
+		leftEnd->setRight(rightEnd);
+	}
+	else
+	{
+		
+	}
 }
 
 void PositiveInteger::printBinary()

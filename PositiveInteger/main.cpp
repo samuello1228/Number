@@ -11,9 +11,8 @@
 using namespace std;
 int main()
 {
-	PositiveInteger* x = new PositiveInteger(1);
+	PositiveInteger* x = new PositiveInteger(2);
 	x->printBinary();
-	
 	
 	
 	return 0;
