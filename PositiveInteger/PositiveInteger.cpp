@@ -20,9 +20,9 @@ PositiveInteger::PositiveInteger()
 
 PositiveInteger::~PositiveInteger()
 {
-	if(leftEnd != nullptr && rightEnd != nullptr)
+	if(getLeftEnd() != nullptr && getRightEnd() != nullptr)
 	{
-		Bit* digit1 = leftEnd;
+		Bit* digit1 = getLeftEnd();
 		Bit* digit2;
 		while(!digit1->isRightEnd())
 		{
@@ -33,9 +33,9 @@ PositiveInteger::~PositiveInteger()
 		delete digit1;
 	}
 
-	if(numberOfDigit != nullptr)
+	if(!getIsOne() && !getIsTwo())
 	{
-		//delete numberOfDigit;
+		delete numberOfDigit;
 	}
 }
 
@@ -93,8 +93,8 @@ PositiveInteger::PositiveInteger(unsigned int x)
 		setIsTwo(false);
 		rightEnd = new Bit;
 		rightEnd->setDigit(1);
-		leftEnd = rightEnd;
-		numberOfDigit = nullptr;
+		setLeftEnd(rightEnd);
+		setNumberOfDigit(this);
 	}
 	else if(x==2)
 	{
@@ -106,7 +106,7 @@ PositiveInteger::PositiveInteger(unsigned int x)
 		leftEnd->setDigit(1);
 		rightEnd->setLeft(leftEnd);
 		leftEnd->setRight(rightEnd);
-		numberOfDigit = nullptr;
+		setNumberOfDigit(this);
 	}
 	else if(x>=3)
 	{
@@ -118,7 +118,7 @@ PositiveInteger::PositiveInteger(unsigned int x)
 		rightEnd->setDigit(x%2);
 		x = (x - rightEnd->getDigit())/2;
 		
-		Bit* digit1 = rightEnd;
+		Bit* digit1 = getRightEnd();
 		Bit* digit2;
 		while(x>=1)
 		{
@@ -130,7 +130,7 @@ PositiveInteger::PositiveInteger(unsigned int x)
 			x = (x - digit2->getDigit())/2;
 			digit1 = digit2;
 		}
-		leftEnd = digit1;
+		setLeftEnd(digit1);
 		
 		numberOfDigit = new PositiveInteger(count);
 	}
