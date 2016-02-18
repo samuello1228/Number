@@ -32,8 +32,12 @@ public:
 	bool getIsTwo();
 	void setIsTwo(bool);
 	
+	static void One(PositiveInteger*);
+	static void Two(PositiveInteger*);
+	
 	void printBinary();
 	static int compare(PositiveInteger*,PositiveInteger*);
+	static PositiveInteger* Add(PositiveInteger*,PositiveInteger*);
 	
 private:
 	Bit* leftEnd;
@@ -43,6 +47,8 @@ private:
 	
 	bool isOne;
 	bool isTwo;
+	
+	static void AddThreeBit(bool,bool,bool,bool&,bool&);
 };
 
 #endif /* PositiveInteger_hpp */

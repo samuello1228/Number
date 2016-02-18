@@ -93,31 +93,41 @@ void PositiveInteger::setIsTwo(bool newIsTwo)
 	isTwo = newIsTwo;
 }
 
+void PositiveInteger::One(PositiveInteger* x)
+{
+	x->setIsOne(true);
+	x->setIsTwo(false);
+	x->rightEnd = new Bit;
+	x->rightEnd->setDigit(1);
+	x->setLeftEnd(x->getRightEnd());
+	x->setNumberOfDigit(nullptr);
+	x->setNumberOfDigitParent(nullptr);
+}
+
+void PositiveInteger::Two(PositiveInteger* x)
+{
+	x->setIsOne(false);
+	x->setIsTwo(true);
+	x->rightEnd = new Bit;
+	x->leftEnd = new Bit;
+	x->rightEnd->setDigit(0);
+	x->leftEnd->setDigit(1);
+	x->rightEnd->setLeft(x->getLeftEnd());
+	x->leftEnd->setRight(x->getRightEnd());
+	x->setNumberOfDigit(nullptr);
+	x->setNumberOfDigitParent(nullptr);
+}
 
 PositiveInteger::PositiveInteger(unsigned int x)
 {
 	if(x==1)
 	{
-		setIsOne(true);
-		setIsTwo(false);
-		rightEnd = new Bit;
-		rightEnd->setDigit(1);
-		setLeftEnd(rightEnd);
-		setNumberOfDigit(nullptr);
-		setNumberOfDigitParent(nullptr);
+		PositiveInteger::One(this);
 	}
 	else if(x==2)
 	{
-		setIsOne(false);
-		setIsTwo(true);
-		rightEnd = new Bit;
-		leftEnd = new Bit;
-		rightEnd->setDigit(0);
-		leftEnd->setDigit(1);
-		rightEnd->setLeft(leftEnd);
-		leftEnd->setRight(rightEnd);
-		setNumberOfDigit(nullptr);
-		setNumberOfDigitParent(nullptr);
+		PositiveInteger::Two(this);
+
 	}
 	else if(x>=3)
 	{
@@ -232,11 +242,11 @@ int PositiveInteger::compare(PositiveInteger* x1, PositiveInteger* x2)
 		{
 			digit1 = digit1->getRight();
 			digit2 = digit2->getRight();
-			if(digit1->getDigit()==0 && digit2->getDigit()==1)
+			if(!digit1->getDigit() && digit2->getDigit())
 			{
 				return -1;
 			}
-			if(digit1->getDigit()==1 && digit2->getDigit()==0)
+			if(digit1->getDigit() && !digit2->getDigit())
 			{
 				return 1;
 			}
@@ -247,4 +257,93 @@ int PositiveInteger::compare(PositiveInteger* x1, PositiveInteger* x2)
 	
 	
 	return 0;
+}
+
+void PositiveInteger::AddThreeBit(bool x1, bool x2, bool x3, bool &y1, bool &y2)
+{
+	if(!x1)
+	{
+		if(!x2)
+		{
+			if(!x3)
+			{
+				//000
+				y1=0;
+				y2=0;
+			}
+			else
+			{
+				//001
+				y1=0;
+				y2=1;
+			}
+		}
+		else
+		{
+			if(!x3)
+			{
+				//010
+				y1=0;
+				y2=1;
+			}
+			else
+			{
+				//011
+				y1=1;
+				y2=0;
+			}
+		}
+	}
+	else
+	{
+		if(!x2)
+		{
+			if(!x3)
+			{
+				//100
+				y1=0;
+				y2=1;
+			}
+			else
+			{
+				//101
+				y1=1;
+				y2=0;
+			}
+		}
+		else
+		{
+			if(!x3)
+			{
+				//110
+				y1=1;
+				y2=0;
+			}
+			else
+			{
+				//111
+				y1=1;
+				y2=1;
+			}
+		}
+	}
+}
+
+PositiveInteger* PositiveInteger::Add(PositiveInteger* x1,PositiveInteger* x2)
+{
+	PositiveInteger* y;
+	if(x1->isOne && x2->isOne)
+	{
+		y = new PositiveInteger;
+		PositiveInteger::Two(y);
+		return y;
+	}
+	/*
+	bool carry;
+	Bit* digit1=x1->getRightEnd();
+	Bit* digit2=x2->getRightEnd();
+	
+	while(!digit1->isLeftEnd() && !digit1->isLeftEnd())
+	*/
+	return y;
 }
