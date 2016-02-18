@@ -14,6 +14,7 @@ PositiveInteger::PositiveInteger()
 	leftEnd = nullptr;
 	rightEnd = nullptr;
 	numberOfDigit = nullptr;
+	numberOfDigitParent = nullptr;
 	isOne=false;
 	isTwo=false;
 }
@@ -65,6 +66,14 @@ void PositiveInteger::setNumberOfDigit(PositiveInteger* newNumberOfDigit)
 {
 	numberOfDigit = newNumberOfDigit;
 }
+PositiveInteger* PositiveInteger::getNumberOfDigitParent()
+{
+	return numberOfDigitParent;
+}
+void PositiveInteger::setNumberOfDigitParent(PositiveInteger* newNumberOfDigitParent)
+{
+	numberOfDigitParent = newNumberOfDigitParent;
+}
 
 bool PositiveInteger::getIsOne()
 {
@@ -94,7 +103,8 @@ PositiveInteger::PositiveInteger(unsigned int x)
 		rightEnd = new Bit;
 		rightEnd->setDigit(1);
 		setLeftEnd(rightEnd);
-		setNumberOfDigit(this);
+		setNumberOfDigit(nullptr);
+		setNumberOfDigitParent(nullptr);
 	}
 	else if(x==2)
 	{
@@ -106,7 +116,8 @@ PositiveInteger::PositiveInteger(unsigned int x)
 		leftEnd->setDigit(1);
 		rightEnd->setLeft(leftEnd);
 		leftEnd->setRight(rightEnd);
-		setNumberOfDigit(this);
+		setNumberOfDigit(nullptr);
+		setNumberOfDigitParent(nullptr);
 	}
 	else if(x>=3)
 	{
@@ -133,6 +144,7 @@ PositiveInteger::PositiveInteger(unsigned int x)
 		setLeftEnd(digit1);
 		
 		numberOfDigit = new PositiveInteger(count);
+		numberOfDigit->setNumberOfDigitParent(this);
 	}
 }
 
@@ -163,4 +175,76 @@ void PositiveInteger::printBinary()
 		cout<<"10"<<endl;
 	}
 	
+}
+
+int PositiveInteger::compare(PositiveInteger* x1, PositiveInteger* x2)
+{
+	/*
+	1: x1>x2
+	0: x1=x2
+	-1: x1<x2
+	*/
+	
+	PositiveInteger* n1 = x1;
+	PositiveInteger* n2 = x2;
+	while( !n1->getIsOne() && !n1->getIsTwo() && !n2->getIsOne() && !n2->getIsTwo())
+	{
+		n1 = n1->getNumberOfDigit();
+		n2 = n2->getNumberOfDigit();
+	}
+	
+	if( (n1->getIsOne() || n1->getIsTwo()) && (!n2->getIsOne() && !n2->getIsTwo()) )
+	{
+		return -1;
+	}
+	
+	if( (!n1->getIsOne() && !n1->getIsTwo()) && (n2->getIsOne() || n2->getIsTwo()) )
+	{
+		return 1;
+	}
+
+	//(n1->getIsOne() || n1->getIsTwo()) && (n2->getIsOne() || n2->getIsTwo())
+	if(n1->getIsOne() && n2->getIsOne())
+	{
+		return 0;
+	}
+	if(n1->getIsOne() && n2->getIsTwo())
+	{
+		return -1;
+	}
+	if(n1->getIsTwo() && n2->getIsOne())
+	{
+		return 1;
+	}
+	
+	// n1->getIsTwo() && n2->getIsTwo()
+	Bit* digit1;
+	Bit* digit2;
+	
+	n1 = n1->getNumberOfDigitParent();
+	n2 = n2->getNumberOfDigitParent();
+	while(n1!=nullptr && n2!=nullptr)
+	{
+		digit1 = n1->getLeftEnd();
+		digit2 = n2->getLeftEnd();
+		//the digit at the left end must be 1, no need to check
+		while(!digit1->isRightEnd() && !digit2->isRightEnd())
+		{
+			digit1 = digit1->getRight();
+			digit2 = digit2->getRight();
+			if(digit1->getDigit()==0 && digit2->getDigit()==1)
+			{
+				return -1;
+			}
+			if(digit1->getDigit()==1 && digit2->getDigit()==0)
+			{
+				return 1;
+			}
+		}
+		n1 = n1->getNumberOfDigitParent();
+		n2 = n2->getNumberOfDigitParent();
+	}
+	
+	
+	return 0;
 }

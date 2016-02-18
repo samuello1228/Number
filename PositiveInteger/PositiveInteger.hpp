@@ -24,17 +24,23 @@ public:
 	void setRightEnd(Bit*);
 	PositiveInteger* getNumberOfDigit();
 	void setNumberOfDigit(PositiveInteger*);
+	PositiveInteger* getNumberOfDigitParent();
+	void setNumberOfDigitParent(PositiveInteger*);
+	
 	bool getIsOne();
 	void setIsOne(bool);
 	bool getIsTwo();
 	void setIsTwo(bool);
 	
 	void printBinary();
+	static int compare(PositiveInteger*,PositiveInteger*);
 	
 private:
 	Bit* leftEnd;
 	Bit* rightEnd;
 	PositiveInteger* numberOfDigit;
+	PositiveInteger* numberOfDigitParent;
+	
 	bool isOne;
 	bool isTwo;
 };
