@@ -167,6 +167,17 @@ void PositiveInteger::printBinary()
 {
 	PositiveInteger* x = this;
 	Bit* digit;
+	///*
+	digit = x->getLeftEnd();
+	cout<<digit->getDigit();
+	while(!digit->isRightEnd())
+	{
+		digit = digit->getRight();
+		cout<<digit->getDigit();
+	}
+	cout<<endl;
+	//*/
+	/*
 	while(!x->isOneOrTwo())
 	{
 		digit = x->getLeftEnd();
@@ -189,6 +200,7 @@ void PositiveInteger::printBinary()
 	{
 		cout<<"10"<<endl;
 	}
+	*/
 }
 
 int PositiveInteger::compare(PositiveInteger* x1, PositiveInteger* x2)
@@ -333,20 +345,29 @@ void PositiveInteger::AddThreeBit(bool x1, bool x2, bool x3, bool &y1, bool &y2)
 
 PositiveInteger* PositiveInteger::Add(PositiveInteger* x1,PositiveInteger* x2)
 {
-	PositiveInteger* y;
 	PositiveInteger* temp;
+	Bit* temp2=nullptr;
+	Bit* temp3=nullptr;
+	if(PositiveInteger::compare(x1,x2)==-1)
+	{
+		temp=x1;
+		x1=x2;
+		x2=temp;
+	}
+	
+	PositiveInteger* y;
 	if(x1->getIsOne() && x2->getIsOne())
 	{
 		y = new PositiveInteger;
 		PositiveInteger::Two(y);
 		return y;
 	}
-	if( (x1->getIsOne() && x2->getIsTwo()) || (x1->getIsTwo() && x2->getIsOne()) )
+	if(x1->getIsTwo() && x2->getIsOne())
 	{
 		y = new PositiveInteger;
 		y->setIsOne(false);
 		y->setIsTwo(false);
-		Bit* temp2 = new Bit;
+		temp2 = new Bit;
 		y->setLeftEnd(temp2);
 		temp2 = new Bit;
 		y->setRightEnd(temp2);
@@ -362,12 +383,56 @@ PositiveInteger* PositiveInteger::Add(PositiveInteger* x1,PositiveInteger* x2)
 		temp->setNumberOfDigitParent(y);
 	}
 	
-	/*
-	bool carry;
+	//
+	y = new PositiveInteger;
+	y->setIsOne(false);
+	y->setIsTwo(false);
+	
+	bool carry=0;
+	bool result1;
+	bool result2;
+	
 	Bit* digit1=x1->getRightEnd();
 	Bit* digit2=x2->getRightEnd();
+	PositiveInteger::AddThreeBit(digit1->getDigit(),digit2->getDigit(),carry,result1,result2);
+	temp2 = new Bit;
+	temp2->setDigit(result2);
+	y->setRightEnd(temp2);
+	carry=result1;
 	
-	while(!digit1->isLeftEnd() && !digit1->isLeftEnd())
-	*/
+	while(!digit2->isLeftEnd())
+	{
+		digit1 = digit1->getLeft();
+		digit2 = digit2->getLeft();
+		PositiveInteger::AddThreeBit(digit1->getDigit(),digit2->getDigit(),carry,result1,result2);
+		temp3 = new Bit;
+		temp3->setDigit(result2);
+		temp2->setLeft(temp3);
+		temp3->setRight(temp2);
+		carry=result1;
+		temp2=temp3;
+	}
+	
+	while(!digit1->isLeftEnd())
+	{
+		digit1 = digit1->getLeft();
+		PositiveInteger::AddThreeBit(digit1->getDigit(),0,carry,result1,result2);
+		temp3 = new Bit;
+		temp3->setDigit(result2);
+		temp2->setLeft(temp3);
+		temp3->setRight(temp2);
+		carry=result1;
+		temp2=temp3;
+	}
+	if(carry)
+	{
+		temp3 = new Bit;
+		temp3->setDigit(1);
+		temp2->setLeft(temp3);
+		temp3->setRight(temp2);
+		temp2=temp3;
+	}
+	y->setLeftEnd(temp2);
+	
 	return y;
 }
