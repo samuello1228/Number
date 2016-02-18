@@ -31,6 +31,7 @@ public:
 	void setIsOne(bool);
 	bool getIsTwo();
 	void setIsTwo(bool);
+	bool isOneOrTwo();
 	
 	static void One(PositiveInteger*);
 	static void Two(PositiveInteger*);

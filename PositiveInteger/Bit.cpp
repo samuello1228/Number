@@ -10,9 +10,9 @@
 
 Bit::Bit()
 {
-	digit=0;
-	left=nullptr;
-	right=nullptr;
+	setDigit(0);
+	setLeft(nullptr);
+	setRight(nullptr);
 }
 
 Bit::~Bit()

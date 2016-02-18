@@ -14,6 +14,7 @@ int main()
 	
 	PositiveInteger* x1;
 	PositiveInteger* x2;
+	PositiveInteger* x3;
 	/*
 	for(int i=1;i<=10;i++)
 	{
@@ -27,11 +28,16 @@ int main()
 		cout<<endl;
 	}
 	*/
-	x1 = new PositiveInteger(100);
-	x2 = new PositiveInteger(4);
+	x1 = new PositiveInteger(1);
 	x1->printBinary();
+	
+	x2 = PositiveInteger::Add(x1,x1);
 	x2->printBinary();
+	
+	x3 = PositiveInteger::Add(x1,x2);
+	x3->printBinary();
 	delete x1;
 	delete x2;
+	delete x3;
 	return 0;
 }

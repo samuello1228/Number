@@ -11,12 +11,12 @@
 using namespace std;
 PositiveInteger::PositiveInteger()
 {
-	leftEnd = nullptr;
-	rightEnd = nullptr;
-	numberOfDigit = nullptr;
-	numberOfDigitParent = nullptr;
-	isOne=false;
-	isTwo=false;
+	setLeftEnd(nullptr);
+	setRightEnd(nullptr);
+	setNumberOfDigit(nullptr);
+	setNumberOfDigitParent(nullptr);
+	setIsOne(false);
+	setIsTwo(false);
 }
 
 PositiveInteger::~PositiveInteger()
@@ -34,7 +34,7 @@ PositiveInteger::~PositiveInteger()
 		delete digit1;
 	}
 
-	if(!getIsOne() && !getIsTwo())
+	if(!isOneOrTwo())
 	{
 		delete numberOfDigit;
 	}
@@ -48,7 +48,6 @@ void PositiveInteger::setLeftEnd(Bit* newLeftEnd)
 {
 	leftEnd = newLeftEnd;
 }
-
 Bit* PositiveInteger::getRightEnd()
 {
 	return rightEnd;
@@ -57,7 +56,6 @@ void PositiveInteger::setRightEnd(Bit* newRightEnd)
 {
 	rightEnd = newRightEnd;
 }
-
 PositiveInteger* PositiveInteger::getNumberOfDigit()
 {
 	return numberOfDigit;
@@ -74,7 +72,6 @@ void PositiveInteger::setNumberOfDigitParent(PositiveInteger* newNumberOfDigitPa
 {
 	numberOfDigitParent = newNumberOfDigitParent;
 }
-
 bool PositiveInteger::getIsOne()
 {
 	return isOne;
@@ -83,7 +80,6 @@ void PositiveInteger::setIsOne(bool newIsOne)
 {
 	isOne = newIsOne;
 }
-
 bool PositiveInteger::getIsTwo()
 {
 	return isTwo;
@@ -92,28 +88,35 @@ void PositiveInteger::setIsTwo(bool newIsTwo)
 {
 	isTwo = newIsTwo;
 }
-
+bool PositiveInteger::isOneOrTwo()
+{
+	return getIsOne() || getIsTwo();
+}
 void PositiveInteger::One(PositiveInteger* x)
 {
 	x->setIsOne(true);
 	x->setIsTwo(false);
-	x->rightEnd = new Bit;
-	x->rightEnd->setDigit(1);
+	Bit* temp = new Bit;
+	x->setRightEnd(temp);
+	
+	x->getRightEnd()->setDigit(1);
 	x->setLeftEnd(x->getRightEnd());
 	x->setNumberOfDigit(nullptr);
 	x->setNumberOfDigitParent(nullptr);
 }
-
 void PositiveInteger::Two(PositiveInteger* x)
 {
 	x->setIsOne(false);
 	x->setIsTwo(true);
-	x->rightEnd = new Bit;
-	x->leftEnd = new Bit;
-	x->rightEnd->setDigit(0);
-	x->leftEnd->setDigit(1);
-	x->rightEnd->setLeft(x->getLeftEnd());
-	x->leftEnd->setRight(x->getRightEnd());
+	Bit* temp = new Bit;
+	x->setRightEnd(temp);
+	temp = new Bit;
+	x->setLeftEnd(temp);
+	
+	x->getRightEnd()->setDigit(0);
+	x->getLeftEnd()->setDigit(1);
+	x->getRightEnd()->setLeft(x->getLeftEnd());
+	x->getLeftEnd()->setRight(x->getRightEnd());
 	x->setNumberOfDigit(nullptr);
 	x->setNumberOfDigitParent(nullptr);
 }
@@ -135,9 +138,10 @@ PositiveInteger::PositiveInteger(unsigned int x)
 		setIsTwo(false);
 		
 		int count=1;
-		rightEnd = new Bit;
-		rightEnd->setDigit(x%2);
-		x = (x - rightEnd->getDigit())/2;
+		Bit* temp = new Bit;
+		setRightEnd(temp);
+		getRightEnd()->setDigit(x%2);
+		x = (x - getRightEnd()->getDigit())/2;
 		
 		Bit* digit1 = getRightEnd();
 		Bit* digit2;
@@ -153,8 +157,9 @@ PositiveInteger::PositiveInteger(unsigned int x)
 		}
 		setLeftEnd(digit1);
 		
-		numberOfDigit = new PositiveInteger(count);
-		numberOfDigit->setNumberOfDigitParent(this);
+		PositiveInteger* temp2 = new PositiveInteger(count);
+		setNumberOfDigit(temp2);
+		getNumberOfDigit()->setNumberOfDigitParent(this);
 	}
 }
 
@@ -162,7 +167,7 @@ void PositiveInteger::printBinary()
 {
 	PositiveInteger* x = this;
 	Bit* digit;
-	while(!x->getIsOne() && !x->getIsTwo())
+	while(!x->isOneOrTwo())
 	{
 		digit = x->getLeftEnd();
 		cout<<digit->getDigit();
@@ -184,7 +189,6 @@ void PositiveInteger::printBinary()
 	{
 		cout<<"10"<<endl;
 	}
-	
 }
 
 int PositiveInteger::compare(PositiveInteger* x1, PositiveInteger* x2)
@@ -197,23 +201,23 @@ int PositiveInteger::compare(PositiveInteger* x1, PositiveInteger* x2)
 	
 	PositiveInteger* n1 = x1;
 	PositiveInteger* n2 = x2;
-	while( !n1->getIsOne() && !n1->getIsTwo() && !n2->getIsOne() && !n2->getIsTwo())
+	while(!n1->isOneOrTwo() && !n2->isOneOrTwo())
 	{
 		n1 = n1->getNumberOfDigit();
 		n2 = n2->getNumberOfDigit();
 	}
 	
-	if( (n1->getIsOne() || n1->getIsTwo()) && (!n2->getIsOne() && !n2->getIsTwo()) )
+	if(n1->isOneOrTwo() && !n2->isOneOrTwo())
 	{
 		return -1;
 	}
 	
-	if( (!n1->getIsOne() && !n1->getIsTwo()) && (n2->getIsOne() || n2->getIsTwo()) )
+	if(!n1->isOneOrTwo() && n2->isOneOrTwo())
 	{
 		return 1;
 	}
 
-	//(n1->getIsOne() || n1->getIsTwo()) && (n2->getIsOne() || n2->getIsTwo())
+	// n1->isOneOrTwo() && n2->isOneOrTwo()
 	if(n1->getIsOne() && n2->getIsOne())
 	{
 		return 0;
@@ -254,8 +258,6 @@ int PositiveInteger::compare(PositiveInteger* x1, PositiveInteger* x2)
 		n1 = n1->getNumberOfDigitParent();
 		n2 = n2->getNumberOfDigitParent();
 	}
-	
-	
 	return 0;
 }
 
@@ -332,12 +334,34 @@ void PositiveInteger::AddThreeBit(bool x1, bool x2, bool x3, bool &y1, bool &y2)
 PositiveInteger* PositiveInteger::Add(PositiveInteger* x1,PositiveInteger* x2)
 {
 	PositiveInteger* y;
-	if(x1->isOne && x2->isOne)
+	PositiveInteger* temp;
+	if(x1->getIsOne() && x2->getIsOne())
 	{
 		y = new PositiveInteger;
 		PositiveInteger::Two(y);
 		return y;
 	}
+	if( (x1->getIsOne() && x2->getIsTwo()) || (x1->getIsTwo() && x2->getIsOne()) )
+	{
+		y = new PositiveInteger;
+		y->setIsOne(false);
+		y->setIsTwo(false);
+		Bit* temp2 = new Bit;
+		y->setLeftEnd(temp2);
+		temp2 = new Bit;
+		y->setRightEnd(temp2);
+		
+		y->getLeftEnd()->setDigit(1);
+		y->getRightEnd()->setDigit(1);
+		y->getLeftEnd()->setRight(y->getRightEnd());
+		y->getRightEnd()->setLeft(y->getLeftEnd());
+		
+		temp = new PositiveInteger;
+		PositiveInteger::Two(temp);
+		y->setNumberOfDigit(temp);
+		temp->setNumberOfDigitParent(y);
+	}
+	
 	/*
 	bool carry;
 	Bit* digit1=x1->getRightEnd();
