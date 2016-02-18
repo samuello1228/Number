@@ -138,13 +138,12 @@ PositiveInteger::PositiveInteger(unsigned int x)
 		setIsTwo(false);
 		
 		int count=1;
-		Bit* temp = new Bit;
-		setRightEnd(temp);
-		getRightEnd()->setDigit(x%2);
-		x = (x - getRightEnd()->getDigit())/2;
-		
-		Bit* digit1 = getRightEnd();
+		Bit* digit1 = new Bit;;
 		Bit* digit2;
+		digit1->setDigit(x%2);
+		setRightEnd(digit1);
+		x = (x - digit1->getDigit())/2;
+
 		while(x>=1)
 		{
 			count++;
@@ -167,7 +166,7 @@ void PositiveInteger::printBinary()
 {
 	PositiveInteger* x = this;
 	Bit* digit;
-	///*
+	/*
 	digit = x->getLeftEnd();
 	cout<<digit->getDigit();
 	while(!digit->isRightEnd())
@@ -176,8 +175,8 @@ void PositiveInteger::printBinary()
 		cout<<digit->getDigit();
 	}
 	cout<<endl;
-	//*/
-	/*
+	*/
+	///*
 	while(!x->isOneOrTwo())
 	{
 		digit = x->getLeftEnd();
@@ -200,7 +199,67 @@ void PositiveInteger::printBinary()
 	{
 		cout<<"10"<<endl;
 	}
-	*/
+	//*/
+}
+
+PositiveInteger* PositiveInteger::copy()
+{
+	PositiveInteger* a1 = this;
+	PositiveInteger* a2;
+	
+	PositiveInteger* x1 = new PositiveInteger;
+	PositiveInteger* x2;
+	PositiveInteger* y = x1;
+	Bit* temp;
+	Bit* digit1;
+	Bit* digit2;
+	
+	x1->setIsOne(a1->getIsOne());
+	x1->setIsTwo(a1->getIsTwo());
+	temp = a1->getRightEnd();
+	digit1 = new Bit;
+	digit1->setDigit(temp->getDigit());
+	x1->setRightEnd(digit1);
+	while(!temp->isLeftEnd())
+	{
+		temp = temp->getLeft();
+		digit2 = new Bit;
+		digit2->setDigit(temp->getDigit());
+		digit1->setLeft(digit2);
+		digit2->setRight(digit1);
+		digit1 = digit2;
+	}
+	x1->setLeftEnd(digit1);
+	
+	while(!a1->isOneOrTwo())
+	{
+		a2 = a1->getNumberOfDigit();
+		
+		x2 = new PositiveInteger;
+		x2->setIsOne(a2->getIsOne());
+		x2->setIsTwo(a2->getIsTwo());
+		temp = a2->getRightEnd();
+		digit1 = new Bit;
+		digit1->setDigit(temp->getDigit());
+		x2->setRightEnd(digit1);
+		while(!temp->isLeftEnd())
+		{
+			temp = temp->getLeft();
+			digit2 = new Bit;
+			digit2->setDigit(temp->getDigit());
+			digit1->setLeft(digit2);
+			digit2->setRight(digit1);
+			digit1 = digit2;
+		}
+		x2->setLeftEnd(digit1);
+		x1->setNumberOfDigit(x2);
+		x2->setNumberOfDigitParent(x1);
+		
+		a1=a2;
+		x1=x2;
+	}
+
+	return y;
 }
 
 int PositiveInteger::compare(PositiveInteger* x1, PositiveInteger* x2)
@@ -431,6 +490,12 @@ PositiveInteger* PositiveInteger::Add(PositiveInteger* x1,PositiveInteger* x2)
 		temp2->setLeft(temp3);
 		temp3->setRight(temp2);
 		temp2=temp3;
+		
+		
+	}
+	else
+	{
+		
 	}
 	y->setLeftEnd(temp2);
 	

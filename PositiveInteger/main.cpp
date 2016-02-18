@@ -15,14 +15,17 @@ int main()
 	PositiveInteger* x1;
 	PositiveInteger* x2;
 	PositiveInteger* x3;
-//	x1 = new PositiveInteger(3);
-//	x2 = new PositiveInteger(3);
-//	x3 = PositiveInteger::Add(x1, x2);
-//	x3->printBinary();
-	///*
 	for(int i=1;i<=10;i++)
 	{
-		for(int j=1;j<=10;j++)
+		x1 = new PositiveInteger(i);
+		x2 = x1->copy();
+		x1->printBinary();
+		x2->printBinary();
+	}
+	/*
+	for(int i=1;i<=5;i++)
+	{
+		for(int j=1;j<=5;j++)
 		{
 			x1 = new PositiveInteger(i);
 			x2 = new PositiveInteger(j);
@@ -33,7 +36,7 @@ int main()
 		}
 		cout<<endl;
 	}
-	//*/
+	*/
 	/*
 	x1 = new PositiveInteger(1);
 	x1->printBinary();
@@ -44,8 +47,8 @@ int main()
 	x3 = PositiveInteger::Add(x1,x2);
 	x3->printBinary();
 	 */
-	//delete x1;
-	//delete x2;
+	delete x1;
+	delete x2;
 	//delete x3;
 	return 0;
 }

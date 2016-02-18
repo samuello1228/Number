@@ -37,6 +37,7 @@ public:
 	static void Two(PositiveInteger*);
 	
 	void printBinary();
+	PositiveInteger* copy();
 	static int compare(PositiveInteger*,PositiveInteger*);
 	static PositiveInteger* Add(PositiveInteger*,PositiveInteger*);
 	
