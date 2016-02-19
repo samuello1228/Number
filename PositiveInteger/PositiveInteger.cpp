@@ -494,11 +494,19 @@ PositiveInteger* PositiveInteger::Add(PositiveInteger* x1,PositiveInteger* x2)
 	return y;
 }
 
-PositiveInteger* PositiveInteger::Multiply(PositiveInteger* x1,PositiveInteger* x2)
+PositiveInteger* PositiveInteger::Subtract(PositiveInteger* x1,PositiveInteger* x2)
 {
+	PositiveInteger* y;
+	int test = PositiveInteger::compare(x1,x2);
+	if(test==0)
+	{
+		cout<<"Error! PositiveInteger does not support number zero."<<endl;
+		y = new PositiveInteger;
+		return y;
+	}
 	PositiveInteger* p1;
-	PositiveInteger* p2;
-	PositiveInteger* p3;
+	//PositiveInteger* p2;
+	//PositiveInteger* p3;
 	Bit* b1;
 	Bit* b2;
 	Bit* tLeft;
@@ -507,6 +515,140 @@ PositiveInteger* PositiveInteger::Multiply(PositiveInteger* x1,PositiveInteger* 
 	Bit* t2;
 	Bit* c1;
 	Bit* c2;
+	
+	if(test==-1)
+	{
+		p1=x1;
+		x1=x2;
+		x2=p1;
+	}
+	y = new PositiveInteger;
+	
+	//Bit* digit1=x1->getRightEnd();
+	Bit* digit2=x2->getRightEnd();
+	
+	c1 = x1->getRightEnd();
+	t1 = new Bit;
+	t1->setDigit(c1->getDigit());
+	tRight = t1;
+	while(!c1->isLeftEnd())
+	{
+		c1 = c1->getLeft();
+		t2 = new Bit;
+		t2->setDigit(c1->getDigit());
+		t1->setLeft(t2);
+		t2->setRight(t1);
+		t1 = t2;
+	}
+	tLeft=t1;
+	
+	//Add one more 0 at the right end temporarily, and delete it later
+	b1 = new Bit;
+	b1->setDigit(0);
+	y->setRightEnd(b1);
+	
+	t1 = tRight;
+	while(true)
+	{
+		b2 = new Bit;
+		if(!t1->getDigit() && digit2->getDigit())
+		{
+			b2->setDigit(1);
+			y->setLeftEnd(b2);
+			
+			c1=t1;
+			c1 = c1->getLeft();
+			while(!c1->getDigit())
+			{
+				c1->setDigit(1);
+				c1 = c1->getLeft();
+			}
+			c1->setDigit(0);
+		}
+		else
+		{
+			if(t1->getDigit() && !digit2->getDigit())
+			{
+				b2->setDigit(1);
+				y->setLeftEnd(b2);
+			}
+			else
+			{
+				b2->setDigit(0);
+			}
+		}
+		b1->setLeft(b2);
+		b2->setRight(b1);
+		b1 = b2;
+		
+		if(digit2->isLeftEnd())
+		{
+			break;
+		}
+		else
+		{
+			t1 = t1->getLeft();
+			digit2 = digit2->getLeft();
+		}
+	}
+	
+	while(!t1->isLeftEnd())
+	{
+		t1 = t1->getLeft();
+		b2 = new Bit;
+		b2->setDigit(t1->getDigit());
+		b1->setLeft(b2);
+		b2->setRight(b1);
+		b1 = b2;
+		if(t1->getDigit())
+		{
+			y->setLeftEnd(b2);
+		}
+		
+	}
+	
+	c1 = y->getRightEnd();
+	c1 = c1->getLeft();
+	delete c1->getRight();
+	c1->setRight(nullptr);
+	y->setRightEnd(c1);
+	
+	c1 = y->getLeftEnd();
+	if(!c1->isLeftEnd())
+	{
+		c2 = c1->getLeft();
+		while(!c2->isLeftEnd())
+		{
+			c2 = c2->getLeft();
+			delete c2->getRight();
+		}
+		delete c2;
+	}
+	c1->setLeft(nullptr);
+	
+	t1 = tRight;
+	
+	while(!t1->isLeftEnd())
+	{
+		t1 = t1->getLeft();
+		delete t1->getRight();
+	}
+	delete tLeft;
+	return y;
+}
+
+PositiveInteger* PositiveInteger::Multiply(PositiveInteger* x1,PositiveInteger* x2)
+{
+	//PositiveInteger* p1;
+	//PositiveInteger* p2;
+	//PositiveInteger* p3;
+	Bit* b1;
+	Bit* b2;
+	Bit* tLeft;
+	Bit* tRight;
+	Bit* t1;
+	Bit* t2;
+	Bit* c1;
 	
 	
 	PositiveInteger* y;
@@ -583,13 +725,7 @@ PositiveInteger* PositiveInteger::Multiply(PositiveInteger* x1,PositiveInteger* 
 		t1 = t2;
 	}
 	
-	//add two more 0 at the left end
-	t2 = new Bit;
-	t2->setDigit(0);
-	t1->setLeft(t2);
-	t2->setRight(t1);
-	t1 = t2;
-	
+	//add one more 0 at the left end
 	t2 = new Bit;
 	t2->setDigit(0);
 	t1->setLeft(t2);
@@ -603,8 +739,14 @@ PositiveInteger* PositiveInteger::Multiply(PositiveInteger* x1,PositiveInteger* 
 	
 	while(!digit2->isLeftEnd())
 	{
-		digit2 = digit2->getLeft();
+		//add one more 0 at the left
+		t2 = new Bit;
+		t2->setDigit(0);
+		tLeft->setLeft(t2);
+		t2->setRight(tLeft);
+		tLeft=t2;
 		
+		digit2 = digit2->getLeft();
 		if(digit2->getDigit())
 		{
 			c1 = digit1;
@@ -641,19 +783,11 @@ PositiveInteger* PositiveInteger::Multiply(PositiveInteger* x1,PositiveInteger* 
 			b2->setRight(b1);
 			b1 = b2;
 		}
-		//add one more 0 at the left and delete one right end
-		t2 = new Bit;
-		t2->setDigit(0);
-		tLeft->setLeft(t2);
-		t2->setRight(tLeft);
-		tLeft=t2;
+		//delete one right end
 		tRight = tRight->getLeft();
 		delete tRight->getRight();
 		tRight->setRight(nullptr);
 	}
-	tLeft = tLeft->getRight();
-	delete tLeft->getLeft();
-	tLeft->setLeft(nullptr);
 
 	t1 = tRight;
 	while(!t1->isLeftEnd())
