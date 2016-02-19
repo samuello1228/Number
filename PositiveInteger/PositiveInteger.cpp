@@ -166,7 +166,7 @@ void PositiveInteger::printBinary()
 {
 	PositiveInteger* x = this;
 	Bit* digit;
-	/*
+	///*
 	digit = x->getLeftEnd();
 	cout<<digit->getDigit();
 	while(!digit->isRightEnd())
@@ -175,8 +175,8 @@ void PositiveInteger::printBinary()
 		cout<<digit->getDigit();
 	}
 	cout<<endl;
-	*/
-	///*
+	//*/
+	/*
 	while(!x->isOneOrTwo())
 	{
 		digit = x->getLeftEnd();
@@ -199,7 +199,7 @@ void PositiveInteger::printBinary()
 	{
 		cout<<"10"<<endl;
 	}
-	//*/
+	*/
 }
 
 PositiveInteger* PositiveInteger::copy()
@@ -490,6 +490,197 @@ PositiveInteger* PositiveInteger::Add(PositiveInteger* x1,PositiveInteger* x2)
 		p1->setNumberOfDigitParent(y);
 	}
 	y->setLeftEnd(b1);
+	
+	return y;
+}
+
+PositiveInteger* PositiveInteger::Multiply(PositiveInteger* x1,PositiveInteger* x2)
+{
+	PositiveInteger* p1;
+	PositiveInteger* p2;
+	PositiveInteger* p3;
+	Bit* b1;
+	Bit* b2;
+	Bit* tLeft;
+	Bit* tRight;
+	Bit* t1;
+	Bit* t2;
+	Bit* c1;
+	Bit* c2;
+	
+	
+	PositiveInteger* y;
+	
+	if(x1->getIsOne() && x2->getIsOne())
+	{
+		y = new PositiveInteger;
+		PositiveInteger::One(y);
+		return y;
+	}
+	if( (x1->getIsOne() && x2->getIsTwo()) || (x1->getIsTwo() && x2->getIsOne()) )
+	{
+		y = new PositiveInteger;
+		PositiveInteger::Two(y);
+		return y;
+	}
+	
+	//
+	y = new PositiveInteger;
+	y->setIsOne(false);
+	y->setIsTwo(false);
+	
+	bool carry=0;
+	bool result1;
+	bool result2;
+	
+	Bit* digit1=x1->getRightEnd();
+	Bit* digit2=x2->getRightEnd();
+	if(!digit1->getDigit() || !digit2->getDigit())
+	{
+		b1 = new Bit;
+		b1->setDigit(0);
+		y->setRightEnd(b1);
+		while(!digit1->getDigit())
+		{
+			b2 = new Bit;
+			b2->setDigit(0);
+			b1->setLeft(b2);
+			b2->setRight(b1);
+			digit1 = digit1->getLeft();
+			b1 = b2;
+		}
+		while(!digit2->getDigit())
+		{
+			b2 = new Bit;
+			b2->setDigit(0);
+			b1->setLeft(b2);
+			b2->setRight(b1);
+			digit2 = digit2->getLeft();
+			b1 = b2;
+		}
+		//Now, b1 is a additional 0 at the left end, and it must be 1
+		b1->setDigit(1);
+	}
+	else
+	{
+		b1 = new Bit;
+		b1->setDigit(1);
+		y->setRightEnd(b1);
+	}
+	
+	//Add one more 0 at the right end temporarily, and delete it later
+	t1 = new Bit;
+	t1->setDigit(0);
+	tRight = t1;
+	c1 = digit1;
+	while(!c1->isLeftEnd())
+	{
+		c1 = c1->getLeft();
+		t2 = new Bit;
+		t2->setDigit(c1->getDigit());
+		t1->setLeft(t2);
+		t2->setRight(t1);
+		t1 = t2;
+	}
+	
+	//add two more 0 at the left end
+	t2 = new Bit;
+	t2->setDigit(0);
+	t1->setLeft(t2);
+	t2->setRight(t1);
+	t1 = t2;
+	
+	t2 = new Bit;
+	t2->setDigit(0);
+	t1->setLeft(t2);
+	t2->setRight(t1);
+	t1 = t2;
+	
+	tLeft=t1;
+	tRight = tRight->getLeft();
+	delete tRight->getRight();
+	tRight->setRight(nullptr);
+	
+	while(!digit2->isLeftEnd())
+	{
+		digit2 = digit2->getLeft();
+		
+		if(digit2->getDigit())
+		{
+			c1 = digit1;
+			t1 = tRight;
+			carry=0;
+			PositiveInteger::AddThreeBit(c1->getDigit(),t1->getDigit(),carry,result1,result2);
+			
+			b2 = new Bit;
+			b2->setDigit(result2);
+			b1->setLeft(b2);
+			b2->setRight(b1);
+			b1 = b2;
+			
+			carry=result1;
+			while(!c1->isLeftEnd())
+			{
+				c1 = c1->getLeft();
+				t1 = t1->getLeft();
+				PositiveInteger::AddThreeBit(c1->getDigit(),t1->getDigit(),carry,result1,result2);
+				t1->setDigit(result2);
+				carry=result1;
+			}
+			if(carry)
+			{
+				t1 = t1->getLeft();
+				t1->setDigit(carry);
+			}
+		}
+		else
+		{
+			b2 = new Bit;
+			b2->setDigit(tRight->getDigit());
+			b1->setLeft(b2);
+			b2->setRight(b1);
+			b1 = b2;
+		}
+		//add one more 0 at the left and delete one right end
+		t2 = new Bit;
+		t2->setDigit(0);
+		tLeft->setLeft(t2);
+		t2->setRight(tLeft);
+		tLeft=t2;
+		tRight = tRight->getLeft();
+		delete tRight->getRight();
+		tRight->setRight(nullptr);
+	}
+	tLeft = tLeft->getRight();
+	delete tLeft->getLeft();
+	tLeft->setLeft(nullptr);
+
+	t1 = tRight;
+	while(!t1->isLeftEnd())
+	{
+		b2 = new Bit;
+		b2->setDigit(t1->getDigit());
+		b1->setLeft(b2);
+		b2->setRight(b1);
+		b1 = b2;
+		t1 = t1->getLeft();
+		delete t1->getRight();
+	}
+	if(t1->getDigit())
+	{
+		b2 = new Bit;
+		b2->setDigit(t1->getDigit());
+		b1->setLeft(b2);
+		b2->setRight(b1);
+		y->setLeftEnd(b2);
+	}
+	else
+	{
+		y->setLeftEnd(b1);
+	}
+	delete t1;
+	
+	
 	
 	return y;
 }

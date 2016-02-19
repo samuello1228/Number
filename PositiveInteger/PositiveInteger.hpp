@@ -40,6 +40,7 @@ public:
 	PositiveInteger* copy();
 	static int compare(PositiveInteger*,PositiveInteger*);
 	static PositiveInteger* Add(PositiveInteger*,PositiveInteger*);
+	static PositiveInteger* Multiply(PositiveInteger*,PositiveInteger*);
 	
 private:
 	Bit* leftEnd;
