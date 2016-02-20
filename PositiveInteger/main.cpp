@@ -33,9 +33,9 @@ int main()
 	delete x2;
 	*/
 	///*
-	for(int i=1;i<=18;i++)
+	for(int i=1;i<=5;i++)
 	{
-		for(int j=1;j<=18;j++)
+		for(int j=1;j<=5;j++)
 		{
 			if(i==j) continue;
 			x1 = new PositiveInteger(i);
