@@ -409,8 +409,8 @@ PositiveInteger* PositiveInteger::Add(PositiveInteger* x1,PositiveInteger* x2,bo
 	PositiveInteger* y;
 	PositiveInteger* p1;
 	PositiveInteger* p2;
-	PositiveInteger* p3;
-	Bit* b1;
+	PositiveInteger* p3 = nullptr;
+	Bit* b1= nullptr;
 	Bit* b2;
 	
 	if(overwrite)
@@ -428,7 +428,6 @@ PositiveInteger* PositiveInteger::Add(PositiveInteger* x1,PositiveInteger* x2,bo
 		x1=x2;
 		x2=p1;
 	}
-
 	
 	if(x1->getIsOne() && x2->getIsOne())
 	{
@@ -464,20 +463,25 @@ PositiveInteger* PositiveInteger::Add(PositiveInteger* x1,PositiveInteger* x2,bo
 	
 	Bit* digit1=x1->getRightEnd();
 	Bit* digit2=x2->getRightEnd();
+	Bit** b=nullptr;
 	PositiveInteger::AddThreeBit(digit1->getDigit(),digit2->getDigit(),carry,result1,result2);
 	
 	if(overwrite)
 	{
-		b1 = y->getRightEnd();
+		if(y==x1)
+		{
+			b = &digit1;
+		}
+		else
+		{
+			b = &digit2;
+		}
+		(*b)->setDigit(result2);
 	}
 	else
 	{
 		b1 = new Bit;
-	}
-	b1->setDigit(result2);
-	
-	if(!overwrite)
-	{
+		b1->setDigit(result2);
 		y->setRightEnd(b1);
 	}
 	carry=result1;
@@ -489,20 +493,17 @@ PositiveInteger* PositiveInteger::Add(PositiveInteger* x1,PositiveInteger* x2,bo
 		PositiveInteger::AddThreeBit(digit1->getDigit(),digit2->getDigit(),carry,result1,result2);
 		if(overwrite)
 		{
-			b2 = b1->getLeft();
+			(*b)->setDigit(result2);
 		}
 		else
 		{
 			b2 = new Bit;
-		}
-		b2->setDigit(result2);
-		if(!overwrite)
-		{
+			b2->setDigit(result2);
 			b1->setLeft(b2);
 			b2->setRight(b1);
+			b1 = b2;
 		}
 		carry = result1;
-		b1 = b2;
 	}
 	
 	while(!digit1->isLeftEnd())
@@ -511,28 +512,44 @@ PositiveInteger* PositiveInteger::Add(PositiveInteger* x1,PositiveInteger* x2,bo
 		PositiveInteger::AddThreeBit(digit1->getDigit(),0,carry,result1,result2);
 		if(y==x1)
 		{
-			b2 = b1->getLeft();
+			(*b)->setDigit(result2);
 		}
 		else
 		{
 			b2 = new Bit;
-		}
-		b2->setDigit(result2);
-		if(y!=x1)
-		{
-			b1->setLeft(b2);
-			b2->setRight(b1);
+			b2->setDigit(result2);
+			if(y==x2)
+			{
+				(*b)->setLeft(b2);
+				b2->setRight(*b);
+				*b = b2;
+			}
+			else
+			{
+				b1->setLeft(b2);
+				b2->setRight(b1);
+				b1 = b2;
+			}
 		}
 		carry = result1;
-		b1 = b2;
 	}
+	
 	if(carry)
 	{
 		b2 = new Bit;
 		b2->setDigit(1);
-		b1->setLeft(b2);
-		b2->setRight(b1);
-		b1 = b2;
+		if(overwrite)
+		{
+			(*b)->setLeft(b2);
+			b2->setRight(*b);
+			*b = b2;
+		}
+		else
+		{
+			b1->setLeft(b2);
+			b2->setRight(b1);
+			b1 = b2;
+		}
 		
 		p2 = new PositiveInteger;
 		PositiveInteger::One(p2);
@@ -582,7 +599,14 @@ PositiveInteger* PositiveInteger::Add(PositiveInteger* x1,PositiveInteger* x2,bo
 			p1->setNumberOfDigitParent(y);
 		}
 	}
-	y->setLeftEnd(b1);
+	if(overwrite)
+	{
+		y->setLeftEnd(*b);
+	}
+	else
+	{
+		y->setLeftEnd(b1);
+	}
 	y->setIsOne(false);
 	y->setIsTwo(false);
 	return y;
