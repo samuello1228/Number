@@ -33,9 +33,9 @@ int main()
 	delete x2;
 	*/
 	///*
-	for(int i=1;i<=16;i++)
+	for(int i=1;i<=10;i++)
 	{
-		for(int j=1;j<=16;j++)
+		for(int j=1;j<=10;j++)
 		{
 			if(i==j) continue;
 			x1 = new PositiveInteger(i);
@@ -46,28 +46,15 @@ int main()
 			delete x2;
 			//cout<<PositiveInteger::compare(x3, x4)<<" ";
 			//x3 = PositiveInteger::Add(x3,x4,1);
-			x1 = PositiveInteger::Subtract(x3, x4);
+			x1 = PositiveInteger::Subtract(x3,x4,1);
+			//x1 = PositiveInteger::Multiply(x3,x4);
 			x1->printBinary();
-			delete x1;
+			//delete x1;
 			delete x3;
 			delete x4;
-			//delete x4;
 		}
 		cout<<endl;
 	}
-	//*/
-	/*
-	x1 = new PositiveInteger(1);
-	x1->printBinary();
-	x2 = new PositiveInteger(3);
-	x2->printBinary();
-	
-	x3 = PositiveInteger::Multiply(x1,x2);
-	x3->printBinary();
-	delete x1;
-	delete x2;
-	delete x3;
-	*/
-	
+
 	return 0;
 }
