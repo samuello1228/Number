@@ -621,11 +621,9 @@ PositiveInteger* PositiveInteger::Subtract(PositiveInteger* x1,PositiveInteger* 
 	PositiveInteger* p4;
 	
 	Bit* b1;
-	//Bit* b2;
 	Bit* t1;
 	Bit* t2;
 	Bit* c1;
-	//Bit* c2;
 	Bit* digitLeft1;
 	Bit* digitLeft2;
 	Bit* digitRight2;
@@ -981,9 +979,9 @@ PositiveInteger* PositiveInteger::Subtract(PositiveInteger* x1,PositiveInteger* 
 
 PositiveInteger* PositiveInteger::Multiply(PositiveInteger* x1,PositiveInteger* x2)
 {
-	//PositiveInteger* p1;
-	//PositiveInteger* p2;
-	//PositiveInteger* p3;
+	PositiveInteger* y;
+	PositiveInteger* p1;
+	PositiveInteger* p2;
 	Bit* b1;
 	Bit* b2;
 	Bit* tLeft;
@@ -991,9 +989,6 @@ PositiveInteger* PositiveInteger::Multiply(PositiveInteger* x1,PositiveInteger* 
 	Bit* t1;
 	Bit* t2;
 	Bit* c1;
-	
-	
-	PositiveInteger* y;
 	
 	if(x1->getIsOne() && x2->getIsOne())
 	{
@@ -1008,7 +1003,6 @@ PositiveInteger* PositiveInteger::Multiply(PositiveInteger* x1,PositiveInteger* 
 		return y;
 	}
 	
-	//
 	y = new PositiveInteger;
 	y->setIsOne(false);
 	y->setIsTwo(false);
@@ -1042,7 +1036,7 @@ PositiveInteger* PositiveInteger::Multiply(PositiveInteger* x1,PositiveInteger* 
 			digit2 = digit2->getLeft();
 			b1 = b2;
 		}
-		//Now, b1 is a additional 0 at the left end, and it must be 1
+		//Now, b1 is an additional 0 at the left end, and it must be 1
 		b1->setDigit(1);
 	}
 	else
@@ -1081,7 +1075,7 @@ PositiveInteger* PositiveInteger::Multiply(PositiveInteger* x1,PositiveInteger* 
 	
 	while(!digit2->isLeftEnd())
 	{
-		//add one more 0 at the left
+		//add one more 0 at the left end
 		t2 = new Bit;
 		t2->setDigit(0);
 		tLeft->setLeft(t2);
@@ -1130,7 +1124,6 @@ PositiveInteger* PositiveInteger::Multiply(PositiveInteger* x1,PositiveInteger* 
 		delete tRight->getRight();
 		tRight->setRight(nullptr);
 	}
-
 	t1 = tRight;
 	while(!t1->isLeftEnd())
 	{
@@ -1142,6 +1135,7 @@ PositiveInteger* PositiveInteger::Multiply(PositiveInteger* x1,PositiveInteger* 
 		t1 = t1->getLeft();
 		delete t1->getRight();
 	}
+	
 	if(t1->getDigit())
 	{
 		b2 = new Bit;
@@ -1149,13 +1143,24 @@ PositiveInteger* PositiveInteger::Multiply(PositiveInteger* x1,PositiveInteger* 
 		b1->setLeft(b2);
 		b2->setRight(b1);
 		y->setLeftEnd(b2);
+		
+		p1 = PositiveInteger::Add(x1->getNumberOfDigit(),x2->getNumberOfDigit(),false);
+		y->setNumberOfDigit(p1);
+		p1->setNumberOfDigitParent(y);
 	}
 	else
 	{
 		y->setLeftEnd(b1);
+		
+		p2 = new PositiveInteger;
+		PositiveInteger::One(p2);
+		p1 = PositiveInteger::Add(x1->getNumberOfDigit(),x2->getNumberOfDigit(),false);
+		p1 = PositiveInteger::Subtract(p1,p2,true);
+		y->setNumberOfDigit(p1);
+		p1->setNumberOfDigitParent(y);
+		delete p2;
 	}
 	delete t1;
-	
 	return y;
 }
 
