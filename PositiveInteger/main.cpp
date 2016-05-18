@@ -16,6 +16,9 @@ int main()
 	PositiveInteger* x2;
 	PositiveInteger* x3;
 	PositiveInteger* x4;
+	PositiveInteger* x5;
+	PositiveInteger* x6;
+	bool divisible=0;
 	/*
 	x1 = new PositiveInteger;
 	PositiveInteger::One(x1);
@@ -33,9 +36,9 @@ int main()
 	delete x2;
 	*/
 	///*
-	for(int i=1;i<=10;i++)
+	for(int i=1;i<=16;i++)
 	{
-		for(int j=1;j<=10;j++)
+		for(int j=1;j<=16;j++)
 		{
 			if(i<=j) continue;
 			x1 = new PositiveInteger(i);
@@ -44,11 +47,17 @@ int main()
 			x4 = x2->copy();
 			delete x1;
 			delete x2;
+			//x5 = new PositiveInteger;
+			//x6 = new PositiveInteger;
 			//cout<<PositiveInteger::compare(x3, x4)<<" ";
 			//x1 = PositiveInteger::Add(x3,x4,1);
-			//x1 = PositiveInteger::Subtract(x3,x4,1,0);
-			x1 = PositiveInteger::Multiply(x3,x4);
-			x1->printBinary();
+			x1 = PositiveInteger::Subtract(x3,x4,1,0);
+			x3->printBinary();
+			//x1 = PositiveInteger::Multiply(x3,x4);
+			//PositiveInteger::Divide(x3,x4,x5,x6,divisible,0,1);
+			//cout<<"divisible: "<<divisible<<endl;
+			//x5->printBinary();
+			//x6->printBinary();
 			//delete x1;
 			delete x3;
 			delete x4;
