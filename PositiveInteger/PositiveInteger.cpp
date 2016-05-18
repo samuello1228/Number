@@ -606,7 +606,7 @@ PositiveInteger* PositiveInteger::Add(PositiveInteger*& x1,PositiveInteger*& x2,
 	return y;
 }
 
-PositiveInteger* PositiveInteger::Subtract(PositiveInteger* x1,PositiveInteger* x2,bool overwrite)
+PositiveInteger* PositiveInteger::Subtract(PositiveInteger* x1,PositiveInteger* x2,bool overwrite,bool checking)
 {
 	PositiveInteger* y;
 	PositiveInteger* p1;
@@ -622,23 +622,26 @@ PositiveInteger* PositiveInteger::Subtract(PositiveInteger* x1,PositiveInteger* 
 	Bit* digitLeft2;
 	Bit* digitRight2;
 	
-	
-	int test1 = PositiveInteger::compare(x1,x2);
+	int test1;
 	int test2 = -1;
-	if(test1==0)
+	if(checking)
 	{
-		cout<<"Error! PositiveInteger does not support number zero."<<endl;
-		y = new PositiveInteger;
-		return y;
+		test1 = PositiveInteger::compare(x1,x2);
+		if(test1==0)
+		{
+			cout<<"Error! PositiveInteger does not support number zero."<<endl;
+			y = new PositiveInteger;
+			return y;
+		}
+		
+		if(test1==-1)
+		{
+			p1=x1;
+			x1=x2;
+			x2=p1;
+		}
 	}
-
-	if(test1==-1)
-	{
-		p1=x1;
-		x1=x2;
-		x2=p1;
-	}
-
+	
 	p1 = x1->getNumberOfDigit();
 	p2 = x2->getNumberOfDigit();
 	p3 = new PositiveInteger;
@@ -842,14 +845,14 @@ PositiveInteger* PositiveInteger::Subtract(PositiveInteger* x1,PositiveInteger* 
 				if(overwrite)
 				{
 					//x1 originally cannot be one or two
-					p1 = PositiveInteger::Subtract(x1->getNumberOfDigit(),count,true);
+					p1 = PositiveInteger::Subtract(x1->getNumberOfDigit(),count,true,false);
 					p1 = PositiveInteger::Add(p1,p3,true);
 				}
 				else
 				{
 					y->setIsOne(false);
 					y->setIsTwo(false);
-					p1 = PositiveInteger::Subtract(x1->getNumberOfDigit(),count,false);
+					p1 = PositiveInteger::Subtract(x1->getNumberOfDigit(),count,false,false);
 					p1 = PositiveInteger::Add(p1,p3,true);
 					y->setNumberOfDigit(p1);
 					p1->setNumberOfDigitParent(y);
@@ -936,12 +939,12 @@ PositiveInteger* PositiveInteger::Subtract(PositiveInteger* x1,PositiveInteger* 
 	{
 		if(overwrite)
 		{
-			p1 = PositiveInteger::Subtract(x1->getNumberOfDigit(),count,true);
+			p1 = PositiveInteger::Subtract(x1->getNumberOfDigit(),count,true,false);
 			p1 = PositiveInteger::Add(p1,p3,true);
 		}
 		else
 		{
-			p1 = PositiveInteger::Subtract(x1->getNumberOfDigit(),count,false);
+			p1 = PositiveInteger::Subtract(x1->getNumberOfDigit(),count,false,false);
 			p1 = PositiveInteger::Add(p1,p3,true);
 			y->setNumberOfDigit(p1);
 			p1->setNumberOfDigitParent(y);
@@ -956,11 +959,11 @@ PositiveInteger* PositiveInteger::Subtract(PositiveInteger* x1,PositiveInteger* 
 		
 		if(overwrite)
 		{
-			p1 = PositiveInteger::Subtract(x1->getNumberOfDigit(),count,true);
+			p1 = PositiveInteger::Subtract(x1->getNumberOfDigit(),count,true,false);
 		}
 		else
 		{
-			p1 = PositiveInteger::Subtract(x1->getNumberOfDigit(),count,false);
+			p1 = PositiveInteger::Subtract(x1->getNumberOfDigit(),count,false,false);
 			y->setNumberOfDigit(p1);
 			p1->setNumberOfDigitParent(y);
 		}
@@ -1154,7 +1157,7 @@ PositiveInteger* PositiveInteger::Multiply(PositiveInteger* x1,PositiveInteger* 
 		
 		p2 = new PositiveInteger;
 		PositiveInteger::One(p2);
-		p1 = PositiveInteger::Subtract(p1,p2,true);
+		p1 = PositiveInteger::Subtract(p1,p2,true,false);
 		y->setNumberOfDigit(p1);
 		p1->setNumberOfDigitParent(y);
 		delete p2;
