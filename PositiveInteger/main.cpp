@@ -45,7 +45,7 @@ int main()
 			delete x1;
 			delete x2;
 			//cout<<PositiveInteger::compare(x3, x4)<<" ";
-			//x3 = PositiveInteger::Add(x3,x4,1);
+			//x1 = PositiveInteger::Add(x3,x4,1);
 			//x1 = PositiveInteger::Subtract(x3,x4,1);
 			x1 = PositiveInteger::Multiply(x3,x4);
 			x1->printBinary();

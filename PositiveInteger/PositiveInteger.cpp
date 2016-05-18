@@ -404,79 +404,86 @@ void PositiveInteger::AddThreeBit(bool x1, bool x2, bool x3, bool &y1, bool &y2)
 	}
 }
 
-PositiveInteger* PositiveInteger::Add(PositiveInteger* x1,PositiveInteger* x2,bool overwrite)
+PositiveInteger* PositiveInteger::Add(PositiveInteger*& x1,PositiveInteger*& x2,bool overwrite)
 {
 	PositiveInteger* y;
-	PositiveInteger* p1;
+	PositiveInteger* p1 = nullptr;
 	PositiveInteger* p2;
-	PositiveInteger* p3 = nullptr;
 	Bit* b1= nullptr;
 	Bit* b2;
-	
-	if(overwrite)
-	{
-		y=x1;
-	}
-	else
-	{
-		y = new PositiveInteger;
-	}
-	
-	if(PositiveInteger::compare(x1,x2)==-1)
-	{
-		p1=x1;
-		x1=x2;
-		x2=p1;
-	}
 	
 	if(x1->getIsOne() && x2->getIsOne())
 	{
 		if(overwrite)
 		{
-			y->setIsOne(false);
-			y->setIsTwo(true);
-			b1 = y->getRightEnd();
+			x1->setIsOne(false);
+			x1->setIsTwo(true);
+			b1 = x1->getRightEnd();
 			b1->setDigit(0);
 			
 			b2 = new Bit;
 			b2->setDigit(1);
 			b1->setLeft(b2);
 			b2->setRight(b1);
-			y->setLeftEnd(b2);
+			x1->setLeftEnd(b2);
+			return x1;
 		}
 		else
 		{
+			y = new PositiveInteger;
 			PositiveInteger::Two(y);
+			return y;
 		}
-		return y;
+	}
+	
+	//swap x1 and x2, if overwrite and the number of digit of x2 is larger.
+	int test = PositiveInteger::compare(x1->getNumberOfDigit(),x2->getNumberOfDigit());
+	PositiveInteger* n1;
+	PositiveInteger* n2;
+	if(overwrite)
+	{
+		if(test==-1)
+		{
+			p1=x1;
+			x1=x2;
+			x2=p1;
+		}
+		n1=x1;
+		n2=x2;
+		y=x1;
+	}
+	else
+	{
+		if(test==-1)
+		{
+			n1=x2;
+			n2=x1;
+		}
+		else
+		{
+			n1=x1;
+			n2=x2;
+		}
+		y = new PositiveInteger;
 	}
 	
 	//
-	if(y==x1 && y->isOneOrTwo())
+	if(overwrite && y->isOneOrTwo())
 	{
-		p3 = y->getNumberOfDigit()->copy();
+		p1 = y->copy();
 	}
 	
 	bool carry=0;
 	bool result1;
 	bool result2;
 	
-	Bit* digit1=x1->getRightEnd();
-	Bit* digit2=x2->getRightEnd();
-	Bit** b=nullptr;
+	Bit* digit1=n1->getRightEnd();
+	Bit* digit2=n2->getRightEnd();
 	PositiveInteger::AddThreeBit(digit1->getDigit(),digit2->getDigit(),carry,result1,result2);
 	
 	if(overwrite)
 	{
-		if(y==x1)
-		{
-			b = &digit1;
-		}
-		else
-		{
-			b = &digit2;
-		}
-		(*b)->setDigit(result2);
+		digit1->setDigit(result2);
 	}
 	else
 	{
@@ -493,7 +500,7 @@ PositiveInteger* PositiveInteger::Add(PositiveInteger* x1,PositiveInteger* x2,bo
 		PositiveInteger::AddThreeBit(digit1->getDigit(),digit2->getDigit(),carry,result1,result2);
 		if(overwrite)
 		{
-			(*b)->setDigit(result2);
+			digit1->setDigit(result2);
 		}
 		else
 		{
@@ -510,26 +517,17 @@ PositiveInteger* PositiveInteger::Add(PositiveInteger* x1,PositiveInteger* x2,bo
 	{
 		digit1 = digit1->getLeft();
 		PositiveInteger::AddThreeBit(digit1->getDigit(),0,carry,result1,result2);
-		if(y==x1)
+		if(overwrite)
 		{
-			(*b)->setDigit(result2);
+			digit1->setDigit(result2);
 		}
 		else
 		{
 			b2 = new Bit;
 			b2->setDigit(result2);
-			if(y==x2)
-			{
-				(*b)->setLeft(b2);
-				b2->setRight(*b);
-				*b = b2;
-			}
-			else
-			{
-				b1->setLeft(b2);
-				b2->setRight(b1);
-				b1 = b2;
-			}
+			b1->setLeft(b2);
+			b2->setRight(b1);
+			b1 = b2;
 		}
 		carry = result1;
 	}
@@ -540,9 +538,10 @@ PositiveInteger* PositiveInteger::Add(PositiveInteger* x1,PositiveInteger* x2,bo
 		b2->setDigit(1);
 		if(overwrite)
 		{
-			(*b)->setLeft(b2);
-			b2->setRight(*b);
-			*b = b2;
+			digit1->setLeft(b2);
+			b2->setRight(digit1);
+			digit1 = b2;
+			y->setLeftEnd(digit1);
 		}
 		else
 		{
@@ -551,28 +550,29 @@ PositiveInteger* PositiveInteger::Add(PositiveInteger* x1,PositiveInteger* x2,bo
 			b1 = b2;
 		}
 		
+		
 		p2 = new PositiveInteger;
 		PositiveInteger::One(p2);
-		if(y==x1)
+		if(overwrite)
 		{
+			//Because p1 >= p2, Add function will not swap two numbers
 			if(y->isOneOrTwo())
 			{
-				p3 = PositiveInteger::Add(p3,p2,true);
-				y->setNumberOfDigit(p3);
-				p3->setNumberOfDigitParent(y);
+				//y>=3
+				p1 = PositiveInteger::Add(p1,p2,true);
+				y->setNumberOfDigit(p1);
+				p1->setNumberOfDigitParent(y);
 			}
 			else
 			{
-				p1 = PositiveInteger::Add(x1->getNumberOfDigit(),p2,true);
+				p1 = y->getNumberOfDigit();
+				p1 = PositiveInteger::Add(p1,p2,true);
 			}
 		}
 		else
 		{
-			if(y==x2 && !y->isOneOrTwo())
-			{
-				delete y->getNumberOfDigit();
-			}
-			p1 = PositiveInteger::Add(x1->getNumberOfDigit(),p2,false);
+			p1 = n1->getNumberOfDigit();
+			p1 = PositiveInteger::Add(p1,p2,false);
 			y->setNumberOfDigit(p1);
 			p1->setNumberOfDigitParent(y);
 		}
@@ -580,30 +580,24 @@ PositiveInteger* PositiveInteger::Add(PositiveInteger* x1,PositiveInteger* x2,bo
 	}
 	else
 	{
-		if(y==x1)
+		if(overwrite)
 		{
 			if(y->isOneOrTwo())
 			{
-				y->setNumberOfDigit(p3);
-				p3->setNumberOfDigitParent(y);
+				//y>=3
+				y->setNumberOfDigit(p1);
+				p1->setNumberOfDigitParent(y);
 			}
 		}
 		else
 		{
-			if(y==x2 && !y->isOneOrTwo())
-			{
-				delete y->getNumberOfDigit();
-			}
-			p1 = x1->getNumberOfDigit()->copy();
+			p1 = n1->getNumberOfDigit()->copy();
 			y->setNumberOfDigit(p1);
 			p1->setNumberOfDigitParent(y);
 		}
 	}
-	if(overwrite)
-	{
-		y->setLeftEnd(*b);
-	}
-	else
+	
+	if(!overwrite)
 	{
 		y->setLeftEnd(b1);
 	}
@@ -1144,7 +1138,9 @@ PositiveInteger* PositiveInteger::Multiply(PositiveInteger* x1,PositiveInteger* 
 		b2->setRight(b1);
 		y->setLeftEnd(b2);
 		
-		p1 = PositiveInteger::Add(x1->getNumberOfDigit(),x2->getNumberOfDigit(),false);
+		p1 = x1->getNumberOfDigit();
+		p2 = x2->getNumberOfDigit();
+		p1 = PositiveInteger::Add(p1,p2,false);
 		y->setNumberOfDigit(p1);
 		p1->setNumberOfDigitParent(y);
 	}
@@ -1152,9 +1148,12 @@ PositiveInteger* PositiveInteger::Multiply(PositiveInteger* x1,PositiveInteger* 
 	{
 		y->setLeftEnd(b1);
 		
+		p1 = x1->getNumberOfDigit();
+		p2 = x2->getNumberOfDigit();
+		p1 = PositiveInteger::Add(p1,p2,false);
+		
 		p2 = new PositiveInteger;
 		PositiveInteger::One(p2);
-		p1 = PositiveInteger::Add(x1->getNumberOfDigit(),x2->getNumberOfDigit(),false);
 		p1 = PositiveInteger::Subtract(p1,p2,true);
 		y->setNumberOfDigit(p1);
 		p1->setNumberOfDigitParent(y);

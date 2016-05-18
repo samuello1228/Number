@@ -39,7 +39,7 @@ public:
 	void printBinary();
 	PositiveInteger* copy();
 	static int compare(PositiveInteger*,PositiveInteger*);
-	static PositiveInteger* Add(PositiveInteger*,PositiveInteger*,bool);
+	static PositiveInteger* Add(PositiveInteger*&,PositiveInteger*&,bool);
 	static PositiveInteger* Subtract(PositiveInteger*,PositiveInteger*,bool);
 	static PositiveInteger* Multiply(PositiveInteger*,PositiveInteger*);
 	static void Divide(PositiveInteger*,PositiveInteger*,PositiveInteger*&,PositiveInteger*&,bool&);
