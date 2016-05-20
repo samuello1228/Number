@@ -40,27 +40,37 @@ int main()
 	{
 		for(int j=1;j<=16;j++)
 		{
-			if(i<=j) continue;
-			x1 = new PositiveInteger(i);
-			x2 = new PositiveInteger(j);
+			if(i>j) continue;
+			x1 = new PositiveInteger(j);
+			x2 = new PositiveInteger(i);
 			x3 = x1->copy();
 			x4 = x2->copy();
 			delete x1;
 			delete x2;
-			//x5 = new PositiveInteger;
-			//x6 = new PositiveInteger;
+			x5 = new PositiveInteger;
+			x6 = new PositiveInteger;
 			//cout<<PositiveInteger::compare(x3, x4)<<" ";
 			//x1 = PositiveInteger::Add(x3,x4,1);
-			x1 = PositiveInteger::Subtract(x3,x4,1,0);
-			x3->printBinary();
+			//x1 = PositiveInteger::Subtract(x3,x4,1,0);
+			//x3->printBinary();
 			//x1 = PositiveInteger::Multiply(x3,x4);
-			//PositiveInteger::Divide(x3,x4,x5,x6,divisible,0,1);
-			//cout<<"divisible: "<<divisible<<endl;
-			//x5->printBinary();
-			//x6->printBinary();
+			PositiveInteger::Divide(x3,x4,x5,x6,divisible,0,1);
+			cout<<j<<"/"<<i<<endl;
+			x5->printBinary();
+			if(!divisible)
+			{
+				x6->printBinary();
+			}
+			else
+			{
+				cout<<"0"<<endl;
+			}
+			cout<<endl;
 			//delete x1;
 			delete x3;
 			delete x4;
+			delete x5;
+			delete x6;
 		}
 		cout<<endl;
 	}

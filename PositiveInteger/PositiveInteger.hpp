@@ -40,7 +40,9 @@ public:
 	PositiveInteger* copy();
 	static int compare(PositiveInteger*,PositiveInteger*);
 	static PositiveInteger* Add(PositiveInteger*&,PositiveInteger*&,bool);
-	static PositiveInteger* SubtractAux(Bit*&,Bit*&,PositiveInteger*&,bool&,bool&,Bit*,Bit*,PositiveInteger*,bool,bool,bool);
+	static PositiveInteger* SubtractAux(Bit*&,Bit*,PositiveInteger*&,bool&,bool&,
+										Bit*,Bit*,PositiveInteger*,bool,bool,
+										bool,bool,Bit*&,Bit*&,int,bool&,PositiveInteger*&);
 	static PositiveInteger* Subtract(PositiveInteger*,PositiveInteger*,bool,bool);
 	static PositiveInteger* Multiply(PositiveInteger*,PositiveInteger*);
 	static void Divide(PositiveInteger*,PositiveInteger*,PositiveInteger*&,PositiveInteger*&,bool&,bool,bool);
