@@ -37,6 +37,13 @@ public:
 	static void Two(PositiveInteger*);
 	
 	void printBinary();
+	struct Digit
+	{
+		char digit;
+		Digit* Left=nullptr;
+		Digit* Right=nullptr;
+	};
+	void printDecimal(bool);
 	PositiveInteger* copy();
 	static int compare(PositiveInteger*,PositiveInteger*);
 	static PositiveInteger* Add(PositiveInteger*&,PositiveInteger*&,bool);
