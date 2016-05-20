@@ -47,19 +47,20 @@ int main()
 			x4 = x2->copy();
 			delete x1;
 			delete x2;
-			x5 = new PositiveInteger;
-			x6 = new PositiveInteger;
+			//x5 = new PositiveInteger;
+			//x6 = new PositiveInteger;
 			//cout<<PositiveInteger::compare(x3, x4)<<" ";
 			//x1 = PositiveInteger::Add(x3,x4,1);
 			//x1 = PositiveInteger::Subtract(x3,x4,1,0);
 			//x3->printBinary();
 			//x1 = PositiveInteger::Multiply(x3,x4);
-			PositiveInteger::Divide(x3,x4,x5,x6,divisible,0,1);
+			PositiveInteger::Divide(x3,x4,x5,x6,divisible,1,0);
 			cout<<j<<"/"<<i<<endl;
 			x5->printBinary();
 			if(!divisible)
 			{
 				x6->printBinary();
+				delete x6;
 			}
 			else
 			{
@@ -67,10 +68,9 @@ int main()
 			}
 			cout<<endl;
 			//delete x1;
-			delete x3;
+			//delete x3;
 			delete x4;
 			delete x5;
-			delete x6;
 		}
 		cout<<endl;
 	}
