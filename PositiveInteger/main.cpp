@@ -40,6 +40,52 @@ int main()
 	{
 		for(int j=1;j<=16;j++)
 		{
+			
+			x1 = new PositiveInteger(i);
+			x2 = new PositiveInteger(j);
+			x3 = x1->copy();
+			x4 = x2->copy();
+			delete x1;
+			delete x2;
+			//cout<<PositiveInteger::compare(x3, x4)<<" ";
+			x1 = PositiveInteger::Add(x3,x4,1);
+			//x1->printBinary();
+			//delete x1;
+			x3->printBinary();
+			delete x3;
+			delete x4;
+			
+			/*
+			if(i<=j) continue;
+			x1 = new PositiveInteger(i);
+			x2 = new PositiveInteger(j);
+			x3 = x1->copy();
+			x4 = x2->copy();
+			delete x1;
+			delete x2;
+			x1 = PositiveInteger::Subtract(x3,x4,1,0);
+			//x1->printBinary();
+			//delete x1;
+			x3->printBinary();
+			delete x3;
+			delete x4;
+			*/
+			
+			/*
+			x1 = new PositiveInteger(i);
+			x2 = new PositiveInteger(j);
+			x3 = x1->copy();
+			x4 = x2->copy();
+			delete x1;
+			delete x2;
+			x1 = PositiveInteger::Multiply(x3,x4);
+			x1->printBinary();
+			delete x1;
+			delete x3;
+			delete x4;
+			*/
+			
+			/*
 			if(i>j) continue;
 			x1 = new PositiveInteger(j);
 			x2 = new PositiveInteger(i);
@@ -47,13 +93,6 @@ int main()
 			x4 = x2->copy();
 			delete x1;
 			delete x2;
-			//x5 = new PositiveInteger;
-			//x6 = new PositiveInteger;
-			//cout<<PositiveInteger::compare(x3, x4)<<" ";
-			//x1 = PositiveInteger::Add(x3,x4,1);
-			//x1 = PositiveInteger::Subtract(x3,x4,1,0);
-			//x3->printBinary();
-			//x1 = PositiveInteger::Multiply(x3,x4);
 			PositiveInteger::Divide(x3,x4,x5,x6,divisible,1,0);
 			cout<<j<<"/"<<i<<endl;
 			x5->printBinary();
@@ -67,10 +106,10 @@ int main()
 				cout<<"0"<<endl;
 			}
 			cout<<endl;
-			//delete x1;
 			//delete x3;
 			delete x4;
 			delete x5;
+			*/
 		}
 		cout<<endl;
 	}
