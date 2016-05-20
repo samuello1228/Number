@@ -9,6 +9,91 @@
 #include <iostream>
 #include "PositiveInteger.hpp"
 using namespace std;
+
+
+struct ListElement
+{
+	PositiveInteger* Element;
+	ListElement* Next=nullptr;
+};
+void findPrime()
+{
+	PositiveInteger* one = new PositiveInteger;
+	PositiveInteger::One(one);
+	PositiveInteger* two = new PositiveInteger;
+	PositiveInteger::Two(two);
+	PositiveInteger* i;
+	PositiveInteger* iMax = new PositiveInteger(10000);
+	
+	ListElement* FirstElement = new ListElement;
+	ListElement* FinalElement;
+	ListElement* element1;
+	ListElement* element2;
+	
+	FirstElement->Element = two->copy();
+	FinalElement = FirstElement;
+	
+	i = PositiveInteger::Add(two,one,false);
+	PositiveInteger* p1;
+	PositiveInteger* p2;
+	bool divisible = false;
+	while(true)
+	{
+		if(PositiveInteger::compare(i,iMax)==1)
+		{
+			break;
+		}
+		
+		element1 = FirstElement;
+		while(true)
+		{
+			p1 = PositiveInteger::Multiply(element1->Element,element1->Element);
+			if(PositiveInteger::compare(i,p1)==-1)
+			{
+				element2 = new ListElement;
+				FinalElement->Next = element2;
+				element2->Element = i->copy();
+				FinalElement = element2;
+				delete p1;
+				break;
+			}
+			delete p1;
+			
+			PositiveInteger::Divide(i,element1->Element,p1,p2,divisible,false,false);
+			delete p1;
+			if(divisible)
+			{
+				break;
+			}
+			else
+			{
+				delete p2;
+			}
+			
+			element1 = element1->Next;
+			
+		}
+		PositiveInteger::Add(i,one,true);
+	}
+	delete i;
+	delete one;
+	delete two;
+	delete iMax;
+	
+	element1 = FirstElement;
+	element1->Element->printBinary();
+	//element1->Element->printDecimal(true);
+	while(element1->Next!=nullptr)
+	{
+		element2 = element1->Next;
+		delete element1;
+		element2->Element->printBinary();
+		//element2->Element->printDecimal(true);
+		element1 = element2;
+	}
+	delete element1;
+}
+
 int main()
 {
 	
@@ -36,8 +121,8 @@ int main()
 			break;
 		}
 		
-		x1 = i->copy();
-		x1->printDecimal(1);
+		//x1 = i->copy();
+		//x1->printDecimal(1);
 		
 		j = new PositiveInteger;
 		PositiveInteger::One(j);
@@ -119,9 +204,11 @@ int main()
 		delete j;
 	}
 	delete i;
-	
 	delete one;
 	delete iMax;
 	delete jMax;
+	
+	findPrime();
+	
 	return 0;
 }

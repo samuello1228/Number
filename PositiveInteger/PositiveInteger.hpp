@@ -40,7 +40,6 @@ public:
 	struct Digit
 	{
 		char digit;
-		Digit* Left=nullptr;
 		Digit* Right=nullptr;
 	};
 	void printDecimal(bool);
@@ -53,6 +52,8 @@ public:
 	static PositiveInteger* Subtract(PositiveInteger*,PositiveInteger*,bool,bool);
 	static PositiveInteger* Multiply(PositiveInteger*,PositiveInteger*);
 	static void Divide(PositiveInteger*,PositiveInteger*,PositiveInteger*&,PositiveInteger*&,bool&,bool,bool);
+	
+	static PositiveInteger* GCD(PositiveInteger*&,PositiveInteger*&,bool);
 	
 private:
 	Bit* leftEnd;
