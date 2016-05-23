@@ -1844,3 +1844,116 @@ void PositiveInteger::Divide(PositiveInteger* x1,PositiveInteger* x2,PositiveInt
 		}
 	}
 }
+
+PositiveInteger::ListOfPositiveInteger* PositiveInteger::findPrime(PositiveInteger* max)
+{
+	PositiveInteger* one = new PositiveInteger;
+	PositiveInteger::One(one);
+	PositiveInteger* two = new PositiveInteger;
+	PositiveInteger::Two(two);
+	PositiveInteger* i;
+	
+	ListOfPositiveInteger* FirstElement = new ListOfPositiveInteger;
+	ListOfPositiveInteger* FinalElement;
+	ListOfPositiveInteger* element1;
+	ListOfPositiveInteger* element2;
+	
+	FirstElement->Element = two->copy();
+	FinalElement = FirstElement;
+	
+	i = PositiveInteger::Add(two,one,false);
+	PositiveInteger* p1;
+	PositiveInteger* p2;
+	bool divisible = false;
+	while(true)
+	{
+		if(PositiveInteger::compare(i,max)==1)
+		{
+			break;
+		}
+		
+		element1 = FirstElement;
+		while(true)
+		{
+			p1 = PositiveInteger::Multiply(element1->Element,element1->Element);
+			if(PositiveInteger::compare(i,p1)==-1)
+			{
+				element2 = new ListOfPositiveInteger;
+				FinalElement->Next = element2;
+				element2->Element = i->copy();
+				FinalElement = element2;
+				delete p1;
+				break;
+			}
+			delete p1;
+			
+			PositiveInteger::Divide(i,element1->Element,p1,p2,divisible,false,false);
+			delete p1;
+			if(divisible)
+			{
+				break;
+			}
+			else
+			{
+				delete p2;
+			}
+			
+			element1 = element1->Next;
+			
+		}
+		PositiveInteger::Add(i,one,true);
+	}
+	delete i;
+	delete one;
+	delete two;
+	
+
+	
+	return FirstElement;
+}
+
+void PositiveInteger::printList(PositiveInteger::ListOfPositiveInteger* list,bool isDecimal)
+{
+	ListOfPositiveInteger* element1;
+	ListOfPositiveInteger* element2;
+	
+	element1 = list;
+	if(isDecimal)
+	{
+		element1->Element->printDecimal(false);
+	}
+	else
+	{
+		element1->Element->printBinary();
+	}
+	while(element1->Next!=nullptr)
+	{
+		element2 = element1->Next;
+		if(isDecimal)
+		{
+			element1->Element->printDecimal(false);
+		}
+		else
+		{
+			element1->Element->printBinary();
+		}
+		element1 = element2;
+	}
+}
+
+void PositiveInteger::deleteList(PositiveInteger::ListOfPositiveInteger* list)
+{
+	ListOfPositiveInteger* element1;
+	ListOfPositiveInteger* element2;
+	
+	element1 = list;
+	delete element1->Element;
+	while(element1->Next!=nullptr)
+	{
+		element2 = element1->Next;
+		delete element1;
+		delete element2->Element;
+		element1 = element2;
+	}
+	delete element1;
+}

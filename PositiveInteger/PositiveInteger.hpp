@@ -52,6 +52,15 @@ public:
 	static PositiveInteger* Subtract(PositiveInteger*,PositiveInteger*,bool,bool);
 	static PositiveInteger* Multiply(PositiveInteger*,PositiveInteger*);
 	static void Divide(PositiveInteger*,PositiveInteger*,PositiveInteger*&,PositiveInteger*&,bool&,bool,bool);
+
+	struct ListOfPositiveInteger
+	{
+		PositiveInteger* Element;
+		ListOfPositiveInteger* Next=nullptr;
+	};
+	static void printList(ListOfPositiveInteger*,bool);
+	static void deleteList(ListOfPositiveInteger*);
+	static ListOfPositiveInteger* findPrime(PositiveInteger*);
 	
 	static PositiveInteger* GCD(PositiveInteger*&,PositiveInteger*&,bool);
 	
