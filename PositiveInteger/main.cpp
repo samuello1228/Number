@@ -25,8 +25,8 @@ int main()
 	PositiveInteger::One(one);
 	PositiveInteger* i;
 	PositiveInteger* j;
-	PositiveInteger* iMax = new PositiveInteger(100);
-	PositiveInteger* jMax = new PositiveInteger(1);
+	PositiveInteger* iMax = new PositiveInteger(5);
+	PositiveInteger* jMax = new PositiveInteger(5);
 	
 	i = new PositiveInteger;
 	PositiveInteger::One(i);
@@ -112,9 +112,18 @@ int main()
 			delete x5;
 			*/
 			
+			///*
+			x3 = i->copy();
+			x4 = j->copy();
+			x1 = PositiveInteger::GCD(x3,x4);
+			x1->printBinary();
+			delete x1;
+			delete x3;
+			delete x4;
+			//*/
 			PositiveInteger::Add(j,one,true);
 		}
-		//cout<<endl;
+		cout<<endl;
 		
 		PositiveInteger::Add(i,one,true);
 		delete j;
@@ -124,12 +133,16 @@ int main()
 	delete iMax;
 	delete jMax;
 	
+	/*
 	PositiveInteger* max = new PositiveInteger(97);
 	PositiveInteger::ListOfPositiveInteger* list;
 	list = PositiveInteger::findPrime(max);
 	PositiveInteger::printList(list,0);
 	PositiveInteger::deleteList(list);
 	delete max;
+	*/
+	
+	
 
 	return 0;
 }

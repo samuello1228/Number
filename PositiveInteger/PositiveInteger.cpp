@@ -1845,6 +1845,52 @@ void PositiveInteger::Divide(PositiveInteger* x1,PositiveInteger* x2,PositiveInt
 	}
 }
 
+void PositiveInteger::printList(PositiveInteger::ListOfPositiveInteger* list,bool isDecimal)
+{
+	ListOfPositiveInteger* element1;
+	ListOfPositiveInteger* element2;
+	
+	element1 = list;
+	if(isDecimal)
+	{
+		element1->Element->printDecimal(false);
+	}
+	else
+	{
+		element1->Element->printBinary();
+	}
+	while(element1->Next!=nullptr)
+	{
+		element2 = element1->Next;
+		if(isDecimal)
+		{
+			element1->Element->printDecimal(false);
+		}
+		else
+		{
+			element1->Element->printBinary();
+		}
+		element1 = element2;
+	}
+}
+
+void PositiveInteger::deleteList(PositiveInteger::ListOfPositiveInteger* list)
+{
+	ListOfPositiveInteger* element1;
+	ListOfPositiveInteger* element2;
+	
+	element1 = list;
+	delete element1->Element;
+	while(element1->Next!=nullptr)
+	{
+		element2 = element1->Next;
+		delete element1;
+		delete element2->Element;
+		element1 = element2;
+	}
+	delete element1;
+}
+
 PositiveInteger::ListOfPositiveInteger* PositiveInteger::findPrime(PositiveInteger* max)
 {
 	PositiveInteger* one = new PositiveInteger;
@@ -1906,54 +1952,38 @@ PositiveInteger::ListOfPositiveInteger* PositiveInteger::findPrime(PositiveInteg
 	delete i;
 	delete one;
 	delete two;
-	
-
-	
 	return FirstElement;
 }
 
-void PositiveInteger::printList(PositiveInteger::ListOfPositiveInteger* list,bool isDecimal)
+PositiveInteger* PositiveInteger::GCD(PositiveInteger* x1,PositiveInteger* x2)
 {
-	ListOfPositiveInteger* element1;
-	ListOfPositiveInteger* element2;
+	PositiveInteger* p1;
+	PositiveInteger* p2;
+	PositiveInteger* p3;
+	PositiveInteger* p4;
+	bool divisible = false;
 	
-	element1 = list;
-	if(isDecimal)
+	if(PositiveInteger::compare(x1,x2)==-1)
 	{
-		element1->Element->printDecimal(false);
+		p1 = x2->copy();
+		p2 = x1->copy();
 	}
 	else
 	{
-		element1->Element->printBinary();
+		p1 = x1->copy();
+		p2 = x2->copy();
 	}
-	while(element1->Next!=nullptr)
-	{
-		element2 = element1->Next;
-		if(isDecimal)
-		{
-			element1->Element->printDecimal(false);
-		}
-		else
-		{
-			element1->Element->printBinary();
-		}
-		element1 = element2;
-	}
-}
-
-void PositiveInteger::deleteList(PositiveInteger::ListOfPositiveInteger* list)
-{
-	ListOfPositiveInteger* element1;
-	ListOfPositiveInteger* element2;
 	
-	element1 = list;
-	delete element1->Element;
-	while(element1->Next!=nullptr)
+	while(true)
 	{
-		element2 = element1->Next;
-		delete element1;
-		delete element2->Element;
-		element1 = element2;
+		PositiveInteger::Divide(p1,p2,p3,p4,divisible,false,false);
+		delete p1;
+		delete p3;
+		if(divisible)
+		{
+			return p2;
+		}
+		p1 = p2;
+		p2 = p4;
 	}
-	delete element1;
 }

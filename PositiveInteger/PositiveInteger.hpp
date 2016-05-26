@@ -62,7 +62,7 @@ public:
 	static void deleteList(ListOfPositiveInteger*);
 	static ListOfPositiveInteger* findPrime(PositiveInteger*);
 	
-	static PositiveInteger* GCD(PositiveInteger*&,PositiveInteger*&,bool);
+	static PositiveInteger* GCD(PositiveInteger*,PositiveInteger*);
 	
 private:
 	Bit* leftEnd;
