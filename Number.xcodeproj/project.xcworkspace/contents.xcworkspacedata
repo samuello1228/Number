@@ -2,6 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "self:PositiveInteger.xcodeproj">
+      location = "self:/Users/samuel 1/Documents/C++ code/PositiveInteger/Number.xcodeproj">
    </FileRef>
 </Workspace>

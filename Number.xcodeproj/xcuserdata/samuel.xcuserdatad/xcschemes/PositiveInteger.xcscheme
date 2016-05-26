@@ -17,7 +17,7 @@
                BlueprintIdentifier = "7EF1D89C1C750258002DA38C"
                BuildableName = "PositiveInteger"
                BlueprintName = "PositiveInteger"
-               ReferencedContainer = "container:PositiveInteger.xcodeproj">
+               ReferencedContainer = "container:Number.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -35,7 +35,7 @@
             BlueprintIdentifier = "7EF1D89C1C750258002DA38C"
             BuildableName = "PositiveInteger"
             BlueprintName = "PositiveInteger"
-            ReferencedContainer = "container:PositiveInteger.xcodeproj">
+            ReferencedContainer = "container:Number.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
@@ -58,7 +58,7 @@
             BlueprintIdentifier = "7EF1D89C1C750258002DA38C"
             BuildableName = "PositiveInteger"
             BlueprintName = "PositiveInteger"
-            ReferencedContainer = "container:PositiveInteger.xcodeproj">
+            ReferencedContainer = "container:Number.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -77,7 +77,7 @@
             BlueprintIdentifier = "7EF1D89C1C750258002DA38C"
             BuildableName = "PositiveInteger"
             BlueprintName = "PositiveInteger"
-            ReferencedContainer = "container:PositiveInteger.xcodeproj">
+            ReferencedContainer = "container:Number.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

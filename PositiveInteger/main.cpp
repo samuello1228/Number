@@ -7,7 +7,7 @@
 //
 
 #include <iostream>
-#include "PositiveInteger.hpp"
+#include "Integer.hpp"
 using namespace std;
 
 int main()
@@ -25,8 +25,8 @@ int main()
 	PositiveInteger::One(one);
 	PositiveInteger* i;
 	PositiveInteger* j;
-	PositiveInteger* iMax = new PositiveInteger(5);
-	PositiveInteger* jMax = new PositiveInteger(5);
+	PositiveInteger* iMax = new PositiveInteger(1);
+	PositiveInteger* jMax = new PositiveInteger(1);
 	
 	i = new PositiveInteger;
 	PositiveInteger::One(i);
@@ -112,18 +112,20 @@ int main()
 			delete x5;
 			*/
 			
-			///*
+			/*
 			x3 = i->copy();
 			x4 = j->copy();
+			//x3 = new PositiveInteger(60);
+			//x4 = new PositiveInteger(72);
 			x1 = PositiveInteger::GCD(x3,x4);
 			x1->printBinary();
 			delete x1;
 			delete x3;
 			delete x4;
-			//*/
+			*/
 			PositiveInteger::Add(j,one,true);
 		}
-		cout<<endl;
+		//cout<<endl;
 		
 		PositiveInteger::Add(i,one,true);
 		delete j;
@@ -142,6 +144,20 @@ int main()
 	delete max;
 	*/
 	
+	
+	///*
+	Integer* a1;
+	Integer* a2;
+	Integer* a3;
+	Integer* a4;
+	
+	a1 = new Integer(-10);
+	a3 = a1->copy();
+	delete a1;
+	a3->printBinary();
+	//a3->printDecimal(false);
+	delete a3;
+	//*/
 	
 
 	return 0;
