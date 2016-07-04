@@ -125,7 +125,7 @@ int main()
 			*/
 			PositiveInteger::Add(j,one,true);
 		}
-		cout<<endl;
+		//cout<<endl;
 		
 		PositiveInteger::Add(i,one,true);
 		delete j;
