@@ -12,6 +12,7 @@
 #include "Bit.hpp"
 #include <string>
 
+class CompareCode;
 class PositiveInteger
 {
 public:
@@ -46,7 +47,7 @@ public:
 	};
 	void printDecimal(bool);
 	PositiveInteger* copy();
-	static int compare(PositiveInteger*,PositiveInteger*);
+	static CompareCode compare(PositiveInteger*,PositiveInteger*);
 	static PositiveInteger* Add(PositiveInteger*&,PositiveInteger*&,bool);
 	static PositiveInteger* SubtractAux(Bit*&,Bit*,PositiveInteger*&,bool&,bool&,
 										Bit*,Bit*,PositiveInteger*,bool,bool,
@@ -76,6 +77,19 @@ private:
 	bool isTwo;
 	
 	static void AddThreeBit(bool,bool,bool,bool&,bool&);
+};
+
+class CompareCode
+{
+public:
+	CompareCode(){Equal=false;Larger=false;}
+	CompareCode(bool newEqual, bool newLarger=false){Equal=newEqual;Larger=newLarger;}
+	bool isEqual(){return Equal;}
+	bool isLarger(){return !Equal && Larger;}
+	bool isSmaller(){return !Equal && !Larger;}
+private:
+	bool Equal;
+	bool Larger;
 };
 
 #endif /* PositiveInteger_hpp */

@@ -249,7 +249,7 @@ void PositiveInteger::printDecimal(bool overwrite)
 	Digit* digit2;
 	while(true)
 	{
-		if(PositiveInteger::compare(x1,ten)==-1)
+		if(PositiveInteger::compare(x1,ten).isSmaller())
 		{
 			divisible = false;
 			isEnd = true;
@@ -465,7 +465,7 @@ PositiveInteger* PositiveInteger::copy()
 	return y;
 }
 
-int PositiveInteger::compare(PositiveInteger* x1, PositiveInteger* x2)
+CompareCode PositiveInteger::compare(PositiveInteger* x1, PositiveInteger* x2)
 {
 	/*
 	1: x1>x2
@@ -483,26 +483,26 @@ int PositiveInteger::compare(PositiveInteger* x1, PositiveInteger* x2)
 	
 	if(n1->isOneOrTwo() && !n2->isOneOrTwo())
 	{
-		return -1;
+		return CompareCode(false,false);
 	}
 	
 	if(!n1->isOneOrTwo() && n2->isOneOrTwo())
 	{
-		return 1;
+		return CompareCode(false,true);
 	}
 
 	// n1->isOneOrTwo() && n2->isOneOrTwo()
 	if(n1->getIsOne() && n2->getIsOne())
 	{
-		return 0;
+		return CompareCode(true);
 	}
 	if(n1->getIsOne() && n2->getIsTwo())
 	{
-		return -1;
+		return CompareCode(false,false);
 	}
 	if(n1->getIsTwo() && n2->getIsOne())
 	{
-		return 1;
+		return CompareCode(false,true);
 	}
 	
 	// n1->getIsTwo() && n2->getIsTwo()
@@ -522,15 +522,15 @@ int PositiveInteger::compare(PositiveInteger* x1, PositiveInteger* x2)
 			digit2 = digit2->getRight();
 			if(!digit1->getDigit() && digit2->getDigit())
 			{
-				return -1;
+				return CompareCode(false,false);
 			}
 			if(digit1->getDigit() && !digit2->getDigit())
 			{
-				return 1;
+				return CompareCode(false,true);
 			}
 		}
 	}
-	return 0;
+	return CompareCode(true);
 }
 
 void PositiveInteger::AddThreeBit(bool x1, bool x2, bool x3, bool &y1, bool &y2)
@@ -636,12 +636,12 @@ PositiveInteger* PositiveInteger::Add(PositiveInteger*& x1,PositiveInteger*& x2,
 	}
 	
 	//swap x1 and x2, if overwrite and the number of digit of x2 is larger.
-	int test = PositiveInteger::compare(x1->getNumberOfDigit(),x2->getNumberOfDigit());
+	CompareCode test = PositiveInteger::compare(x1->getNumberOfDigit(),x2->getNumberOfDigit());
 	PositiveInteger* n1;
 	PositiveInteger* n2;
 	if(overwrite)
 	{
-		if(test==-1)
+		if(test.isSmaller())
 		{
 			p1=x1;
 			x1=x2;
@@ -653,7 +653,7 @@ PositiveInteger* PositiveInteger::Add(PositiveInteger*& x1,PositiveInteger*& x2,
 	}
 	else
 	{
-		if(test==-1)
+		if(test.isSmaller())
 		{
 			n1=x2;
 			n2=x1;
@@ -819,8 +819,8 @@ PositiveInteger* PositiveInteger::SubtractAux(Bit*& LeftEnd1,Bit* RightEnd1,Posi
 	Bit* digitLeft1;
 	Bit* digitLeft2;
 	Bit* digitRight2;
-	int test1;
-	int test2 = -1;
+	CompareCode test1;
+	CompareCode test2;
 	
 	bool isCount = !Divide;
 	
@@ -832,7 +832,7 @@ PositiveInteger* PositiveInteger::SubtractAux(Bit*& LeftEnd1,Bit* RightEnd1,Posi
 	p2 = new PositiveInteger;
 	PositiveInteger::One(p2);
 	test1 = PositiveInteger::compare(n1,n2);
-	if(test1!=0)
+	if(!test1.isEqual())
 	{
 		p1 = PositiveInteger::Add(n2,p2,false);
 		test2 = PositiveInteger::compare(n1,p1);
@@ -848,9 +848,9 @@ PositiveInteger* PositiveInteger::SubtractAux(Bit*& LeftEnd1,Bit* RightEnd1,Posi
 		y = new PositiveInteger;
 	}
 	
-	if(test1==0 || (test1!=0 && test2==0))
+	if(test1.isEqual() || (!test1.isEqual() && test2.isEqual()))
 	{
-		if(test1==0)
+		if(test1.isEqual())
 		{
 			//n1 = n2
 			digitLeft1 = LeftEnd1;
@@ -1272,18 +1272,18 @@ PositiveInteger* PositiveInteger::Subtract(PositiveInteger* x1,PositiveInteger* 
 	PositiveInteger* p1;
 	
 	
-	int test1;
+	CompareCode test1;
 	if(checking)
 	{
 		test1 = PositiveInteger::compare(x1,x2);
-		if(test1==0)
+		if(test1.isEqual())
 		{
 			cout<<"Error! PositiveInteger does not support number zero."<<endl;
 			y = new PositiveInteger;
 			return y;
 		}
 		
-		if(test1==-1)
+		if(test1.isSmaller())
 		{
 			p1=x1;
 			x1=x2;
@@ -1551,8 +1551,8 @@ void PositiveInteger::Divide(PositiveInteger* x1,PositiveInteger* x2,PositiveInt
 	
 	if(checking)
 	{
-		int test = PositiveInteger::compare(x1,x2);
-		if(test==-1)
+		CompareCode test = PositiveInteger::compare(x1,x2);
+		if(test.isSmaller())
 		{
 			cout<<"Error! PositiveInteger does not support number zero."<<endl;
 			return;
@@ -1977,7 +1977,7 @@ PositiveInteger::ListOfPositiveInteger* PositiveInteger::findPrime(PositiveInteg
 	bool divisible = false;
 	while(true)
 	{
-		if(PositiveInteger::compare(i,max)==1)
+		if(PositiveInteger::compare(i,max).isLarger())
 		{
 			break;
 		}
@@ -1986,7 +1986,7 @@ PositiveInteger::ListOfPositiveInteger* PositiveInteger::findPrime(PositiveInteg
 		while(true)
 		{
 			p1 = PositiveInteger::Multiply(element1->Element,element1->Element);
-			if(PositiveInteger::compare(i,p1)==-1)
+			if(PositiveInteger::compare(i,p1).isSmaller())
 			{
 				element2 = new ListOfPositiveInteger;
 				FinalElement->Next = element2;
@@ -2027,7 +2027,7 @@ PositiveInteger* PositiveInteger::GCD(PositiveInteger* x1,PositiveInteger* x2)
 	PositiveInteger* p4;
 	bool divisible = false;
 	
-	if(PositiveInteger::compare(x1,x2)==-1)
+	if(PositiveInteger::compare(x1,x2).isSmaller())
 	{
 		p1 = x2->copy();
 		p2 = x1->copy();
