@@ -1585,12 +1585,12 @@ void PositiveInteger::Divide(PositiveInteger* x1,PositiveInteger* x2,PositiveInt
 	digit1 = y2->getLeftEnd();
 	digit2 = x2->getLeftEnd();
 	//digit1 = 1, digit2 = 1
-	int compare =0;
+	CompareCode compare;
 	while(true)
 	{
 		if(digit2->isRightEnd())
 		{
-			compare = 0;
+			compare = CompareCode(true);
 			break;
 		}
 		if(digit1->isRightEnd())
@@ -1605,13 +1605,13 @@ void PositiveInteger::Divide(PositiveInteger* x1,PositiveInteger* x2,PositiveInt
 		if(digit1->getDigit() && !digit2->getDigit())
 		{
 			//digit1 = 1, digit2 = 0
-			compare = 1;
+			compare = CompareCode(false,true);
 			break;
 		}
 		if(!digit1->getDigit() && digit2->getDigit())
 		{
 			//digit1 = 0, digit2 = 1
-			compare = -1;
+			compare = CompareCode(false,false);
 			break;
 		}
 	}
@@ -1659,7 +1659,7 @@ void PositiveInteger::Divide(PositiveInteger* x1,PositiveInteger* x2,PositiveInt
 	p3 = x2->getNumberOfDigit();
 	p1 = PositiveInteger::Subtract(p1,p3,true,false);
 	
-	if(compare == -1)
+	if(compare.isSmaller())
 	{
 		//reserve one more 0 at the left end
 		y1->getLeftEnd()->setDigit(0);
@@ -1694,7 +1694,7 @@ void PositiveInteger::Divide(PositiveInteger* x1,PositiveInteger* x2,PositiveInt
 	bool w2;
 	while(true)
 	{
-		if(compare == 0)
+		if(compare.isEqual())
 		{
 			isSubtract = true;
 			isCount = false;
@@ -1759,14 +1759,14 @@ void PositiveInteger::Divide(PositiveInteger* x1,PositiveInteger* x2,PositiveInt
 				}
 			}
 		}
-		else if(compare == 1)
+		else if(compare.isLarger())
 		{
 			p3 = x2->getNumberOfDigit();
 			p1 = PositiveInteger::SubtractAux(t1,t2,p3,w1,w2,
 											  x2->getLeftEnd(),x2->getRightEnd(),x2->getNumberOfDigit(),x2->getIsOne(),x2->getIsTwo(),
 											  true,true,b1,t2,isEnd,count);
 		}
-		else if(compare == -1)
+		else if(compare.isSmaller())
 		{
 			p3 = x2->getNumberOfDigit();
 			p3 = PositiveInteger::Add(p3,p2,false);
@@ -1800,7 +1800,7 @@ void PositiveInteger::Divide(PositiveInteger* x1,PositiveInteger* x2,PositiveInt
 			{
 				if(digit2->isRightEnd())
 				{
-					compare = 0;
+					compare = CompareCode(true);
 					break;
 				}
 				if(digit1->isRightEnd())
@@ -1814,24 +1814,24 @@ void PositiveInteger::Divide(PositiveInteger* x1,PositiveInteger* x2,PositiveInt
 				if(digit1->getDigit() && !digit2->getDigit())
 				{
 					//digit1 = 1, digit2 = 0
-					compare = 1;
+					compare = CompareCode(false,true);
 					break;
 				}
 				if(!digit1->getDigit() && digit2->getDigit())
 				{
 					//digit1 = 0, digit2 = 1
-					compare = -1;
+					compare = CompareCode(false,false);
 					break;
 				}
 			}
-			if(b1->isRightEnd() && compare == -1)
+			if(b1->isRightEnd() && compare.isSmaller())
 			{
 				isEnd = true;
 				p1 = x2->getNumberOfDigit()->copy();
 				y2->setNumberOfDigit(p1);
 				p1->setNumberOfDigitParent(y2);
 			}
-			else if(compare == 0 || compare == 1)
+			else if(!compare.isSmaller())
 			{
 				b1->setDigit(1);
 			}
