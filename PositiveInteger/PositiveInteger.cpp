@@ -758,14 +758,14 @@ PositiveInteger* PositiveInteger::Add(PositiveInteger*& x1,PositiveInteger*& x2,
 			if(y->isOneOrTwo())
 			{
 				//y>=3
-				p1 = PositiveInteger::Add(p1,one,true);
+				PositiveInteger::Add(p1,one,true);
 				y->setNumberOfDigit(p1);
 				p1->setNumberOfDigitParent(y);
 			}
 			else
 			{
 				p1 = y->getNumberOfDigit();
-				p1 = PositiveInteger::Add(p1,one,true);
+				PositiveInteger::Add(p1,one,true);
 			}
 		}
 		else
@@ -859,7 +859,7 @@ PositiveInteger* PositiveInteger::SubtractAux(Bit*& LeftEnd1,Bit* RightEnd1,Posi
 			{
 				if(isCount)
 				{
-					count = PositiveInteger::Add(count,one,true);
+					PositiveInteger::Add(count,one,true);
 				}
 				//Because y>=1
 				digitLeft1 = digitLeft1->getRight();
@@ -922,7 +922,7 @@ PositiveInteger* PositiveInteger::SubtractAux(Bit*& LeftEnd1,Bit* RightEnd1,Posi
 			//digitLeft1 = 0, digitLeft2 =1
 			if(isCount)
 			{
-				count = PositiveInteger::Add(count,one,true);
+				PositiveInteger::Add(count,one,true);
 			}
 			if(overwrite)
 			{
@@ -1086,8 +1086,8 @@ PositiveInteger* PositiveInteger::SubtractAux(Bit*& LeftEnd1,Bit* RightEnd1,Posi
 					if(!Divide)
 					{
 						//x1 originally cannot be one or two
-						p1 = PositiveInteger::Subtract(n1,count,true,false);
-						p1 = PositiveInteger::Add(p1,one,true);
+						PositiveInteger::Subtract(n1,count,true,false);
+						PositiveInteger::Add(n1,one,true);
 					}
 				}
 				else
@@ -1095,7 +1095,7 @@ PositiveInteger* PositiveInteger::SubtractAux(Bit*& LeftEnd1,Bit* RightEnd1,Posi
 					y->setIsOne(false);
 					y->setIsTwo(false);
 					p1 = PositiveInteger::Subtract(n1,count,false,false);
-					p1 = PositiveInteger::Add(p1,one,true);
+					PositiveInteger::Add(p1,one,true);
 					y->setNumberOfDigit(p1);
 					p1->setNumberOfDigitParent(y);
 				}
@@ -1201,14 +1201,14 @@ PositiveInteger* PositiveInteger::SubtractAux(Bit*& LeftEnd1,Bit* RightEnd1,Posi
 		{
 			if(!Divide)
 			{
-				p1 = PositiveInteger::Subtract(n1,count,true,false);
-				p1 = PositiveInteger::Add(p1,one,true);
+				PositiveInteger::Subtract(n1,count,true,false);
+				PositiveInteger::Add(n1,one,true);
 			}
 		}
 		else
 		{
 			p1 = PositiveInteger::Subtract(n1,count,false,false);
-			p1 = PositiveInteger::Add(p1,one,true);
+			PositiveInteger::Add(p1,one,true);
 			y->setNumberOfDigit(p1);
 			p1->setNumberOfDigitParent(y);
 		}
@@ -1224,7 +1224,7 @@ PositiveInteger* PositiveInteger::SubtractAux(Bit*& LeftEnd1,Bit* RightEnd1,Posi
 			LeftEnd1 = c1;
 			if(!Divide)
 			{
-				p1 = PositiveInteger::Subtract(n1,count,true,false);
+				PositiveInteger::Subtract(n1,count,true,false);
 			}
 		}
 		else
@@ -1239,7 +1239,7 @@ PositiveInteger* PositiveInteger::SubtractAux(Bit*& LeftEnd1,Bit* RightEnd1,Posi
 		{
 			if(isCount)
 			{
-				count = PositiveInteger::Add(count,one,true);
+				PositiveInteger::Add(count,one,true);
 			}
 			if(!isEnd)
 			{
@@ -1527,7 +1527,7 @@ PositiveInteger* PositiveInteger::Multiply(PositiveInteger* x1,PositiveInteger* 
 		
 		one = new PositiveInteger;
 		PositiveInteger::One(one);
-		p1 = PositiveInteger::Subtract(p1,one,true,false);
+		PositiveInteger::Subtract(p1,one,true,false);
 		y->setNumberOfDigit(p1);
 		p1->setNumberOfDigitParent(y);
 		delete one;
@@ -1658,7 +1658,7 @@ void PositiveInteger::Divide(PositiveInteger* x1,PositiveInteger* x2,PositiveInt
 	p1 = PositiveInteger::Add(p1,one,false);
 	
 	p3 = x2->getNumberOfDigit();
-	p1 = PositiveInteger::Subtract(p1,p3,true,false);
+	PositiveInteger::Subtract(p1,p3,true,false);
 	
 	if(compare.isSmaller())
 	{
@@ -1666,7 +1666,7 @@ void PositiveInteger::Divide(PositiveInteger* x1,PositiveInteger* x2,PositiveInt
 		y1->getLeftEnd()->setDigit(0);
 		y1->getLeftEnd()->getRight()->setDigit(1);
 
-		p1 = PositiveInteger::Subtract(p1,one,true,false);
+		PositiveInteger::Subtract(p1,one,true,false);
 	}
 	else
 	{
@@ -1724,7 +1724,7 @@ void PositiveInteger::Divide(PositiveInteger* x1,PositiveInteger* x2,PositiveInt
 				{
 					if(isCount)
 					{
-						count = PositiveInteger::Add(count,one,true);
+						PositiveInteger::Add(count,one,true);
 					}
 					if(!isEnd)
 					{
@@ -1763,7 +1763,7 @@ void PositiveInteger::Divide(PositiveInteger* x1,PositiveInteger* x2,PositiveInt
 		else if(compare.isLarger())
 		{
 			p3 = x2->getNumberOfDigit();
-			p1 = PositiveInteger::SubtractAux(t1,t2,p3,w1,w2,
+			PositiveInteger::SubtractAux(t1,t2,p3,w1,w2,
 											  x2->getLeftEnd(),x2->getRightEnd(),x2->getNumberOfDigit(),x2->getIsOne(),x2->getIsTwo(),
 											  true,true,b1,t2,isEnd,count);
 		}
@@ -1771,7 +1771,7 @@ void PositiveInteger::Divide(PositiveInteger* x1,PositiveInteger* x2,PositiveInt
 		{
 			p3 = x2->getNumberOfDigit();
 			p3 = PositiveInteger::Add(p3,one,false);
-			p1 = PositiveInteger::SubtractAux(t1,t2->getRight(),p3,w1,w2,
+			PositiveInteger::SubtractAux(t1,t2->getRight(),p3,w1,w2,
 											  x2->getLeftEnd(),x2->getRightEnd(),x2->getNumberOfDigit(),x2->getIsOne(),x2->getIsTwo(),
 											  true,true,b1,t2,isEnd,count);
 			delete p3;
