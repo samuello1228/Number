@@ -10,12 +10,14 @@
 #define PositiveInteger_hpp
 
 #include "Bit.hpp"
+#include <string>
 
 class PositiveInteger
 {
 public:
 	PositiveInteger();
-	PositiveInteger(unsigned int);
+	//PositiveInteger(unsigned int);
+    PositiveInteger(std::string);
 	~PositiveInteger();
 	
 	Bit* getLeftEnd();

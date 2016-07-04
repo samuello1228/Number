@@ -121,6 +121,70 @@ void PositiveInteger::Two(PositiveInteger* x)
 	x->setNumberOfDigitParent(nullptr);
 }
 
+PositiveInteger::PositiveInteger(std::string x)
+{
+    PositiveInteger* one = new PositiveInteger;
+    PositiveInteger::One(one);
+    PositiveInteger* count = new PositiveInteger;
+    PositiveInteger::One(count);
+    
+    std::string::iterator i=x.begin();
+    Bit* b1 = new Bit;
+    Bit* b2;
+    setLeftEnd(b1);
+    if(*i == '1')
+    {
+        b1->setDigit(1);
+    }
+    i++;
+    
+    while(i!=x.end())
+    {
+        PositiveInteger::Add(count,one,true);
+        b2 = new Bit;
+        b1->setRight(b2);
+        b2->setLeft(b1);
+        if(*i == '1')
+        {
+            b2->setDigit(1);
+        }
+        b1 = b2;
+        i++;
+    }
+    setRightEnd(b1);
+    
+    if(count->getIsOne())
+    {
+        setIsOne(true);
+        setIsTwo(false);
+        setNumberOfDigit(this);
+        setNumberOfDigitParent(nullptr);
+        delete one;
+        delete count;
+        return;
+    }
+    else if(count->getIsTwo() && !getRightEnd()->getDigit())
+    {
+        setIsOne(false);
+        setIsTwo(true);
+        setNumberOfDigit(this);
+        setNumberOfDigitParent(nullptr);
+        delete one;
+        delete count;
+        return;
+    }
+    else
+    {
+        setIsOne(false);
+        setIsTwo(false);
+        setNumberOfDigit(count);
+        count->setNumberOfDigitParent(this);
+		setNumberOfDigitParent(nullptr);
+        delete one;
+        return;
+    }
+}
+/*
 PositiveInteger::PositiveInteger(unsigned int x)
 {
 	if(x==1)
@@ -161,10 +225,10 @@ PositiveInteger::PositiveInteger(unsigned int x)
 		getNumberOfDigit()->setNumberOfDigitParent(this);
 	}
 }
-
+*/
 void PositiveInteger::printDecimal(bool overwrite)
 {
-	PositiveInteger* ten = new PositiveInteger(10);
+	PositiveInteger* ten = new PositiveInteger("1010");
 	PositiveInteger* x1;
 	PositiveInteger* x2 = nullptr;
 	PositiveInteger* x3;

@@ -16,6 +16,7 @@ Integer::Integer()
 	sign = true;
 	magnitude = nullptr;
 }
+/*
 Integer::Integer(int x)
 {
 	if(x==0)
@@ -39,7 +40,31 @@ Integer::Integer(int x)
 		}
 	}
 }
-
+*/
+Integer::Integer(std::string x)
+{
+    std::string::iterator i=x.begin();
+    
+    if(*i == '0')
+    {
+        isZero = true;
+        return;
+    }
+    else if(*i == '-')
+    {
+        isZero = false;
+        sign = false;
+        x.erase(i);
+    }
+    else
+    {
+        isZero = false;
+        sign = true;
+    }
+    
+    PositiveInteger* m = new PositiveInteger(x);
+    setMagnitude(m);
+}
 Integer::~Integer()
 {
 	if(!isZero)

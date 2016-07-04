@@ -15,7 +15,8 @@ class Integer
 {
 public:
 	Integer();
-	Integer(int);
+	//Integer(int);
+    Integer(std::string);
 	~Integer();
 	bool getIsZero();
 	void setIsZero(bool);
