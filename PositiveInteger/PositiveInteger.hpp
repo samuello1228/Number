@@ -70,7 +70,10 @@ public:
 	PositiveInteger(unsigned int);
 	bool isComplete();
 	bool isSame(unsigned int);
+	
 	static bool VerifyCopy(unsigned int);
+	static bool VerifyCounter(unsigned int);
+	static bool VerifyPositiveInteger(unsigned int);
 private:
 	Bit* leftEnd;
 	Bit* rightEnd;

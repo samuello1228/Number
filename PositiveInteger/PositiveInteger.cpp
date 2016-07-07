@@ -2178,20 +2178,83 @@ bool PositiveInteger::isSame(unsigned int x)
 	Bit* b2;
 	
 	b1 = getRightEnd();
+	b2 = p1->getRightEnd();
+	while(true)
+	{
+		if(b1->getDigit()!=b2->getDigit()) return false;
+		if(b1->getLeft()==nullptr) break;
+		if(b2->getLeft()==nullptr) return false;
+		b1 = b1->getLeft();
+		b2 = b2->getLeft();
+	}
+	if(b2->getLeft()!=nullptr) return false;
 	
+	delete p1;
 	return true;
 }
 
 bool PositiveInteger::VerifyCopy(unsigned int max)
 {
 	PositiveInteger* p1;
+	PositiveInteger* p2;
 	for(unsigned int i=1;i<=max;i++)
 	{
 		p1 = new PositiveInteger(i);
-		p1->printBinary();
-		if(!p1->isComplete()) return false;
+		//p1->printBinary();
+		p2 = p1->copy();
+		if(!p2->isSame(i)) return false;
 		
 		delete p1;
+		delete p2;
 	}
 	return true;
 }
+bool PositiveInteger::VerifyCounter(unsigned int max)
+{
+	PositiveInteger* one = new PositiveInteger;
+	PositiveInteger::One(one);
+	PositiveInteger* count = new PositiveInteger;
+	PositiveInteger::One(count);
+	for(unsigned int i=1;i<=max;i++)
+	{
+		if(!count->isSame(i)) return false;
+		count = PositiveInteger::Add(count,one,true);
+	}
+	delete one;
+	delete count;
+	return true;
+}
+bool PositiveInteger::VerifyPositiveInteger(unsigned int max)
+{
+	PositiveInteger* p1;
+	PositiveInteger* p2;
+	std::string s;
+	Bit* b1;
+	for(unsigned int i=1;i<=max;i++)
+	{
+		s.clear();
+		p1 = new PositiveInteger(i);
+		b1 = p1->getLeftEnd();
+		while(true)
+		{
+			if(b1->getDigit())
+			{
+				s.push_back('1');
+			}
+			else
+			{
+				s.push_back('0');
+			}
+			if(b1->isRightEnd()) break;
+			b1 = b1->getRight();
+		}
+		//cout<<s<<endl;
+		p2 = new PositiveInteger(s);
+		if(!p2->isSame(i)) return false;
+		
+		delete p1;
+		delete p2;
+	}
+	return true;
+}
+
