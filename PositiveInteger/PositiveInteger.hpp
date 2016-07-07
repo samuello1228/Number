@@ -17,7 +17,6 @@ class PositiveInteger
 {
 public:
 	PositiveInteger();
-	//PositiveInteger(unsigned int);
     PositiveInteger(std::string);
 	~PositiveInteger();
 	
@@ -67,6 +66,12 @@ public:
 	
 	static PositiveInteger* GCD(PositiveInteger*,PositiveInteger*);
 	
+	//verification
+	PositiveInteger(unsigned int);
+	unsigned int getInt();
+	bool isComplete();
+	bool isSame(unsigned int);
+	static bool VerifyCopy(unsigned int);
 private:
 	Bit* leftEnd;
 	Bit* rightEnd;

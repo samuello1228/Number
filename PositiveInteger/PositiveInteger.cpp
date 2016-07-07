@@ -113,7 +113,7 @@ void PositiveInteger::Two(PositiveInteger* x)
 	temp = new Bit;
 	x->setLeftEnd(temp);
 	
-	x->getRightEnd()->setDigit(0);
+	//x->getRightEnd()->setDigit(0);
 	x->getLeftEnd()->setDigit(1);
 	x->getRightEnd()->setLeft(x->getLeftEnd());
 	x->getLeftEnd()->setRight(x->getRightEnd());
@@ -184,48 +184,7 @@ PositiveInteger::PositiveInteger(std::string x)
         return;
     }
 }
-/*
-PositiveInteger::PositiveInteger(unsigned int x)
-{
-	if(x==1)
-	{
-		PositiveInteger::One(this);
-	}
-	else if(x==2)
-	{
-		PositiveInteger::Two(this);
 
-	}
-	else if(x>=3)
-	{
-		setIsOne(false);
-		setIsTwo(false);
-		
-		int count=1;
-		Bit* digit1 = new Bit;;
-		Bit* digit2;
-		digit1->setDigit(x%2);
-		setRightEnd(digit1);
-		x = (x - digit1->getDigit())/2;
-
-		while(x>=1)
-		{
-			count++;
-			digit2 = new Bit;
-			digit2->setDigit(x%2);
-			digit1->setLeft(digit2);
-			digit2->setRight(digit1);
-			x = (x - digit2->getDigit())/2;
-			digit1 = digit2;
-		}
-		setLeftEnd(digit1);
-		
-		PositiveInteger* temp2 = new PositiveInteger(count);
-		setNumberOfDigit(temp2);
-		getNumberOfDigit()->setNumberOfDigitParent(this);
-	}
-}
-*/
 void PositiveInteger::printDecimal(bool overwrite)
 {
 	PositiveInteger* ten = new PositiveInteger("1010");
@@ -322,13 +281,11 @@ void PositiveInteger::printDecimal(bool overwrite)
 				{
 					//x1 = 1001 (binary)
 					digit1->digit = '9';
-
 				}
 				else
 				{
 					//x1 = 1000 (binary)
 					digit1->digit = '8';
-
 				}
 			}
 		}
@@ -636,24 +593,27 @@ PositiveInteger* PositiveInteger::Add(PositiveInteger*& x1,PositiveInteger*& x2,
 	}
 	
 	//swap x1 and x2, if overwrite and the number of digit of x2 is larger.
-	CompareCode test = PositiveInteger::compare(x1->getNumberOfDigit(),x2->getNumberOfDigit());
+	
 	PositiveInteger* n1;
 	PositiveInteger* n2;
 	if(overwrite)
 	{
-		if(test.isSmaller())
+		//because if overwrite is true, then must add one
+		/*
+		if(PositiveInteger::compare(x1->getNumberOfDigit(),x2->getNumberOfDigit()).isSmaller())
 		{
 			p1=x1;
 			x1=x2;
 			x2=p1;
 		}
+		*/
 		n1=x1;
 		n2=x2;
 		y=x1;
 	}
 	else
 	{
-		if(test.isSmaller())
+		if(PositiveInteger::compare(x1->getNumberOfDigit(),x2->getNumberOfDigit()).isSmaller())
 		{
 			n1=x2;
 			n2=x1;
@@ -1246,7 +1206,7 @@ PositiveInteger* PositiveInteger::SubtractAux(Bit*& LeftEnd1,Bit* RightEnd1,Posi
 				if(y1Digit->isRightEnd())
 				{
 					isEnd = true;
-					isCount = true;
+					//isCount = true;
 					count = new PositiveInteger;
 					PositiveInteger::One(count);
 				}
@@ -2051,4 +2011,182 @@ PositiveInteger* PositiveInteger::GCD(PositiveInteger* x1,PositiveInteger* x2)
 		p1 = p2;
 		p2 = p4;
 	}
+}
+
+//verification
+PositiveInteger::PositiveInteger(unsigned int x)
+{
+	PositiveInteger* p1 = this;
+	PositiveInteger* p2;
+	setNumberOfDigitParent(nullptr);
+	int count;
+	Bit* b1;
+	Bit* b2;
+	
+	while(true)
+	{
+		if(x==1)
+		{
+			setIsOne(true);
+			setIsTwo(false);
+			Bit* temp = new Bit;
+			setRightEnd(temp);
+			
+			getRightEnd()->setDigit(1);
+			setLeftEnd(getRightEnd());
+			setNumberOfDigit(this);
+			return;
+		}
+		else if(x==2)
+		{
+			setIsOne(false);
+			setIsTwo(true);
+			Bit* temp = new Bit;
+			setRightEnd(temp);
+			temp = new Bit;
+			setLeftEnd(temp);
+			
+			//getRightEnd()->setDigit(0);
+			getLeftEnd()->setDigit(1);
+			getRightEnd()->setLeft(getLeftEnd());
+			getLeftEnd()->setRight(getRightEnd());
+			setNumberOfDigit(this);
+			setNumberOfDigitParent(nullptr);
+			return;
+		}
+		else if(x>=3)
+		{
+			p1->setIsOne(false);
+			p1->setIsTwo(false);
+			
+			count=1;
+			b1 = new Bit;;
+			b1->setDigit(x%2);
+			p1->setRightEnd(b1);
+			x = (x - b1->getDigit())/2;
+			
+			while(x>=1)
+			{
+				count++;
+				b2 = new Bit;
+				b2->setDigit(x%2);
+				b1->setLeft(b2);
+				b2->setRight(b1);
+				x = (x - b2->getDigit())/2;
+				b1 = b2;
+			}
+			p1->setLeftEnd(b1);
+			
+			p2 = new PositiveInteger();
+			p1->setNumberOfDigit(p2);
+			p2->setNumberOfDigitParent(p1);
+			
+			p1 = p2;
+			x = count;
+		}
+	}
+}
+unsigned int PositiveInteger::getInt()
+{
+	return 0;
+}
+bool PositiveInteger::isComplete()
+{
+	PositiveInteger* p1 = this;
+	PositiveInteger* p2;
+	int count1 = 0;
+	int count2;
+	int count3;
+	int ADD;
+	Bit* b1;
+	Bit* b2;
+	bool firstTime = true;
+	
+	if(getNumberOfDigitParent()!=nullptr) return false;
+	
+	while(true)
+	{
+		count2 = 0;
+		count3 = 0;
+		ADD = 1;
+		
+		if(p1->getRightEnd()==nullptr) return false;
+		b1 = p1->getRightEnd();
+		if(b1->getRight()!=nullptr) return false;
+		while(true)
+		{
+			if(b1->getDigit()) count2 += ADD;
+			count3++;
+			
+			if(b1->getLeft()==nullptr) break;
+			b2 = b1->getLeft();
+			if(b2->getRight()==nullptr) return false;
+			if(b2->getRight()!=b1) return false;
+			
+			ADD *= 2;
+			b1 = b2;
+		}
+		
+		if(!b1->getDigit()) return false;
+		if(p1->getLeftEnd()==nullptr) return false;
+		b2 = p1->getLeftEnd();
+		if(b1!=b2) return false;
+		
+		if(!firstTime)
+		{
+			if(count2!=count1) return false;
+		}
+		
+		if(count2==1)
+		{
+			if(!p1->getIsOne()) return false;
+			if(p1->getIsTwo()) return false;
+			if(count3!=1) return false;
+			
+			if(p1->getNumberOfDigit()==nullptr) return false;
+			if(p1->getNumberOfDigit()!=p1) return false;
+			return true;
+		}
+		else if(count2==2)
+		{
+			if(p1->getIsOne()) return false;
+			if(!p1->getIsTwo()) return false;
+			if(count3!=2) return false;
+			
+			if(p1->getNumberOfDigit()==nullptr) return false;
+			if(p1->getNumberOfDigit()!=p1) return false;
+			return true;
+		}
+		else if(count2>=3)
+		{
+			if(p1->getIsOne()) return false;
+			if(p1->getIsTwo()) return false;
+
+			if(p1->getNumberOfDigit()==nullptr) return false;
+			p2 = p1->getNumberOfDigit();
+			if(p2->getNumberOfDigitParent()!=p1) return false;
+			
+			firstTime = false;
+			p1 = p2;
+			count1 = count3;
+		}
+		else return false;
+	}
+}
+bool PositiveInteger::isSame(unsigned int x)
+{
+	
+	return true;
+}
+
+bool PositiveInteger::VerifyCopy(unsigned int max)
+{
+	PositiveInteger* p1;
+	for(unsigned int i=1;i<=max;i++)
+	{
+		p1 = new PositiveInteger(i);
+		//p1->printBinary();
+		if(!p1->isComplete()) return false;
+	}
+	return true;
 }
