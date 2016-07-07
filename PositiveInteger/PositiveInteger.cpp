@@ -2027,31 +2027,30 @@ PositiveInteger::PositiveInteger(unsigned int x)
 	{
 		if(x==1)
 		{
-			setIsOne(true);
-			setIsTwo(false);
+			p1->setIsOne(true);
+			p1->setIsTwo(false);
 			Bit* temp = new Bit;
-			setRightEnd(temp);
+			p1->setRightEnd(temp);
 			
-			getRightEnd()->setDigit(1);
-			setLeftEnd(getRightEnd());
-			setNumberOfDigit(this);
+			p1->getRightEnd()->setDigit(1);
+			p1->setLeftEnd(p1->getRightEnd());
+			p1->setNumberOfDigit(p1);
 			return;
 		}
 		else if(x==2)
 		{
-			setIsOne(false);
-			setIsTwo(true);
+			p1->setIsOne(false);
+			p1->setIsTwo(true);
 			Bit* temp = new Bit;
-			setRightEnd(temp);
+			p1->setRightEnd(temp);
 			temp = new Bit;
-			setLeftEnd(temp);
+			p1->setLeftEnd(temp);
 			
-			//getRightEnd()->setDigit(0);
-			getLeftEnd()->setDigit(1);
-			getRightEnd()->setLeft(getLeftEnd());
-			getLeftEnd()->setRight(getRightEnd());
-			setNumberOfDigit(this);
-			setNumberOfDigitParent(nullptr);
+			//p1->getRightEnd()->setDigit(0);
+			p1->getLeftEnd()->setDigit(1);
+			p1->getRightEnd()->setLeft(p1->getLeftEnd());
+			p1->getLeftEnd()->setRight(p1->getRightEnd());
+			p1->setNumberOfDigit(p1);
 			return;
 		}
 		else if(x>=3)
@@ -2086,10 +2085,7 @@ PositiveInteger::PositiveInteger(unsigned int x)
 		}
 	}
 }
-unsigned int PositiveInteger::getInt()
-{
-	return 0;
-}
+
 bool PositiveInteger::isComplete()
 {
 	PositiveInteger* p1 = this;
@@ -2164,6 +2160,7 @@ bool PositiveInteger::isComplete()
 
 			if(p1->getNumberOfDigit()==nullptr) return false;
 			p2 = p1->getNumberOfDigit();
+			if(p2->getNumberOfDigitParent()==nullptr) return false;
 			if(p2->getNumberOfDigitParent()!=p1) return false;
 			
 			firstTime = false;
@@ -2175,6 +2172,12 @@ bool PositiveInteger::isComplete()
 }
 bool PositiveInteger::isSame(unsigned int x)
 {
+	if(!isComplete()) return false;
+	PositiveInteger* p1 = new PositiveInteger(x);
+	Bit* b1;
+	Bit* b2;
+	
+	b1 = getRightEnd();
 	
 	return true;
 }
@@ -2185,8 +2188,10 @@ bool PositiveInteger::VerifyCopy(unsigned int max)
 	for(unsigned int i=1;i<=max;i++)
 	{
 		p1 = new PositiveInteger(i);
-		//p1->printBinary();
+		p1->printBinary();
 		if(!p1->isComplete()) return false;
+		
+		delete p1;
 	}
 	return true;
 }

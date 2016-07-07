@@ -68,7 +68,6 @@ public:
 	
 	//verification
 	PositiveInteger(unsigned int);
-	unsigned int getInt();
 	bool isComplete();
 	bool isSame(unsigned int);
 	static bool VerifyCopy(unsigned int);

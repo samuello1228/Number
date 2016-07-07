@@ -135,7 +135,7 @@ int main()
 	delete iMax;
 	delete jMax;
 	
-	if(!PositiveInteger::VerifyCopy(20)) cout<<"Error"<<endl;
+	if(!PositiveInteger::VerifyCopy(100)) cout<<"Error"<<endl;
 	else cout<<"OK"<<endl;
 	
 	/*
