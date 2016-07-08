@@ -599,14 +599,14 @@ PositiveInteger* PositiveInteger::Add(PositiveInteger*& x1,PositiveInteger*& x2,
 	if(overwrite)
 	{
 		//because if overwrite is true, then must add one
-		/*
+		//*
 		if(PositiveInteger::compare(x1->getNumberOfDigit(),x2->getNumberOfDigit()).isSmaller())
 		{
 			p1=x1;
 			x1=x2;
 			x2=p1;
 		}
-		*/
+		//*/
 		n1=x1;
 		n2=x2;
 		y=x1;
@@ -2275,6 +2275,27 @@ bool PositiveInteger::VerifyCompare(unsigned int max)
 
 			delete p1;
 			delete p2;
+		}
+	}
+	return true;
+}
+bool PositiveInteger::VerifyAdd(unsigned int max,bool overwrite)
+{
+	PositiveInteger* p1;
+	PositiveInteger* p2;
+	PositiveInteger* p3;
+	for(unsigned int i=1;i<=max;i++)
+	{
+		for(unsigned int j=1;j<=max;j++)
+		{
+			p1 = new PositiveInteger(i);
+			p2 = new PositiveInteger(j);
+			p3 = PositiveInteger::Add(p1,p2,overwrite);
+			if(!p3->isSame(i+j)) return false;
+			
+			delete p1;
+			delete p2;
+			if(!overwrite) delete p3;
 		}
 	}
 	return true;

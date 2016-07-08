@@ -75,6 +75,7 @@ public:
 	static bool VerifyCounter(unsigned int);
 	static bool VerifyPositiveInteger(unsigned int);
 	static bool VerifyCompare(unsigned int);
+	static bool VerifyAdd(unsigned int,bool);
 private:
 	Bit* leftEnd;
 	Bit* rightEnd;
