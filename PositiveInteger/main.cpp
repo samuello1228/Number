@@ -136,8 +136,9 @@ int main()
 	delete jMax;
 	
 	if(!PositiveInteger::VerifyCopy(100)) cout<<"Error"<<endl;
-	else if(!PositiveInteger::VerifyCounter(100)) cout<<"Error"<<endl;
-	else if(!PositiveInteger::VerifyPositiveInteger(100)) cout<<"Error"<<endl;
+	//else if(!PositiveInteger::VerifyCounter(100)) cout<<"Error"<<endl;
+	//else if(!PositiveInteger::VerifyPositiveInteger(100)) cout<<"Error"<<endl;
+	else if(!PositiveInteger::VerifyCompare(100)) cout<<"Error"<<endl;
 	else cout<<"OK"<<endl;
 	
 	/*

@@ -2257,4 +2257,25 @@ bool PositiveInteger::VerifyPositiveInteger(unsigned int max)
 	}
 	return true;
 }
+bool PositiveInteger::VerifyCompare(unsigned int max)
+{
+	PositiveInteger* p1;
+	PositiveInteger* p2;
+	CompareCode code;
+	for(unsigned int i=1;i<=max;i++)
+	{
+		for(unsigned int j=1;j<=max;j++)
+		{
+			p1 = new PositiveInteger(i);
+			p2 = new PositiveInteger(j);
+			code = PositiveInteger::compare(p1,p2);
+			if(i==j && !code.isEqual())  return false;
+			else if(i>j && !code.isLarger())  return false;
+			else if(i<j && !code.isSmaller())  return false;
 
+			delete p1;
+			delete p2;
+		}
+	}
+	return true;
+}
