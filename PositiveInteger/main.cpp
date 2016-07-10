@@ -25,8 +25,8 @@ int main()
 	PositiveInteger::One(one);
 	PositiveInteger* i;
 	PositiveInteger* j;
-	PositiveInteger* iMax = new PositiveInteger("1000");
-	PositiveInteger* jMax = new PositiveInteger("1000");
+	PositiveInteger* iMax = new PositiveInteger("1000000000");
+	PositiveInteger* jMax = new PositiveInteger("1000000000");
 	
 	i = new PositiveInteger;
 	PositiveInteger::One(i);
@@ -38,7 +38,8 @@ int main()
 		}
 		
 		//x1 = i->copy();
-		//x1->printDecimal(1);
+		//x1->printBinary();
+		//delete x1;
 		
 		j = new PositiveInteger;
 		PositiveInteger::One(j);
@@ -49,30 +50,30 @@ int main()
 				break;
 			}
 			
-			/*
+			///*
 			x3 = i->copy();
 			x4 = j->copy();
 			//cout<<PositiveInteger::compare(x3, x4)<<" ";
-			x1 = PositiveInteger::Add(x3,x4,1);
+			x1 = PositiveInteger::Add(x3,x4,0);
 			//x1->printBinary();
-			//delete x1;
-			x3->printBinary();
+			delete x1;
+			//x3->printBinary();
 			delete x3;
 			delete x4;
-			*/
+			//*/
 			
 			/*
-			if(PositiveInteger::compare(i,j)!=1)
+			if(!PositiveInteger::compare(i,j).isLarger())
 			{
 				PositiveInteger::Add(j,one,true);
 				continue;
 			}
 			x3 = i->copy();
 			x4 = j->copy();
-			x1 = PositiveInteger::Subtract(x3,x4,1,1);
+			x1 = PositiveInteger::Subtract(x3,x4,1,false);
 			//x1->printBinary();
 			//delete x1;
-			x3->printBinary();
+			//x3->printBinary();
 			delete x3;
 			delete x4;
 			*/
@@ -140,6 +141,7 @@ int main()
 	//else if(!PositiveInteger::VerifyPositiveInteger(100)) cout<<"Error"<<endl;
 	//else if(!PositiveInteger::VerifyCompare(100)) cout<<"Error"<<endl;
 	else if(!PositiveInteger::VerifyAdd(100,0)) cout<<"Error"<<endl;
+	//else if(!PositiveInteger::VerifySubtract(100,0)) cout<<"Error"<<endl;
 	else cout<<"OK"<<endl;
 	
 	/*

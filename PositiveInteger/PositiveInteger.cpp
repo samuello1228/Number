@@ -672,23 +672,49 @@ PositiveInteger* PositiveInteger::Add(PositiveInteger*& x1,PositiveInteger*& x2,
 		carry = result1;
 	}
 	
-	while(!digit1->isLeftEnd())
+	if(carry)
 	{
-		digit1 = digit1->getLeft();
-		PositiveInteger::AddThreeBit(digit1->getDigit(),0,carry,result1,result2);
-		if(overwrite)
+		while(true)
 		{
-			digit1->setDigit(result2);
+			if(digit1->isLeftEnd())
+			{
+				//carry = true;
+				break;
+			}
+			digit1 = digit1->getLeft();
+			if(digit1->getDigit())
+			{
+				if(overwrite)
+				{
+					digit1->setDigit(0);
+				}
+				else
+				{
+					b2 = new Bit;
+					b2->setDigit(0);
+					b1->setLeft(b2);
+					b2->setRight(b1);
+					b1 = b2;
+				}
+			}
+			else
+			{
+				if(overwrite)
+				{
+					digit1->setDigit(1);
+				}
+				else
+				{
+					b2 = new Bit;
+					b2->setDigit(1);
+					b1->setLeft(b2);
+					b2->setRight(b1);
+					b1 = b2;
+				}
+				carry = false;
+				break;
+			}
 		}
-		else
-		{
-			b2 = new Bit;
-			b2->setDigit(result2);
-			b1->setLeft(b2);
-			b2->setRight(b1);
-			b1 = b2;
-		}
-		carry = result1;
 	}
 	
 	if(carry)
@@ -707,6 +733,7 @@ PositiveInteger* PositiveInteger::Add(PositiveInteger*& x1,PositiveInteger*& x2,
 			b1->setLeft(b2);
 			b2->setRight(b1);
 			b1 = b2;
+			y->setLeftEnd(b1);
 		}
 		
 		
@@ -750,16 +777,24 @@ PositiveInteger* PositiveInteger::Add(PositiveInteger*& x1,PositiveInteger*& x2,
 		}
 		else
 		{
+			while(!digit1->isLeftEnd())
+			{
+				digit1 = digit1->getLeft();
+				
+				b2 = new Bit;
+				b2->setDigit(digit1->getDigit());
+				b1->setLeft(b2);
+				b2->setRight(b1);
+				b1 = b2;
+			}
+			y->setLeftEnd(b1);
+			
 			p1 = n1->getNumberOfDigit()->copy();
 			y->setNumberOfDigit(p1);
 			p1->setNumberOfDigitParent(y);
 		}
 	}
-	
-	if(!overwrite)
-	{
-		y->setLeftEnd(b1);
-	}
+
 	y->setIsOne(false);
 	y->setIsTwo(false);
 	return y;
@@ -2292,6 +2327,27 @@ bool PositiveInteger::VerifyAdd(unsigned int max,bool overwrite)
 			p2 = new PositiveInteger(j);
 			p3 = PositiveInteger::Add(p1,p2,overwrite);
 			if(!p3->isSame(i+j)) return false;
+			
+			delete p1;
+			delete p2;
+			if(!overwrite) delete p3;
+		}
+	}
+	return true;
+}
+bool PositiveInteger::VerifySubtract(unsigned int max,bool overwrite)
+{
+	PositiveInteger* p1;
+	PositiveInteger* p2;
+	PositiveInteger* p3;
+	for(unsigned int i=1;i<=max;i++)
+	{
+		for(unsigned int j=1;j<=i-1;j++)
+		{
+			p1 = new PositiveInteger(i);
+			p2 = new PositiveInteger(j);
+			p3 = PositiveInteger::Subtract(p1,p2,overwrite,false);
+			if(!p3->isSame(i-j)) return false;
 			
 			delete p1;
 			delete p2;
