@@ -12,54 +12,32 @@ using namespace std;
 
 Integer::Integer()
 {
-	isZero = false;
-	sign = true;
-	magnitude = nullptr;
+	setIsZero(false);
+	setSign(true);
+	setMagnitude(nullptr);
 }
-/*
-Integer::Integer(int x)
-{
-	if(x==0)
-	{
-		isZero = true;
-		sign = true;
-		magnitude = nullptr;
-	}
-	else
-	{
-		isZero = false;
-		if(x>0)
-		{
-			sign = true;
-			magnitude = new PositiveInteger(x);
-		}
-		else
-		{
-			sign = false;
-			magnitude = new PositiveInteger(-x);
-		}
-	}
-}
-*/
+
 Integer::Integer(std::string x)
 {
     std::string::iterator i=x.begin();
     
     if(*i == '0')
     {
-        isZero = true;
+        setIsZero(true);
+		setSign(true);
+		setMagnitude(nullptr);
         return;
     }
     else if(*i == '-')
     {
-        isZero = false;
-        sign = false;
+        setIsZero(false);
+        setSign(false);
         x.erase(i);
     }
     else
     {
-        isZero = false;
-        sign = true;
+        setIsZero(false);
+        setSign(true);
     }
     
     PositiveInteger* m = new PositiveInteger(x);
@@ -67,7 +45,7 @@ Integer::Integer(std::string x)
 }
 Integer::~Integer()
 {
-	if(!isZero)
+	if(!getIsZero())
 	{
 		delete magnitude;
 	}
@@ -150,6 +128,8 @@ Integer* Integer::copy()
 	if(getIsZero())
 	{
 		y->setIsZero(true);
+		y->setSign(true);
+		y->setMagnitude(nullptr);
 		return y;
 	}
 	else
@@ -170,5 +150,89 @@ Integer* Integer::copy()
 			return y;
 		}
 	}
+}
+
+//verification
+Integer::Integer(int x)
+{
+	if(x==0)
+	{
+		setIsZero(true);
+		setSign(true);
+		setMagnitude(nullptr);
+	}
+	else
+	{
+		PositiveInteger* m;
+		setIsZero(false);
+		if(x>0)
+		{
+			setSign(true);
+			m = new PositiveInteger(x);
+			setMagnitude(m);
+		}
+		else
+		{
+			setSign(false);
+			m = new PositiveInteger(-x);
+			setMagnitude(m);
+		}
+	}
+}
+bool Integer::isComplete()
+{
+	if(getIsZero())
+	{
+		if(!getSign()) return false;
+		if(getMagnitude()!=nullptr) return false;
+	}
+	else
+	{
+		if(getMagnitude()==nullptr) return false;
+		if(!getMagnitude()->isComplete()) return false;
+	}
+	return true;
+}
+bool Integer::isSame(int x)
+{
+	if(!isComplete()) return false;
 	
+	if(x==0)
+	{
+		if(!getIsZero()) return false;
+	}
+	else
+	{
+		if(getIsZero()) return false;
+		if(x>0)
+		{
+			if(!getSign()) return false;
+			if(!getMagnitude()->isSame(x)) return false;
+
+		}
+		else
+		{
+			if(getSign()) return false;
+			if(!getMagnitude()->isSame(-x)) return false;
+		}
+	}
+	return true;
+}
+bool Integer::VerifyCopy(int max)
+{
+	Integer* p1;
+	Integer* p2;
+	for(int i=-max;i<=max;i++)
+	{
+		p1 = new Integer(i);
+		//if(!p1->isComplete()) return false;
+		//p1->printBinary();
+		p2 = p1->copy();
+		if(!p2->isSame(i)) return false;
+		p2->printBinary();
+		
+		delete p1;
+		delete p2;
+	}
+	return true;
 }

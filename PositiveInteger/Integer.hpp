@@ -15,7 +15,6 @@ class Integer
 {
 public:
 	Integer();
-	//Integer(int);
     Integer(std::string);
 	~Integer();
 	bool getIsZero();
@@ -30,8 +29,14 @@ public:
 	void printBinary();
 	void printDecimal(bool);
 	Integer* copy();
+	static CompareCode compare(Integer*,Integer*);
 	
+	//verification
+	Integer(int);
+	bool isComplete();
+	bool isSame(int);
 	
+	static bool VerifyCopy(int);
 	
 private:
 	bool isZero;
