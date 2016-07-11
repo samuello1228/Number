@@ -2356,3 +2356,57 @@ bool PositiveInteger::VerifySubtract(unsigned int max,bool overwrite)
 	}
 	return true;
 }
+bool PositiveInteger::VerifyMultiply(unsigned int max)
+{
+	PositiveInteger* p1;
+	PositiveInteger* p2;
+	PositiveInteger* p3;
+	for(unsigned int i=1;i<=max;i++)
+	{
+		for(unsigned int j=1;j<=max;j++)
+		{
+			p1 = new PositiveInteger(i);
+			p2 = new PositiveInteger(j);
+			p3 = PositiveInteger::Multiply(p1,p2);
+			if(!p3->isSame(i*j)) return false;
+			
+			delete p1;
+			delete p2;
+			delete p3;
+		}
+	}
+	return true;
+}
+bool PositiveInteger::VerifyDivide(unsigned int max,bool overwrite)
+{
+	PositiveInteger* p1;
+	PositiveInteger* p2;
+	PositiveInteger* p3;
+	PositiveInteger* p4;
+	bool divisible=0;
+	for(unsigned int i=1;i<=max;i++)
+	{
+		for(unsigned int j=1;j<=i;j++)
+		{
+			p1 = new PositiveInteger(i);
+			p2 = new PositiveInteger(j);
+			PositiveInteger::Divide(p1,p2,p3,p4,divisible,overwrite,false);
+			if(!p3->isSame(i/j)) return false;
+			if(i%j==0)
+			{
+				if(!divisible) return false;
+			}
+			else
+			{
+				if(divisible) return false;
+				if(!p4->isSame(i%j)) return false;
+				delete p4;
+			}
+			
+			if(!overwrite) delete p1;
+			delete p2;
+			delete p3;
+		}
+	}
+	return true;
+}

@@ -50,7 +50,7 @@ int main()
 				break;
 			}
 			
-			///*
+			/*
 			x3 = i->copy();
 			x4 = j->copy();
 			//cout<<PositiveInteger::compare(x3, x4)<<" ";
@@ -60,7 +60,7 @@ int main()
 			//x3->printBinary();
 			delete x3;
 			delete x4;
-			//*/
+			*/
 			
 			/*
 			if(!PositiveInteger::compare(i,j).isLarger())
@@ -82,14 +82,14 @@ int main()
 			x3 = i->copy();
 			x4 = j->copy();
 			x1 = PositiveInteger::Multiply(x3,x4);
-			x1->printBinary();
+			//x1->printBinary();
 			delete x1;
 			delete x3;
 			delete x4;
 			*/
 			
 			/*
-			if(PositiveInteger::compare(i,j)==1)
+			if(PositiveInteger::compare(i,j).isLarger())
 			{
 				PositiveInteger::Add(j,one,true);
 				continue;
@@ -97,17 +97,17 @@ int main()
 			x3 = j->copy();
 			x4 = i->copy();
 			PositiveInteger::Divide(x3,x4,x5,x6,divisible,1,0);
-			x5->printBinary();
+			//x5->printBinary();
 			if(!divisible)
 			{
-				x6->printBinary();
+				//x6->printBinary();
 				delete x6;
 			}
 			else
 			{
-				cout<<"0"<<endl;
+				//cout<<"0"<<endl;
 			}
-			cout<<endl;
+			//cout<<endl;
 			//delete x3;
 			delete x4;
 			delete x5;
@@ -136,12 +136,14 @@ int main()
 	delete iMax;
 	delete jMax;
 	
-	if(!PositiveInteger::VerifyCopy(100)) cout<<"Error"<<endl;
-	//else if(!PositiveInteger::VerifyCounter(100)) cout<<"Error"<<endl;
-	//else if(!PositiveInteger::VerifyPositiveInteger(100)) cout<<"Error"<<endl;
-	//else if(!PositiveInteger::VerifyCompare(100)) cout<<"Error"<<endl;
-	else if(!PositiveInteger::VerifyAdd(100,0)) cout<<"Error"<<endl;
-	//else if(!PositiveInteger::VerifySubtract(100,0)) cout<<"Error"<<endl;
+	//if(!PositiveInteger::VerifyCopy(100)) cout<<"Error"<<endl;
+	//if(!PositiveInteger::VerifyCounter(100)) cout<<"Error"<<endl;
+	//if(!PositiveInteger::VerifyPositiveInteger(100)) cout<<"Error"<<endl;
+	//if(!PositiveInteger::VerifyCompare(100)) cout<<"Error"<<endl;
+	//if(!PositiveInteger::VerifyAdd(100,0)) cout<<"Error"<<endl;
+	//if(!PositiveInteger::VerifySubtract(100,0)) cout<<"Error"<<endl;
+	//if(!PositiveInteger::VerifyMultiply(100)) cout<<"Error"<<endl;
+	if(!PositiveInteger::VerifyDivide(100,0)) cout<<"Error"<<endl;
 	else cout<<"OK"<<endl;
 	
 	/*
