@@ -38,6 +38,7 @@ public:
 	
 	static bool VerifyCopy(int);
 	static bool VerifyInteger(int);
+	static bool VerifyCompare(int);
 	
 private:
 	bool isZero;

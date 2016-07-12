@@ -152,6 +152,64 @@ Integer* Integer::copy()
 	}
 }
 
+CompareCode Integer::compare(Integer* x1, Integer* x2)
+{
+	if(x1->getIsZero())
+	{
+		if(x2->getIsZero())
+		{
+			//x1=0=x2
+			return CompareCode(true);
+		}
+		else if(x2->getSign())
+		{
+			//x1=0<x2
+			return CompareCode(false,false);
+		}
+		else
+		{
+			//x1=0>x2
+			return CompareCode(false,true);
+		}
+	}
+	else if(x1->getSign())
+	{
+		if(x2->getIsZero())
+		{
+			//x1>0=x2
+			return CompareCode(false,true);
+		}
+		else if(x2->getSign())
+		{
+			//x1>0, x2>0
+			return PositiveInteger::compare(x1->getMagnitude(),x2->getMagnitude());
+		}
+		else
+		{
+			//x1>0>x2
+			return CompareCode(false,true);
+		}
+	}
+	else
+	{
+		if(x2->getIsZero())
+		{
+			//x1<0=x2
+			return CompareCode(false,false);
+		}
+		else if(x2->getSign())
+		{
+			//x1<0<x2
+			return CompareCode(false,false);
+		}
+		else
+		{
+			//x1<0, x2<0
+			return PositiveInteger::compare(x2->getMagnitude(),x1->getMagnitude());
+		}
+	}
+}
+
 //verification
 Integer::Integer(int x)
 {
@@ -278,4 +336,25 @@ bool Integer::VerifyInteger(int max)
 	}
 	return true;
 }
-
+bool Integer::VerifyCompare(int max)
+{
+	Integer* p1;
+	Integer* p2;
+	CompareCode code;
+	for(int i=-max;i<=max;i++)
+	{
+		for(int j=-max;j<=max;j++)
+		{
+			p1 = new Integer(i);
+			p2 = new Integer(j);
+			code = Integer::compare(p1,p2);
+			if(i==j && !code.isEqual())  return false;
+			else if(i>j && !code.isLarger())  return false;
+			else if(i<j && !code.isSmaller())  return false;
+			
+			delete p1;
+			delete p2;
+		}
+	}
+	return true;
+}
