@@ -78,16 +78,16 @@ void Integer::setMagnitude(PositiveInteger* newMagnitude)
 {
 	magnitude = newMagnitude;
 }
-
+/*
 void Integer::One(Integer* x)
 {
-	x->setIsZero(false);
-	x->setSign(true);
+	//x->setIsZero(false);
+	//x->setSign(true);
 	PositiveInteger* a = new PositiveInteger;
 	PositiveInteger::One(a);
 	x->setMagnitude(a);
 }
-
+*/
 void Integer::printBinary()
 {
 	if(getIsZero())
@@ -128,16 +128,16 @@ Integer* Integer::copy()
 	if(getIsZero())
 	{
 		y->setIsZero(true);
-		y->setSign(true);
-		y->setMagnitude(nullptr);
+		//y->setSign(true);
+		//y->setMagnitude(nullptr);
 		return y;
 	}
 	else
 	{
-		y->setIsZero(false);
+		//y->setIsZero(false);
 		if(getSign())
 		{
-			y->setSign(true);
+			//y->setSign(true);
 			p1 = getMagnitude()->copy();
 			y->setMagnitude(p1);
 			return y;
@@ -261,7 +261,7 @@ Integer* Integer::Add(Integer*& x1,Integer*& x2,bool overwrite)
 		else
 		{
 			y = new Integer();
-			y->setIsZero(false);
+			//y->setIsZero(false);
 			if(!x1->getSign())
 			{
 				y->setSign(false);
@@ -325,7 +325,7 @@ Integer* Integer::Add(Integer*& x1,Integer*& x2,bool overwrite)
 			else
 			{
 				y = new Integer();
-				y->setIsZero(false);
+				//y->setIsZero(false);
 				if((x1->getSign() && code.isSmaller()) ||
 				   (!x1->getSign() && code.isLarger()) )
 				{
@@ -391,7 +391,7 @@ Integer* Integer::Multiply(Integer* x1,Integer* x2)
 	}
 	
 	y = new Integer();
-	y->setIsZero(false);
+	//y->setIsZero(false);
 	if((x1->getSign() && !x2->getSign()) ||
 	   (!x1->getSign() && x2->getSign()) )
 	{

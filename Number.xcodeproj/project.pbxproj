@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7EAE307A1D355BCB0076B4D3 /* RealNumber.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7EAE30781D355BCB0076B4D3 /* RealNumber.cpp */; };
+		7EAE307D1D355C6A0076B4D3 /* RealNumberBound.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7EAE307B1D355C6A0076B4D3 /* RealNumberBound.cpp */; };
 		7EF1D8A11C750259002DA38C /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7EF1D8A01C750259002DA38C /* main.cpp */; };
 		7EF1D8A91C750562002DA38C /* PositiveInteger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7EF1D8A71C750562002DA38C /* PositiveInteger.cpp */; };
 		7EF1D8AC1C7506BB002DA38C /* Bit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7EF1D8AA1C7506BB002DA38C /* Bit.cpp */; };
@@ -26,6 +28,10 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		7EAE30781D355BCB0076B4D3 /* RealNumber.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RealNumber.cpp; sourceTree = "<group>"; };
+		7EAE30791D355BCB0076B4D3 /* RealNumber.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = RealNumber.hpp; sourceTree = "<group>"; };
+		7EAE307B1D355C6A0076B4D3 /* RealNumberBound.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RealNumberBound.cpp; sourceTree = "<group>"; };
+		7EAE307C1D355C6A0076B4D3 /* RealNumberBound.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = RealNumberBound.hpp; sourceTree = "<group>"; };
 		7EF1D89D1C750258002DA38C /* PositiveInteger */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = PositiveInteger; sourceTree = BUILT_PRODUCTS_DIR; };
 		7EF1D8A01C750259002DA38C /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; usesTabs = 1; };
 		7EF1D8A71C750562002DA38C /* PositiveInteger.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PositiveInteger.cpp; sourceTree = "<group>"; };
@@ -73,6 +79,10 @@
 				7EF1D8AB1C7506BB002DA38C /* Bit.hpp */,
 				7EFA56511CF72F8E0004B5A2 /* Integer.cpp */,
 				7EFA56521CF72F8E0004B5A2 /* Integer.hpp */,
+				7EAE30781D355BCB0076B4D3 /* RealNumber.cpp */,
+				7EAE30791D355BCB0076B4D3 /* RealNumber.hpp */,
+				7EAE307B1D355C6A0076B4D3 /* RealNumberBound.cpp */,
+				7EAE307C1D355C6A0076B4D3 /* RealNumberBound.hpp */,
 			);
 			name = Number;
 			path = PositiveInteger;
@@ -137,6 +147,8 @@
 				7EF1D8AC1C7506BB002DA38C /* Bit.cpp in Sources */,
 				7EF1D8A11C750259002DA38C /* main.cpp in Sources */,
 				7EFA56531CF72F8E0004B5A2 /* Integer.cpp in Sources */,
+				7EAE307D1D355C6A0076B4D3 /* RealNumberBound.cpp in Sources */,
+				7EAE307A1D355BCB0076B4D3 /* RealNumber.cpp in Sources */,
 				7EF1D8A91C750562002DA38C /* PositiveInteger.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
