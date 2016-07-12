@@ -37,6 +37,7 @@ public:
 	bool isSame(int);
 	
 	static bool VerifyCopy(int);
+	static bool VerifyInteger(int);
 	
 private:
 	bool isZero;

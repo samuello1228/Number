@@ -236,3 +236,46 @@ bool Integer::VerifyCopy(int max)
 	}
 	return true;
 }
+bool Integer::VerifyInteger(int max)
+{
+	Integer* p1;
+	Integer* p2;
+	std::string s;
+	Bit* b1;
+	for(int i=-max;i<=max;i++)
+	{
+		p1 = new Integer(i);
+		if(i==0)
+		{
+			p2 = new Integer("0");
+		}
+		else
+		{
+			s.clear();
+			if(i<0) s.push_back('-');
+			b1 = p1->getMagnitude()->getLeftEnd();
+			while(true)
+			{
+				if(b1->getDigit())
+				{
+					s.push_back('1');
+				}
+				else
+				{
+					s.push_back('0');
+				}
+				if(b1->isRightEnd()) break;
+				b1 = b1->getRight();
+			}
+			//cout<<s<<endl;
+			p2 = new Integer(s);
+		}
+		
+		if(!p2->isSame(i)) return false;
+		
+		delete p1;
+		delete p2;
+	}
+	return true;
+}
+
