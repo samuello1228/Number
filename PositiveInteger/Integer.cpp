@@ -364,6 +364,23 @@ Integer* Integer::Negation(bool overwrite)
 	}
 	return y;
 }
+Integer* Integer::Subtract(Integer*& x1,Integer*& x2,bool overwrite)
+{
+	Integer* y;
+	if(overwrite)
+	{
+		x2->Negation(true);
+		Integer::Add(x1,x2,true);
+		return x1;
+	}
+	else
+	{
+		x2->Negation(true);
+		y = Integer::Add(x1,x2,false);
+		x2->Negation(true);
+		return y;
+	}
+}
 
 //verification
 Integer::Integer(int x)
@@ -441,6 +458,7 @@ bool Integer::VerifyCopy(int max)
 		//if(!p1->isComplete()) return false;
 		//p1->printBinary();
 		p2 = p1->copy();
+		if(!p1->isSame(i)) return false;
 		if(!p2->isSame(i)) return false;
 		p2->printBinary();
 		
@@ -503,6 +521,8 @@ bool Integer::VerifyCompare(int max)
 			p1 = new Integer(i);
 			p2 = new Integer(j);
 			code = Integer::compare(p1,p2);
+			if(!p1->isSame(i)) return false;
+			if(!p2->isSame(j)) return false;
 			if(i==j && !code.isEqual())  return false;
 			else if(i>j && !code.isLarger())  return false;
 			else if(i<j && !code.isSmaller())  return false;
@@ -529,6 +549,11 @@ bool Integer::VerifyAdd(int max,bool overwrite)
 			{
 				if(!p1->isSame(i+j)) return false;
 			}
+			else
+			{
+				if(!p1->isSame(i)) return false;
+				if(!p2->isSame(j)) return false;
+			}
 			if(!p3->isSame(i+j)) return false;
 			//p3->printBinary();
 			
@@ -552,6 +577,11 @@ bool Integer::VerifyNegation(int max,bool overwrite)
 		{
 			if(!p1->isSame(-i)) return false;
 		}
+		else
+		{
+			if(!p1->isSame(i)) return false;
+		}
+		
 		if(!p2->isSame(-i)) return false;
 		//p2->printBinary();
 		
@@ -560,4 +590,35 @@ bool Integer::VerifyNegation(int max,bool overwrite)
 	}
 	return true;
 }
-
+bool Integer::VerifySubtract(int max,bool overwrite)
+{
+	Integer* p1;
+	Integer* p2;
+	Integer* p3;
+	for(int i=-max;i<=max;i++)
+	{
+		for(int j=-max;j<=max;j++)
+		{
+			p1 = new Integer(i);
+			p2 = new Integer(j);
+			p3 = Integer::Subtract(p1,p2,overwrite);
+			if(overwrite)
+			{
+				if(!p1->isSame(i-j)) return false;
+			}
+			else
+			{
+				if(!p1->isSame(i)) return false;
+				if(!p2->isSame(j)) return false;
+			}
+			if(!p3->isSame(i-j)) return false;
+			p3->printBinary();
+			
+			delete p1;
+			delete p2;
+			if(!overwrite) delete p3;
+		}
+		cout<<endl;
+	}
+	return true;
+}

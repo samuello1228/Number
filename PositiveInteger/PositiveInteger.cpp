@@ -2237,6 +2237,7 @@ bool PositiveInteger::VerifyCopy(unsigned int max)
 		p1 = new PositiveInteger(i);
 		//p1->printBinary();
 		p2 = p1->copy();
+		if(!p1->isSame(i)) return false;
 		if(!p2->isSame(i)) return false;
 		
 		delete p1;
@@ -2304,6 +2305,8 @@ bool PositiveInteger::VerifyCompare(unsigned int max)
 			p1 = new PositiveInteger(i);
 			p2 = new PositiveInteger(j);
 			code = PositiveInteger::compare(p1,p2);
+			if(!p1->isSame(i)) return false;
+			if(!p2->isSame(j)) return false;
 			if(i==j && !code.isEqual())  return false;
 			else if(i>j && !code.isLarger())  return false;
 			else if(i<j && !code.isSmaller())  return false;
@@ -2330,8 +2333,12 @@ bool PositiveInteger::VerifyAdd(unsigned int max,bool overwrite)
 			{
 				if(!p1->isSame(i+j)) return false;
 			}
+			else
+			{
+				if(!p1->isSame(i)) return false;
+				if(!p2->isSame(j)) return false;
+			}
 			if(!p3->isSame(i+j)) return false;
-			
 			
 			delete p1;
 			delete p2;
@@ -2352,6 +2359,15 @@ bool PositiveInteger::VerifySubtract(unsigned int max,bool overwrite)
 			p1 = new PositiveInteger(i);
 			p2 = new PositiveInteger(j);
 			p3 = PositiveInteger::Subtract(p1,p2,overwrite,false);
+			if(overwrite)
+			{
+				if(!p1->isSame(i-j)) return false;
+			}
+			else
+			{
+				if(!p1->isSame(i)) return false;
+				if(!p2->isSame(j)) return false;
+			}
 			if(!p3->isSame(i-j)) return false;
 			
 			delete p1;
@@ -2373,6 +2389,8 @@ bool PositiveInteger::VerifyMultiply(unsigned int max)
 			p1 = new PositiveInteger(i);
 			p2 = new PositiveInteger(j);
 			p3 = PositiveInteger::Multiply(p1,p2);
+			if(!p1->isSame(i)) return false;
+			if(!p2->isSame(j)) return false;
 			if(!p3->isSame(i*j)) return false;
 			
 			delete p1;
@@ -2396,6 +2414,11 @@ bool PositiveInteger::VerifyDivide(unsigned int max,bool overwrite)
 			p1 = new PositiveInteger(i);
 			p2 = new PositiveInteger(j);
 			PositiveInteger::Divide(p1,p2,p3,p4,divisible,overwrite,false);
+			if(!overwrite)
+			{
+				if(!p1->isSame(i)) return false;
+			}
+			if(!p2->isSame(j)) return false;
 			if(!p3->isSame(i/j)) return false;
 			if(i%j==0)
 			{
