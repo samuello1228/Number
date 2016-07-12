@@ -337,6 +337,33 @@ Integer* Integer::Add(Integer*& x1,Integer*& x2,bool overwrite)
 		}
 	}
 }
+Integer* Integer::Negation(bool overwrite)
+{
+	Integer* y;
+	if(overwrite)
+	{
+		y = this;
+	}
+	else
+	{
+		y = this->copy();
+	}
+	
+	if(y->getIsZero())
+	{
+		return y;
+	}
+	
+	if(y->getSign())
+	{
+		y->setSign(false);
+	}
+	else
+	{
+		y->setSign(true);
+	}
+	return y;
+}
 
 //verification
 Integer::Integer(int x)
@@ -503,13 +530,33 @@ bool Integer::VerifyAdd(int max,bool overwrite)
 				if(!p1->isSame(i+j)) return false;
 			}
 			if(!p3->isSame(i+j)) return false;
-			p3->printBinary();
+			//p3->printBinary();
 			
 			delete p1;
 			delete p2;
 			if(!overwrite) delete p3;
 		}
-		cout<<endl;
+		//cout<<endl;
+	}
+	return true;
+}
+bool Integer::VerifyNegation(int max,bool overwrite)
+{
+	Integer* p1;
+	Integer* p2;
+	for(int i=-max;i<=max;i++)
+	{
+		p1 = new Integer(i);
+		p2 = p1->Negation(overwrite);
+		if(overwrite)
+		{
+			if(!p1->isSame(-i)) return false;
+		}
+		if(!p2->isSame(-i)) return false;
+		//p2->printBinary();
+		
+		delete p1;
+		if(!overwrite) delete p2;
 	}
 	return true;
 }

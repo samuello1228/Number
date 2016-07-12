@@ -31,6 +31,7 @@ public:
 	Integer* copy();
 	static CompareCode compare(Integer*,Integer*);
 	static Integer* Add(Integer*&,Integer*&,bool);
+	Integer* Negation(bool);
 	
 	//verification
 	Integer(int);
@@ -41,6 +42,7 @@ public:
 	static bool VerifyInteger(int);
 	static bool VerifyCompare(int);
 	static bool VerifyAdd(int,bool);
+	static bool VerifyNegation(int,bool);
 	
 private:
 	bool isZero;
