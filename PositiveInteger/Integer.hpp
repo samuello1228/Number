@@ -33,6 +33,7 @@ public:
 	static Integer* Add(Integer*&,Integer*&,bool);
 	Integer* Negation(bool);
 	static Integer* Subtract(Integer*&,Integer*&,bool);
+	static Integer* Multiply(Integer*,Integer*);
 	
 	//verification
 	Integer(int);
@@ -45,6 +46,8 @@ public:
 	static bool VerifyAdd(int,bool);
 	static bool VerifyNegation(int,bool);
 	static bool VerifySubtract(int,bool);
+	static bool VerifyMultiply(int);
+	
 	
 private:
 	bool isZero;

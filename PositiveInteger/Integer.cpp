@@ -381,6 +381,26 @@ Integer* Integer::Subtract(Integer*& x1,Integer*& x2,bool overwrite)
 		return y;
 	}
 }
+Integer* Integer::Multiply(Integer* x1,Integer* x2)
+{
+	Integer* y;
+	if(x1->getIsZero() || x2->getIsZero())
+	{
+		y = new Integer("0");
+		return y;
+	}
+	
+	y = new Integer();
+	y->setIsZero(false);
+	if((x1->getSign() && !x2->getSign()) ||
+	   (!x1->getSign() && x2->getSign()) )
+	{
+		y->setSign(false);
+	}
+	PositiveInteger* m1 = PositiveInteger::Multiply(x1->getMagnitude(),x2->getMagnitude());
+	y->setMagnitude(m1);
+	return y;
+}
 
 //verification
 Integer::Integer(int x)
@@ -612,13 +632,38 @@ bool Integer::VerifySubtract(int max,bool overwrite)
 				if(!p2->isSame(j)) return false;
 			}
 			if(!p3->isSame(i-j)) return false;
-			p3->printBinary();
+			//p3->printBinary();
 			
 			delete p1;
 			delete p2;
 			if(!overwrite) delete p3;
 		}
-		cout<<endl;
+		//cout<<endl;
+	}
+	return true;
+}
+bool Integer::VerifyMultiply(int max)
+{
+	Integer* p1;
+	Integer* p2;
+	Integer* p3;
+	for(int i=-max;i<=max;i++)
+	{
+		for(int j=-max;j<=max;j++)
+		{
+			p1 = new Integer(i);
+			p2 = new Integer(j);
+			p3 = Integer::Multiply(p1,p2);
+			if(!p1->isSame(i)) return false;
+			if(!p2->isSame(j)) return false;
+			if(!p3->isSame(i*j)) return false;
+			//p3->printBinary();
+			
+			delete p1;
+			delete p2;
+			delete p3;
+		}
+		//cout<<endl;
 	}
 	return true;
 }
