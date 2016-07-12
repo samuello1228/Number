@@ -209,6 +209,134 @@ CompareCode Integer::compare(Integer* x1, Integer* x2)
 		}
 	}
 }
+Integer* Integer::Add(Integer*& x1,Integer*& x2,bool overwrite)
+{
+	Integer* y;
+	Integer* p1 = nullptr;
+	PositiveInteger* m1 = nullptr;
+	PositiveInteger* m2 = nullptr;
+	PositiveInteger* m3 = nullptr;
+	if(x2->getIsZero())
+	{
+		if(overwrite)
+		{
+			return x1;
+		}
+		else
+		{
+			y = x1->copy();
+			return y;
+		}
+	}
+	else if(x1->getIsZero())
+	{
+		if(overwrite)
+		{
+			p1=x1;
+			x1=x2;
+			x2=p1;
+			return x1;
+		}
+		else
+		{
+			y = x2->copy();
+			return y;
+		}
+	}
+	else if((x1->getSign() && x2->getSign()) ||
+			(!x1->getSign() && !x2->getSign()) )
+	{
+		//x1>0, x1>0
+		//x1<0, x1<0
+		m1 = x1->getMagnitude();
+		m2 = x2->getMagnitude();
+		m3 = PositiveInteger::Add(m1,m2,overwrite);
+		
+		if(overwrite)
+		{
+			x1->setMagnitude(m1);
+			x2->setMagnitude(m2);
+			return x1;
+		}
+		else
+		{
+			y = new Integer();
+			y->setIsZero(false);
+			if(!x1->getSign())
+			{
+				y->setSign(false);
+			}
+			y->setMagnitude(m3);
+			return y;
+		}
+	}
+	else
+	{
+		//x1>0, x1<0
+		//x1<0, x1>0
+		CompareCode code = PositiveInteger::compare(x1->getMagnitude(),x2->getMagnitude());
+		if(code.isEqual())
+		{
+			//y = 0
+			if(overwrite)
+			{
+				x1->setIsZero(true);
+				x1->setSign(true);
+				delete x1->getMagnitude();
+				x1->setMagnitude(nullptr);
+				return x1;
+			}
+			else
+			{
+				y = new Integer("0");
+				return y;
+			}
+		}
+		else
+		{
+			if(code.isLarger())
+			{
+				m3 = PositiveInteger::Subtract(x1->getMagnitude(),x2->getMagnitude(),overwrite,false);
+			}
+			else
+			{
+				m3 = PositiveInteger::Subtract(x2->getMagnitude(),x1->getMagnitude(),overwrite,false);
+			}
+			
+			if(overwrite)
+			{
+				if(code.isSmaller())
+				{
+					if(x1->getSign())
+					{
+						x1->setSign(false);
+					}
+					else
+					{
+						x1->setSign(true);
+					}
+					
+					m1 = x1->getMagnitude();
+					x1->setMagnitude(x2->getMagnitude());
+					x2->setMagnitude(m1);
+				}
+				return x1;
+			}
+			else
+			{
+				y = new Integer();
+				y->setIsZero(false);
+				if((x1->getSign() && code.isSmaller()) ||
+				   (!x1->getSign() && code.isLarger()) )
+				{
+					y->setSign(false);
+				}
+				y->setMagnitude(m3);
+				return y;
+			}
+		}
+	}
+}
 
 //verification
 Integer::Integer(int x)
@@ -358,3 +486,31 @@ bool Integer::VerifyCompare(int max)
 	}
 	return true;
 }
+bool Integer::VerifyAdd(int max,bool overwrite)
+{
+	Integer* p1;
+	Integer* p2;
+	Integer* p3;
+	for(int i=-max;i<=max;i++)
+	{
+		for(int j=-max;j<=max;j++)
+		{
+			p1 = new Integer(i);
+			p2 = new Integer(j);
+			p3 = Integer::Add(p1,p2,overwrite);
+			if(overwrite)
+			{
+				if(!p1->isSame(i+j)) return false;
+			}
+			if(!p3->isSame(i+j)) return false;
+			p3->printBinary();
+			
+			delete p1;
+			delete p2;
+			if(!overwrite) delete p3;
+		}
+		cout<<endl;
+	}
+	return true;
+}
+

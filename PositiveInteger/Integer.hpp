@@ -30,6 +30,7 @@ public:
 	void printDecimal(bool);
 	Integer* copy();
 	static CompareCode compare(Integer*,Integer*);
+	static Integer* Add(Integer*&,Integer*&,bool);
 	
 	//verification
 	Integer(int);
@@ -39,6 +40,7 @@ public:
 	static bool VerifyCopy(int);
 	static bool VerifyInteger(int);
 	static bool VerifyCompare(int);
+	static bool VerifyAdd(int,bool);
 	
 private:
 	bool isZero;

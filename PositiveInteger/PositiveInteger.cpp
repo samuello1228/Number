@@ -2326,7 +2326,12 @@ bool PositiveInteger::VerifyAdd(unsigned int max,bool overwrite)
 			p1 = new PositiveInteger(i);
 			p2 = new PositiveInteger(j);
 			p3 = PositiveInteger::Add(p1,p2,overwrite);
+			if(overwrite)
+			{
+				if(!p1->isSame(i+j)) return false;
+			}
 			if(!p3->isSame(i+j)) return false;
+			
 			
 			delete p1;
 			delete p2;

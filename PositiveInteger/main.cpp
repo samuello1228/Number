@@ -182,7 +182,8 @@ int main()
 	
 	//if(!Integer::VerifyCopy(100)) cout<<"Error"<<endl;
 	//if(!Integer::VerifyInteger(100)) cout<<"Error"<<endl;
-	if(!Integer::VerifyCompare(100)) cout<<"Error"<<endl;
+	//if(!Integer::VerifyCompare(100)) cout<<"Error"<<endl;
+	if(!Integer::VerifyAdd(5,1)) cout<<"Error"<<endl;
 	else cout<<"OK"<<endl;
 
 	return 0;
