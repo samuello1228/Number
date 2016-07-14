@@ -190,9 +190,9 @@ void RealNumberBound::printBinary()
 }
 
 //verification
-RealNumberBound::RealNumberBound(bool isZero,bool sign,unsigned int m,int e)
+RealNumberBound::RealNumberBound(bool IsZero,bool Sign,unsigned int m,int e)
 {
-	if(isZero)
+	if(IsZero)
 	{
 		setIsZero(true);
 		setSign(true);
@@ -208,7 +208,7 @@ RealNumberBound::RealNumberBound(bool isZero,bool sign,unsigned int m,int e)
 	Bit* c1;
 	
 	setIsZero(false);
-	if(sign)
+	if(Sign)
 	{
 		setSign(true);
 	}
@@ -251,12 +251,102 @@ RealNumberBound::RealNumberBound(bool isZero,bool sign,unsigned int m,int e)
 	p2 = new Integer(e);
 	setExponent(p2);
 }
-bool RealNumberBound::VerifyRealNumberBound(int max)
+
+bool RealNumberBound::isComplete()
+{
+	Bit* b1;
+	Bit* b2;
+	if(getIsZero())
+	{
+		if(!getSign()) return false;
+		if(getLeftEnd()!=nullptr) return false;
+		if(getRightEnd()!=nullptr) return false;
+		if(getExponent()!=nullptr) return false;
+	}
+	else
+	{
+		if(getRightEnd()==nullptr) return false;
+		b1 = getRightEnd();
+		if(b1->getRight()!=nullptr) return false;
+		if(!b1->getDigit()) return false;
+		while(true)
+		{
+			if(b1->getLeft()==nullptr) break;
+			b2 = b1->getLeft();
+			if(b2->getRight()==nullptr) return false;
+			if(b2->getRight()!=b1) return false;
+			b1 = b2;
+		}
+		if(!b1->getDigit()) return false;
+		if(getLeftEnd()==nullptr) return false;
+		b2 = getLeftEnd();
+		if(b1!=b2) return false;
+
+		if(getExponent()==nullptr) return false;
+		if(!getExponent()->isComplete()) return false;
+	}
+	return true;
+}
+
+bool RealNumberBound::isSame(bool IsZero,bool Sign,unsigned int m,int e)
+{
+	PositiveInteger* p1;
+	Bit* b1;
+	Bit* b2;
+	
+	if(!isComplete()) return false;
+	if(IsZero)
+	{
+		if(!getIsZero()) return false;
+	}
+	else
+	{
+		if(getSign()!=Sign) return false;
+		
+		if(m==0)
+		{
+			b1 = getLeftEnd();
+			if(b1->getRight()!=nullptr) return false;
+		}
+		else
+		{
+			p1 = new PositiveInteger(m);
+			b1 = p1->getRightEnd();
+			b2 = new Bit;
+			b2->setDigit(1);
+			b1->setRight(b2);
+			b2->setLeft(b1);
+			p1->setRightEnd(b2);
+			
+			b1 = getLeftEnd();
+			b2 = p1->getLeftEnd();
+			while(true)
+			{
+				if(b1->getDigit()!=b2->getDigit()) return false;
+				if(b1->getRight()==nullptr) break;
+				if(b2->getRight()==nullptr) return false;
+				b1 = b1->getRight();
+				b2 = b2->getRight();
+			}
+			if(b2->getRight()!=nullptr) return false;
+			delete p1;
+		}
+		
+		if(!getExponent()->isSame(e)) return false;
+	}
+	
+	return true;
+}
+
+
+bool RealNumberBound::VerifyCopy(int max)
 {
 	RealNumberBound* x1;
 	
 	x1 = new RealNumberBound(true);
+	if(!x1->isComplete()) return false;
 	x1->printBinary();
+	if(!x1->isSame(true)) return false;
 	delete x1;
 	cout<<endl;
 	
@@ -265,7 +355,9 @@ bool RealNumberBound::VerifyRealNumberBound(int max)
 		for(int j=-max;j<=max;j++)
 		{
 			x1 = new RealNumberBound(false,true,i,j);
+			if(!x1->isComplete()) return false;
 			x1->printBinary();
+			if(!x1->isSame(false,true,i,j)) return false;
 			delete x1;
 		}
 		cout<<endl;
@@ -276,7 +368,9 @@ bool RealNumberBound::VerifyRealNumberBound(int max)
 		for(int j=-max;j<=max;j++)
 		{
 			x1 = new RealNumberBound(false,false,i,j);
+			if(!x1->isComplete()) return false;
 			x1->printBinary();
+			if(!x1->isSame(false,false,i,j)) return false;
 			delete x1;
 		}
 		cout<<endl;

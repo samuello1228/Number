@@ -31,10 +31,11 @@ public:
 	void printBinary();
 	
 	//verification
-	RealNumberBound(bool isZero,bool sign=true,unsigned int m=0,int e=0);
+	RealNumberBound(bool IsZero,bool Sign=true,unsigned int m=0,int e=0);
 	bool isComplete();
-	bool isSame(double);
+	bool isSame(bool IsZero,bool Sign=true,unsigned int m=0,int e=0);
 	
+	static bool VerifyCopy(int);
 	static bool VerifyRealNumberBound(int);
 	
 	
