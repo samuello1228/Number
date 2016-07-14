@@ -7,7 +7,7 @@
 //
 
 #include <iostream>
-#include "Integer.hpp"
+#include "RealNumberBound.hpp"
 using namespace std;
 
 int main()
@@ -169,15 +169,12 @@ int main()
 	/*
 	Integer* a1;
 	Integer* a2;
-	Integer* a3;
-	Integer* a4;
 	
 	a1 = new Integer("-1010");
-	a3 = a1->copy();
+	a2 = a1->copy();
 	delete a1;
-	a3->printBinary();
-	//a3->printDecimal(false);
-	delete a3;
+	a2->printBinary();
+	delete a2;
 	*/
 	
 	//if(!Integer::VerifyCopy(100)) cout<<"Error"<<endl;
@@ -188,6 +185,18 @@ int main()
 	//if(!Integer::VerifySubtract(100,0)) cout<<"Error"<<endl;
 	//if(!Integer::VerifyMultiply(100)) cout<<"Error"<<endl;
 	//else cout<<"OK"<<endl;
+	
+	///*
+	RealNumberBound* a1;
+	RealNumberBound* a2;
+
+	a1 = new RealNumberBound("-1001","0");
+	a1->printBinary();
+	//a2 = a1->copy();
+	delete a1;
+	//a2->printBinary();
+	//delete a2;
+	//*/
 
 	return 0;
 }

@@ -24,8 +24,6 @@ public:
 	PositiveInteger* getMagnitude();
 	void setMagnitude(PositiveInteger*);
 	
-	static void One(Integer*);
-	
 	void printBinary();
 	void printDecimal(bool);
 	Integer* copy();

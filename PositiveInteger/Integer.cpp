@@ -78,16 +78,7 @@ void Integer::setMagnitude(PositiveInteger* newMagnitude)
 {
 	magnitude = newMagnitude;
 }
-/*
-void Integer::One(Integer* x)
-{
-	//x->setIsZero(false);
-	//x->setSign(true);
-	PositiveInteger* a = new PositiveInteger;
-	PositiveInteger::One(a);
-	x->setMagnitude(a);
-}
-*/
+
 void Integer::printBinary()
 {
 	if(getIsZero())

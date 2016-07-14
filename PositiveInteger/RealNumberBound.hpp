@@ -21,17 +21,23 @@ public:
 	void setIsZero(bool);
 	bool getSign();
 	void setSign(bool);
-	PositiveInteger* getMagnitude();
-	void setMagnitude(PositiveInteger*);
+	Bit* getLeftEnd();
+	void setLeftEnd(Bit*);
+	Bit* getRightEnd();
+	void setRightEnd(Bit*);
 	Integer* getExponent();
 	void setExponent(Integer*);
+	
+	void printBinary();
+	
 	
 private:
 	bool isZero;
 	bool sign;
 	//true: positive
 	//false: negative
-	PositiveInteger* magnitude;
+	Bit* leftEnd;
+	Bit* rightEnd;
 	//1.0100101 * 2^3
 	Integer* exponent;
 };
