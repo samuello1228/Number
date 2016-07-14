@@ -369,26 +369,27 @@ PositiveInteger* PositiveInteger::copy()
 	PositiveInteger* x1 = new PositiveInteger;
 	PositiveInteger* x2;
 	PositiveInteger* y = x1;
-	Bit* temp;
-	Bit* digit1;
-	Bit* digit2;
+	
+	Bit* b1;
+	Bit* b2;
+	Bit* c1;
 	
 	x1->setIsOne(a1->getIsOne());
 	x1->setIsTwo(a1->getIsTwo());
-	temp = a1->getRightEnd();
-	digit1 = new Bit;
-	digit1->setDigit(temp->getDigit());
-	x1->setRightEnd(digit1);
-	while(!temp->isLeftEnd())
+	c1 = a1->getRightEnd();
+	b1 = new Bit;
+	b1->setDigit(c1->getDigit());
+	x1->setRightEnd(b1);
+	while(!c1->isLeftEnd())
 	{
-		temp = temp->getLeft();
-		digit2 = new Bit;
-		digit2->setDigit(temp->getDigit());
-		digit1->setLeft(digit2);
-		digit2->setRight(digit1);
-		digit1 = digit2;
+		c1 = c1->getLeft();
+		b2 = new Bit;
+		b2->setDigit(c1->getDigit());
+		b1->setLeft(b2);
+		b2->setRight(b1);
+		b1 = b2;
 	}
-	x1->setLeftEnd(digit1);
+	x1->setLeftEnd(b1);
 	
 	while(!a1->isOneOrTwo())
 	{
@@ -397,20 +398,20 @@ PositiveInteger* PositiveInteger::copy()
 		x2 = new PositiveInteger;
 		x2->setIsOne(a2->getIsOne());
 		x2->setIsTwo(a2->getIsTwo());
-		temp = a2->getRightEnd();
-		digit1 = new Bit;
-		digit1->setDigit(temp->getDigit());
-		x2->setRightEnd(digit1);
-		while(!temp->isLeftEnd())
+		c1 = a2->getRightEnd();
+		b1 = new Bit;
+		b1->setDigit(c1->getDigit());
+		x2->setRightEnd(b1);
+		while(!c1->isLeftEnd())
 		{
-			temp = temp->getLeft();
-			digit2 = new Bit;
-			digit2->setDigit(temp->getDigit());
-			digit1->setLeft(digit2);
-			digit2->setRight(digit1);
-			digit1 = digit2;
+			c1 = c1->getLeft();
+			b2 = new Bit;
+			b2->setDigit(c1->getDigit());
+			b1->setLeft(b2);
+			b2->setRight(b1);
+			b1 = b2;
 		}
-		x2->setLeftEnd(digit1);
+		x2->setLeftEnd(b1);
 		x1->setNumberOfDigit(x2);
 		x2->setNumberOfDigitParent(x1);
 		

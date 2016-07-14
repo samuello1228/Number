@@ -30,6 +30,13 @@ public:
 	
 	void printBinary();
 	
+	//verification
+	RealNumberBound(bool isZero,bool sign=true,unsigned int m=0,int e=0);
+	bool isComplete();
+	bool isSame(double);
+	
+	static bool VerifyRealNumberBound(int);
+	
 	
 private:
 	bool isZero;

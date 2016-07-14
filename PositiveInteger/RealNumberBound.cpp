@@ -139,7 +139,7 @@ void RealNumberBound::setExponent(Integer* newExponent)
 void RealNumberBound::printBinary()
 {
 	PositiveInteger* m;
-	Bit* digit;
+	Bit* b1;
 	
 	if(getIsZero())
 	{
@@ -152,8 +152,8 @@ void RealNumberBound::printBinary()
 		cout<<"-";
 	}
 	
-	digit = getLeftEnd();
-	if(digit->isRightEnd())
+	b1 = getLeftEnd();
+	if(b1->isRightEnd())
 	{
 		cout<<"1";
 	}
@@ -161,10 +161,10 @@ void RealNumberBound::printBinary()
 	{
 		cout<<"1.";
 	}
-	while(!digit->isRightEnd())
+	while(!b1->isRightEnd())
 	{
-		digit = digit->getRight();
-		cout<<digit->getDigit();
+		b1 = b1->getRight();
+		cout<<b1->getDigit();
 	}
 	
 	cout<<"e";
@@ -179,12 +179,107 @@ void RealNumberBound::printBinary()
 	}
 	
 	m = getExponent()->getMagnitude();
-	digit = m->getLeftEnd();
-	cout<<digit->getDigit();
-	while(!digit->isRightEnd())
+	b1 = m->getLeftEnd();
+	cout<<b1->getDigit();
+	while(!b1->isRightEnd())
 	{
-		digit = digit->getRight();
-		cout<<digit->getDigit();
+		b1 = b1->getRight();
+		cout<<b1->getDigit();
 	}
 	cout<<endl;
+}
+
+//verification
+RealNumberBound::RealNumberBound(bool isZero,bool sign,unsigned int m,int e)
+{
+	if(isZero)
+	{
+		setIsZero(true);
+		setSign(true);
+		setLeftEnd(nullptr);
+		setRightEnd(nullptr);
+		setExponent(nullptr);
+		return;
+	}
+	PositiveInteger* p1;
+	Integer* p2;
+	Bit* b1;
+	Bit* b2;
+	Bit* c1;
+	
+	setIsZero(false);
+	if(sign)
+	{
+		setSign(true);
+	}
+	else
+	{
+		setSign(false);
+	}
+	if(m==0)
+	{
+		b1 = new Bit;
+		b1->setDigit(1);
+		setLeftEnd(b1);
+		setRightEnd(b1);
+	}
+	else
+	{
+		p1 = new PositiveInteger(m);
+		
+		c1 = p1->getLeftEnd();
+		b1 = new Bit;
+		b1->setDigit(c1->getDigit());
+		setLeftEnd(b1);
+		while(!c1->isRightEnd())
+		{
+			c1 = c1->getRight();
+			b2 = new Bit;
+			b2->setDigit(c1->getDigit());
+			b1->setRight(b2);
+			b2->setLeft(b1);
+			b1 = b2;
+		}
+		b2 = new Bit;
+		b2->setDigit(1);
+		b1->setRight(b2);
+		b2->setLeft(b1);
+		setRightEnd(b2);
+		delete p1;
+	}
+	
+	p2 = new Integer(e);
+	setExponent(p2);
+}
+bool RealNumberBound::VerifyRealNumberBound(int max)
+{
+	RealNumberBound* x1;
+	
+	x1 = new RealNumberBound(true);
+	x1->printBinary();
+	delete x1;
+	cout<<endl;
+	
+	for(unsigned int i=0;i<=max;i++)
+	{
+		for(int j=-max;j<=max;j++)
+		{
+			x1 = new RealNumberBound(false,true,i,j);
+			x1->printBinary();
+			delete x1;
+		}
+		cout<<endl;
+	}
+	
+	for(unsigned int i=0;i<=max;i++)
+	{
+		for(int j=-max;j<=max;j++)
+		{
+			x1 = new RealNumberBound(false,false,i,j);
+			x1->printBinary();
+			delete x1;
+		}
+		cout<<endl;
+	}
+	return true;
 }

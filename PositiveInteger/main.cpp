@@ -186,7 +186,7 @@ int main()
 	//if(!Integer::VerifyMultiply(100)) cout<<"Error"<<endl;
 	//else cout<<"OK"<<endl;
 	
-	///*
+	/*
 	RealNumberBound* a1;
 	RealNumberBound* a2;
 
@@ -196,7 +196,10 @@ int main()
 	delete a1;
 	//a2->printBinary();
 	//delete a2;
-	//*/
+	*/
+	
+	if(!RealNumberBound::VerifyRealNumberBound(5)) cout<<"Error"<<endl;
+	else cout<<"OK"<<endl;
 
 	return 0;
 }
