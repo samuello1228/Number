@@ -47,32 +47,7 @@ void PositiveInteger::setRightEnd(Bit* newRightEnd)
 {
 	rightEnd = newRightEnd;
 }
-/*
-void PositiveInteger::One(PositiveInteger* x)
-{
-	Bit* b1 = new Bit;
-	x->setRightEnd(b1);
-	x->setLeftEnd(b1);
-	b1->setDigit(1);
-}
 
-void PositiveInteger::Two(PositiveInteger* x)
-{
-	x->setIsOne(false);
-	x->setIsTwo(true);
-	Bit* temp = new Bit;
-	x->setRightEnd(temp);
-	temp = new Bit;
-	x->setLeftEnd(temp);
-	
-	//x->getRightEnd()->setDigit(0);
-	x->getLeftEnd()->setDigit(1);
-	x->getRightEnd()->setLeft(x->getLeftEnd());
-	x->getLeftEnd()->setRight(x->getRightEnd());
-	x->setNumberOfDigit(x);
-	x->setNumberOfDigitParent(nullptr);
-}
-*/
 PositiveInteger::PositiveInteger(std::string x)
 {
     std::string::iterator i=x.begin();
@@ -241,26 +216,18 @@ void PositiveInteger::printBinary()
 	}
 	cout<<endl;
 }
-/*
+
 PositiveInteger* PositiveInteger::copy()
 {
-	PositiveInteger* a1 = this;
-	PositiveInteger* a2;
-	
-	PositiveInteger* x1 = new PositiveInteger;
-	PositiveInteger* x2;
-	PositiveInteger* y = x1;
-	
+	PositiveInteger* y = new PositiveInteger;
 	Bit* b1;
 	Bit* b2;
 	Bit* c1;
 	
-	x1->setIsOne(a1->getIsOne());
-	x1->setIsTwo(a1->getIsTwo());
-	c1 = a1->getRightEnd();
+	c1 = getRightEnd();
 	b1 = new Bit;
 	b1->setDigit(c1->getDigit());
-	x1->setRightEnd(b1);
+	y->setRightEnd(b1);
 	while(!c1->isLeftEnd())
 	{
 		c1 = c1->getLeft();
@@ -270,40 +237,10 @@ PositiveInteger* PositiveInteger::copy()
 		b2->setRight(b1);
 		b1 = b2;
 	}
-	x1->setLeftEnd(b1);
-	
-	while(!a1->isOneOrTwo())
-	{
-		a2 = a1->getNumberOfDigit();
-		
-		x2 = new PositiveInteger;
-		x2->setIsOne(a2->getIsOne());
-		x2->setIsTwo(a2->getIsTwo());
-		c1 = a2->getRightEnd();
-		b1 = new Bit;
-		b1->setDigit(c1->getDigit());
-		x2->setRightEnd(b1);
-		while(!c1->isLeftEnd())
-		{
-			c1 = c1->getLeft();
-			b2 = new Bit;
-			b2->setDigit(c1->getDigit());
-			b1->setLeft(b2);
-			b2->setRight(b1);
-			b1 = b2;
-		}
-		x2->setLeftEnd(b1);
-		x1->setNumberOfDigit(x2);
-		x2->setNumberOfDigitParent(x1);
-		
-		a1=a2;
-		x1=x2;
-	}
-	x1->setNumberOfDigit(x1);
-
+	y->setLeftEnd(b1);
 	return y;
 }
-*/
+
 //CompareCode PositiveInteger::compare(PositiveInteger* x1, PositiveInteger* x2)
 //{
 	/*
@@ -2008,16 +1945,15 @@ bool PositiveInteger::VerifyCopy(unsigned int max)
 	for(unsigned int i=1;i<=max;i++)
 	{
 		p1 = new PositiveInteger(i);
-		if(!p1->isComplete()) return false;
-		p1->printBinary();
+		//if(!p1->isComplete()) return false;
+		//p1->printBinary();
 		
-		//p2 = p1->copy();
+		p2 = p1->copy();
 		if(!p1->isSame(i)) return false;
-		//if(!p2->isSame(i)) return false;
-		
+		if(!p2->isSame(i)) return false;
 		
 		delete p1;
-		//delete p2;
+		delete p2;
 	}
 	return true;
 }

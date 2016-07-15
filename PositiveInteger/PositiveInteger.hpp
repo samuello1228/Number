@@ -25,9 +25,6 @@ public:
 	Bit* getRightEnd();
 	void setRightEnd(Bit*);
 	
-	//static void One(PositiveInteger*);
-	//static void Two(PositiveInteger*);
-	
 	void printBinary();
 	struct Digit
 	{
