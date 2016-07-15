@@ -15,8 +15,8 @@ public:
 	Bit();
 	~Bit();
 	
-	bool getDigit();
-	void setDigit(bool);
+	bool getBit();
+	void setBit(bool);
 	
 	Bit* getLeft();
 	void setLeft(Bit*);
@@ -27,7 +27,7 @@ public:
 	bool isRightEnd();
 	
 private:
-	bool digit;
+	bool bit;
 	Bit* left;
 	Bit* right;
 };

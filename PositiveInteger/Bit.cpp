@@ -10,7 +10,7 @@
 
 Bit::Bit()
 {
-	setDigit(0);
+	setBit(0);
 	setLeft(nullptr);
 	setRight(nullptr);
 }
@@ -19,13 +19,13 @@ Bit::~Bit()
 {
 }
 
-bool Bit::getDigit()
+bool Bit::getBit()
 {
-	return digit;
+	return bit;
 }
-void Bit::setDigit(bool newDigit)
+void Bit::setBit(bool newBit)
 {
-	digit = newDigit;
+	bit = newBit;
 }
 
 Bit* Bit::getLeft()
