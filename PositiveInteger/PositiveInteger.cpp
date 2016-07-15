@@ -2010,11 +2010,11 @@ bool PositiveInteger::VerifyCopy(unsigned int max)
 		p1 = new PositiveInteger(i);
 		if(!p1->isComplete()) return false;
 		p1->printBinary();
-		/*
-		p2 = p1->copy();
+		
+		//p2 = p1->copy();
 		if(!p1->isSame(i)) return false;
-		if(!p2->isSame(i)) return false;
-		*/
+		//if(!p2->isSame(i)) return false;
+		
 		
 		delete p1;
 		//delete p2;
@@ -2038,7 +2038,7 @@ bool PositiveInteger::VerifyCounter(unsigned int max)
 	return true;
 }
 */
-/*
+
 bool PositiveInteger::VerifyPositiveInteger(unsigned int max)
 {
 	PositiveInteger* p1;
@@ -2072,7 +2072,7 @@ bool PositiveInteger::VerifyPositiveInteger(unsigned int max)
 	}
 	return true;
 }
-*/
+
 /*
 bool PositiveInteger::VerifyCompare(unsigned int max)
 {
