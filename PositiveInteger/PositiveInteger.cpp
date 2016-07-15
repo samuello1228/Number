@@ -241,75 +241,65 @@ PositiveInteger* PositiveInteger::copy()
 	return y;
 }
 
-//CompareCode PositiveInteger::compare(PositiveInteger* x1, PositiveInteger* x2)
-//{
-	/*
-	1: x1>x2
-	0: x1=x2
-	-1: x1<x2
-	*/
-	/*
-	PositiveInteger* n1 = x1;
-	PositiveInteger* n2 = x2;
-	while(!n1->isOneOrTwo() && !n2->isOneOrTwo())
-	{
-		n1 = n1->getNumberOfDigit();
-		n2 = n2->getNumberOfDigit();
-	}
+CompareCode PositiveInteger::compare(PositiveInteger* x1, PositiveInteger* x2)
+{
+	Bit* b1;
+	Bit* b2;
 	
-	if(n1->isOneOrTwo() && !n2->isOneOrTwo())
-	{
-		return CompareCode(false,false);
-	}
-	
-	if(!n1->isOneOrTwo() && n2->isOneOrTwo())
-	{
-		return CompareCode(false,true);
-	}
+	b1 = x1->getRightEnd();
+	b2 = x2->getRightEnd();
 
-	// n1->isOneOrTwo() && n2->isOneOrTwo()
-	if(n1->getIsOne() && n2->getIsOne())
+	while(true)
 	{
-		return CompareCode(true);
-	}
-	if(n1->getIsOne() && n2->getIsTwo())
-	{
-		return CompareCode(false,false);
-	}
-	if(n1->getIsTwo() && n2->getIsOne())
-	{
-		return CompareCode(false,true);
-	}
-	
-	// n1->getIsTwo() && n2->getIsTwo()
-	Bit* digit1;
-	Bit* digit2;
-	
-	while(n1!=x1 && n2!=x2)
-	{
-		n1 = n1->getNumberOfDigitParent();
-		n2 = n2->getNumberOfDigitParent();
-		digit1 = n1->getLeftEnd();
-		digit2 = n2->getLeftEnd();
-		//the digit at the left end must be 1, no need to check
-		while(!digit1->isRightEnd() && !digit2->isRightEnd())
+		if(b1->isLeftEnd())
 		{
-			digit1 = digit1->getRight();
-			digit2 = digit2->getRight();
-			if(!digit1->getDigit() && digit2->getDigit())
+			if(b2->isLeftEnd())
+			{
+				break;
+			}
+			else
 			{
 				return CompareCode(false,false);
 			}
-			if(digit1->getDigit() && !digit2->getDigit())
+		}
+		else
+		{
+			if(b2->isLeftEnd())
+			{
+				return CompareCode(false,true);
+			}
+			else
+			{
+				b1 = b1->getLeft();
+				b2 = b2->getLeft();
+			}
+		}
+	}
+	
+	while(true)
+	{
+		if(b1->getDigit())
+		{
+			if(!b2->getDigit())
 			{
 				return CompareCode(false,true);
 			}
 		}
+		else
+		{
+			if(b2->getDigit())
+			{
+				return CompareCode(false,false);
+			}
+		}
+		
+		if(b1->isRightEnd()) break;
+		b1 = b1->getRight();
+		b2 = b2->getRight();
 	}
-	*/
-	//return CompareCode(true);
 	
-//}
+	return CompareCode(true);
+}
 
 void PositiveInteger::AddThreeBit(bool x1, bool x2, bool x3, bool &y1, bool &y2)
 {
@@ -2009,7 +1999,6 @@ bool PositiveInteger::VerifyPositiveInteger(unsigned int max)
 	return true;
 }
 
-/*
 bool PositiveInteger::VerifyCompare(unsigned int max)
 {
 	PositiveInteger* p1;
@@ -2034,6 +2023,7 @@ bool PositiveInteger::VerifyCompare(unsigned int max)
 	}
 	return true;
 }
+/*
 bool PositiveInteger::VerifyAdd(unsigned int max,bool overwrite)
 {
 	PositiveInteger* p1;

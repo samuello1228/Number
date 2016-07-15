@@ -135,10 +135,10 @@ int main()
 	delete iMax;
 	delete jMax;
 	*/
-	if(!PositiveInteger::VerifyCopy(100)) cout<<"Error"<<endl;
+	//if(!PositiveInteger::VerifyCopy(100)) cout<<"Error"<<endl;
 	//if(!PositiveInteger::VerifyCounter(100)) cout<<"Error"<<endl;
 	//if(!PositiveInteger::VerifyPositiveInteger(100)) cout<<"Error"<<endl;
-	//if(!PositiveInteger::VerifyCompare(100)) cout<<"Error"<<endl;
+	if(!PositiveInteger::VerifyCompare(100)) cout<<"Error"<<endl;
 	//if(!PositiveInteger::VerifyAdd(100,0)) cout<<"Error"<<endl;
 	//if(!PositiveInteger::VerifySubtract(100,0)) cout<<"Error"<<endl;
 	//if(!PositiveInteger::VerifyMultiply(100)) cout<<"Error"<<endl;
