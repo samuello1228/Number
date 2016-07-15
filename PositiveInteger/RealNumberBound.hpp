@@ -10,6 +10,7 @@
 #define RealNumberBound_hpp
 
 #include "Integer.hpp"
+
 class RealNumberBound
 {
 public:

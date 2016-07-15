@@ -24,19 +24,9 @@ public:
 	void setLeftEnd(Bit*);
 	Bit* getRightEnd();
 	void setRightEnd(Bit*);
-	PositiveInteger* getNumberOfDigit();
-	void setNumberOfDigit(PositiveInteger*);
-	PositiveInteger* getNumberOfDigitParent();
-	void setNumberOfDigitParent(PositiveInteger*);
 	
-	bool getIsOne();
-	void setIsOne(bool);
-	bool getIsTwo();
-	void setIsTwo(bool);
-	bool isOneOrTwo();
-	
-	static void One(PositiveInteger*);
-	static void Two(PositiveInteger*);
+	//static void One(PositiveInteger*);
+	//static void Two(PositiveInteger*);
 	
 	void printBinary();
 	struct Digit
@@ -51,7 +41,7 @@ public:
 	static PositiveInteger* Subtract(PositiveInteger*,PositiveInteger*,bool,bool);
 	static PositiveInteger* Multiply(PositiveInteger*,PositiveInteger*);
 	static void Divide(PositiveInteger*,PositiveInteger*,PositiveInteger*&,PositiveInteger*&,bool&,bool,bool);
-
+	
 	struct ListOfPositiveInteger
 	{
 		PositiveInteger* Element;
@@ -79,11 +69,6 @@ public:
 private:
 	Bit* leftEnd;
 	Bit* rightEnd;
-	PositiveInteger* numberOfDigit;
-	PositiveInteger* numberOfDigitParent;
-	
-	bool isOne;
-	bool isTwo;
 	
 	static void AddThreeBit(bool,bool,bool,bool&,bool&);
 	static PositiveInteger* SubtractAux(Bit*&,Bit*,PositiveInteger*&,bool&,bool&,

@@ -9,7 +9,7 @@
 #include "Integer.hpp"
 #include <iostream>
 using namespace std;
-
+/*
 Integer::Integer()
 {
 	setIsZero(false);
@@ -658,3 +658,4 @@ bool Integer::VerifyMultiply(int max)
 	}
 	return true;
 }
+*/

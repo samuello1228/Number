@@ -5,7 +5,7 @@
 //  Created by Samuel Lo on 12/7/2016.
 //  Copyright © 2016年 Samuel Lo. All rights reserved.
 //
-
+/*
 #include "RealNumberBound.hpp"
 #include <iostream>
 using namespace std;
@@ -377,3 +377,4 @@ bool RealNumberBound::VerifyCopy(int max)
 	}
 	return true;
 }
+ */
