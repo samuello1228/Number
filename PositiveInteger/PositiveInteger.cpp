@@ -383,7 +383,7 @@ void PositiveInteger::AddThreeBit(bool x1, bool x2, bool x3, bool &y1, bool &y2)
 		}
 	}
 }
-/*
+
 PositiveInteger* PositiveInteger::Add(PositiveInteger* x1,PositiveInteger* x2,bool overwrite)
 {
 	PositiveInteger* y = nullptr;
@@ -402,6 +402,8 @@ PositiveInteger* PositiveInteger::Add(PositiveInteger* x1,PositiveInteger* x2,bo
 	{
 		y = new PositiveInteger();
 		b2 = new Bit;
+		b2->setRight(nullptr);
+		b2->setIsRightEnd(true);
 		y->setRightEnd(b2);
 	}
 	
@@ -418,41 +420,55 @@ PositiveInteger* PositiveInteger::Add(PositiveInteger* x1,PositiveInteger* x2,bo
 			b1 = b2;
 		}
 		carry = result1;
-		if(c1->isLeftEnd())
+		if(c1->getIsLeftEnd())
 		{
-			if(c2->isLeftEnd())
+			if(c2->getIsLeftEnd())
 			{
 				if(carry)
 				{
 					b2 = new Bit;
+					b2->setLeft(nullptr);
+					b2->setIsLeftEnd(true);
 					b2->setBit(1);
 					if(overwrite)
 					{
+						c1->setIsLeftEnd(false);
 						c1->setLeft(b2);
 						b2->setRight(c1);
 						x1->setLeftEnd(b2);
+						return x1;
 					}
 					else
 					{
 						b1->setLeft(b2);
 						b2->setRight(b1);
+						y->setLeftEnd(b2);
+						return y;
 					}
-				}
-				
-				if(overwrite)
-				{
-					return x1;
 				}
 				else
 				{
-					y->setLeftEnd(b2);
-					return y;
+					cout<<"logic error: the left end is not 1"<<endl;
+					if(overwrite)
+					{
+						return x1;
+					}
+					else
+					{
+						b1->setLeft(nullptr);
+						b1->setIsLeftEnd(true);
+						y->setLeftEnd(b1);
+						return y;
+					}
 				}
-				
 			}
 			else
 			{
-				///////////////////////////
+				///////////////////////////start
+				if(overwrite)
+				{
+					c1->setIsLeftEnd(false);
+				}
 				if(carry)
 				{
 					while(true)
@@ -461,7 +477,7 @@ PositiveInteger* PositiveInteger::Add(PositiveInteger* x1,PositiveInteger* x2,bo
 						if(c2->getBit())
 						{
 							b2 = new Bit;
-							//b2->setBit(0);
+							b2->setBit(0);
 							if(overwrite)
 							{
 								c1->setLeft(b2);
@@ -475,9 +491,11 @@ PositiveInteger* PositiveInteger::Add(PositiveInteger* x1,PositiveInteger* x2,bo
 								b1 = b2;
 							}
 							
-							if(c2->isLeftEnd())
+							if(c2->getIsLeftEnd())
 							{
 								b2 = new Bit;
+								b2->setLeft(nullptr);
+								b2->setIsLeftEnd(true);
 								b2->setBit(1);
 								if(overwrite)
 								{
@@ -513,9 +531,9 @@ PositiveInteger* PositiveInteger::Add(PositiveInteger* x1,PositiveInteger* x2,bo
 								b1 = b2;
 							}
 							
-							if(c2->isLeftEnd())
+							if(c2->getIsLeftEnd())
 							{
-								//Error
+								cout<<"logic error: the left end of x2 is not 1"<<endl;
 								if(overwrite)
 								{
 									x1->setLeftEnd(c1);
@@ -523,7 +541,8 @@ PositiveInteger* PositiveInteger::Add(PositiveInteger* x1,PositiveInteger* x2,bo
 								}
 								else
 								{
-									
+									b1->setLeft(nullptr);
+									b1->setIsLeftEnd(true);
 									y->setLeftEnd(b1);
 									return y;
 								}
@@ -552,27 +571,31 @@ PositiveInteger* PositiveInteger::Add(PositiveInteger* x1,PositiveInteger* x2,bo
 						b1 = b2;
 					}
 					
-					if(c2->isLeftEnd()) break;
+					if(c2->getIsLeftEnd()) break;
 				}
+				
 				if(overwrite)
 				{
+					c1->setLeft(nullptr);
+					c1->setIsLeftEnd(true);
 					x1->setLeftEnd(c1);
 					return x1;
 				}
 				else
 				{
-			
+					b1->setLeft(nullptr);
+					b1->setIsLeftEnd(true);
 					y->setLeftEnd(b1);
 					return y;
 				}
-				///////////////////////////
+				///////////////////////////end
 			}
 		}
 		else
 		{
-			if(c2->isLeftEnd())
+			if(c2->getIsLeftEnd())
 			{
-				///////////////////////////
+				///////////////////////////start
 				if(carry)
 				{
 					while(true)
@@ -587,18 +610,21 @@ PositiveInteger* PositiveInteger::Add(PositiveInteger* x1,PositiveInteger* x2,bo
 							else
 							{
 								b2 = new Bit;
-								//b2->setBit(0);
+								b2->setBit(0);
 								b1->setLeft(b2);
 								b2->setRight(b1);
 								b1 = b2;
 							}
 							
-							if(c1->isLeftEnd())
+							if(c1->getIsLeftEnd())
 							{
 								b2 = new Bit;
+								b2->setLeft(nullptr);
+								b2->setIsLeftEnd(true);
 								b2->setBit(1);
 								if(overwrite)
 								{
+									c1->setIsLeftEnd(false);
 									c1->setLeft(b2);
 									b2->setRight(c1);
 									x1->setLeftEnd(b2);
@@ -629,9 +655,11 @@ PositiveInteger* PositiveInteger::Add(PositiveInteger* x1,PositiveInteger* x2,bo
 								b2->setRight(b1);
 								b1 = b2;
 								
-								if(c1->isLeftEnd())
+								if(c1->getIsLeftEnd())
 								{
-									//Error
+									cout<<"logic error: the left end of x1 is not 1"<<endl;
+									b1->setLeft(nullptr);
+									b1->setIsLeftEnd(true);
 									y->setLeftEnd(b1);
 									return y;
 								}
@@ -655,12 +683,14 @@ PositiveInteger* PositiveInteger::Add(PositiveInteger* x1,PositiveInteger* x2,bo
 						b1->setLeft(b2);
 						b2->setRight(b1);
 						b1 = b2;
-						if(c1->isLeftEnd()) break;
+						if(c1->getIsLeftEnd()) break;
 					}
+					b1->setLeft(nullptr);
+					b1->setIsLeftEnd(true);
 					y->setLeftEnd(b1);
 					return y;
 				}
-				///////////////////////////
+				///////////////////////////end
 			}
 			else
 			{
@@ -677,7 +707,7 @@ PositiveInteger* PositiveInteger::Add(PositiveInteger* x1,PositiveInteger* x2,bo
 		}
 	}
 }
-*/
+
 /*
 PositiveInteger* PositiveInteger::SubtractAux(Bit*& LeftEnd1,Bit* RightEnd1,PositiveInteger*& n1,bool& isOne1,bool& isTwo1,
 											  Bit* LeftEnd2,Bit* RightEnd2,PositiveInteger* n2,bool isOne2,bool isTwo2,
@@ -2098,7 +2128,7 @@ bool PositiveInteger::VerifyCompare(unsigned int max)
 	}
 	return true;
 }
-/*
+
 bool PositiveInteger::VerifyAdd(unsigned int max,bool overwrite)
 {
 	PositiveInteger* p1;
@@ -2129,7 +2159,7 @@ bool PositiveInteger::VerifyAdd(unsigned int max,bool overwrite)
 	}
 	return true;
 }
-
+/*
 bool PositiveInteger::VerifySubtract(unsigned int max,bool overwrite)
 {
 	PositiveInteger* p1;
