@@ -141,9 +141,9 @@ int main()
 	//if(!PositiveInteger::VerifyCounter(100)) cout<<"Error"<<endl;
 	//if(!PositiveInteger::VerifyPositiveInteger(100)) cout<<"Error"<<endl;
 	//if(!PositiveInteger::VerifyCompare(100)) cout<<"Error"<<endl;
-	//if(!PositiveInteger::VerifyAdd(100,1)) cout<<"Error"<<endl;
+	if(!PositiveInteger::VerifyAdd(100,1)) cout<<"Error"<<endl;
 	//if(!PositiveInteger::VerifySubtract(100,0)) cout<<"Error"<<endl;
-	if(!PositiveInteger::VerifyMultiply(100)) cout<<"Error"<<endl;
+	//if(!PositiveInteger::VerifyMultiply(3)) cout<<"Error"<<endl;
 	//if(!PositiveInteger::VerifyDivide(100,0)) cout<<"Error"<<endl;
 	else cout<<"OK"<<endl;
 	
