@@ -1267,51 +1267,44 @@ PositiveInteger* PositiveInteger::Multiply(PositiveInteger* x1,PositiveInteger* 
 	bool result1;
 	bool result2;
 	
+	b1 = new Bit;
+	b1->setRight(nullptr);
+	b1->setIsRightEnd(true);
+	y->setRightEnd(b1);
+	
 	c1 = x1->getRightEnd();
-	c2 = x2->getRightEnd();
-	
-	if(!c1->getBit() || !c2->getBit())
+	while(true)
 	{
-		b1 = new Bit;
-		b1->setRight(nullptr);
-		b1->setIsRightEnd(true);
+		if(c1->getBit()) break;
 		b1->setBit(0);
-		y->setRightEnd(b1);
-		while(!c1->getBit())
-		{
-			b2 = new Bit;
-			b2->setBit(0);
-			b1->setLeft(b2);
-			b2->setRight(b1);
-			c1 = c1->getLeft();
-			b1 = b2;
-		}
-		while(!c2->getBit())
-		{
-			b2 = new Bit;
-			b2->setBit(0);
-			b1->setLeft(b2);
-			b2->setRight(b1);
-			c2 = c2->getLeft();
-			b1 = b2;
-		}
-		//Now, b1 is an additional 0 at the left end, and it must be 1
-		b1->setBit(1);
-	}
-	else
-	{
-		b1 = new Bit;
-		b1->setRight(nullptr);
-		b1->setIsRightEnd(true);
-		b1->setBit(1);
-		y->setRightEnd(b1);
+		
+		b2 = new Bit;
+		b1->setLeft(b2);
+		b2->setRight(b1);
+		c1 = c1->getLeft();
+		b1 = b2;
+		
 	}
 	
-	//Add one more 0 at the right end temporarily, and delete it later
+	c2 = x2->getRightEnd();
+	while(true)
+	{
+		if(c2->getBit()) break;
+		b1->setBit(0);
+		
+		b2 = new Bit;
+		b1->setLeft(b2);
+		b2->setRight(b1);
+		c2 = c2->getLeft();
+		b1 = b2;
+	}
+	
+	//Now, b1 must be 1
+	b1->setBit(1);
+
+	
+	//Add one more bit at the right end temporarily, and delete it later
 	t1 = new Bit;
-	t1->setRight(nullptr);
-	t1->setIsRightEnd(true);
-	t1->setBit(0);
 	tRight = t1;
 	d1 = c1;
 	while(true)
@@ -1337,11 +1330,11 @@ PositiveInteger* PositiveInteger::Multiply(PositiveInteger* x1,PositiveInteger* 
 	
 	tRight = tRight->getLeft();
 	delete tRight->getRight();
-	tRight->setRight(nullptr);
-	tRight->setIsRightEnd(true);
 	
-	while(!c2->getIsLeftEnd())
+	while(true)
 	{
+		if(c2->getIsLeftEnd()) break;
+		
 		//add one more 0 at the left end
 		t2 = new Bit;
 		t2->setLeft(nullptr);
@@ -1367,8 +1360,9 @@ PositiveInteger* PositiveInteger::Multiply(PositiveInteger* x1,PositiveInteger* 
 			b1 = b2;
 			
 			carry=result1;
-			while(!d1->getIsLeftEnd())
+			while(true)
 			{
+				if(d1->getIsLeftEnd()) break;
 				d1 = d1->getLeft();
 				t1 = t1->getLeft();
 				PositiveInteger::AddThreeBit(d1->getBit(),t1->getBit(),carry,result1,result2);
@@ -1392,11 +1386,9 @@ PositiveInteger* PositiveInteger::Multiply(PositiveInteger* x1,PositiveInteger* 
 		//delete one right end
 		tRight = tRight->getLeft();
 		delete tRight->getRight();
-		tRight->setRight(nullptr);
-		tRight->setIsRightEnd(true);
 	}
 	t1 = tRight;
-	while(t1->getLeft()!=nullptr)
+	while(!t1->getIsLeftEnd())
 	{
 		b2 = new Bit;
 		b2->setBit(t1->getBit());
