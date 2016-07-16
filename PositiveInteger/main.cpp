@@ -30,7 +30,7 @@ int main()
 	//PositiveInteger* jMax = new PositiveInteger("1000");
 	
 	i = new PositiveInteger("1");
-	//while(false)
+
 	while(true)
 	{
 		if(PositiveInteger::compare(i,iMax).isEqual())
@@ -50,7 +50,7 @@ int main()
 				break;
 			}
 			
-			///*
+			/*
 			x3 = i->copy();
 			x4 = j->copy();
 			//cout<<PositiveInteger::compare(x3, x4)<<" ";
@@ -60,7 +60,7 @@ int main()
 			//x3->printBinary();
 			delete x3;
 			delete x4;
-			//*/
+			*/
 			
 			/*
 			if(!PositiveInteger::compare(i,j).isLarger())
@@ -143,9 +143,9 @@ int main()
 	//if(!PositiveInteger::VerifyCompare(100)) cout<<"Error"<<endl;
 	//if(!PositiveInteger::VerifyAdd(100,1)) cout<<"Error"<<endl;
 	//if(!PositiveInteger::VerifySubtract(100,0)) cout<<"Error"<<endl;
-	//if(!PositiveInteger::VerifyMultiply(100)) cout<<"Error"<<endl;
+	if(!PositiveInteger::VerifyMultiply(100)) cout<<"Error"<<endl;
 	//if(!PositiveInteger::VerifyDivide(100,0)) cout<<"Error"<<endl;
-	//else cout<<"OK"<<endl;
+	else cout<<"OK"<<endl;
 	
 	/*
 	PositiveInteger* max = new PositiveInteger(97);
