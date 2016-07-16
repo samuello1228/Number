@@ -30,7 +30,8 @@ int main()
 	//PositiveInteger* jMax = new PositiveInteger("1000");
 	
 	i = new PositiveInteger("1");
-	while(true)
+	while(false)
+	//while(true)
 	{
 		if(PositiveInteger::compare(i,iMax).isEqual())
 		{
@@ -123,11 +124,11 @@ int main()
 			delete x4;
 			*/
 	
-			PositiveInteger::Add(j,one,true);
+			//PositiveInteger::Add(j,one,true);
 		}
 		//cout<<endl;
 		
-		PositiveInteger::Add(i,one,true);
+		//PositiveInteger::Add(i,one,true);
 		delete j;
 	}
 	delete i;
@@ -135,7 +136,7 @@ int main()
 	delete iMax;
 	delete jMax;
 	
-	//if(!PositiveInteger::VerifyCopy(100)) cout<<"Error"<<endl;
+	if(!PositiveInteger::VerifyCopy(100)) cout<<"Error"<<endl;
 	//if(!PositiveInteger::VerifyCounter(100)) cout<<"Error"<<endl;
 	//if(!PositiveInteger::VerifyPositiveInteger(100)) cout<<"Error"<<endl;
 	//if(!PositiveInteger::VerifyCompare(100)) cout<<"Error"<<endl;
@@ -143,7 +144,7 @@ int main()
 	//if(!PositiveInteger::VerifySubtract(100,0)) cout<<"Error"<<endl;
 	//if(!PositiveInteger::VerifyMultiply(100)) cout<<"Error"<<endl;
 	//if(!PositiveInteger::VerifyDivide(100,0)) cout<<"Error"<<endl;
-	//else cout<<"OK"<<endl;
+	else cout<<"OK"<<endl;
 	
 	/*
 	PositiveInteger* max = new PositiveInteger(97);

@@ -23,13 +23,17 @@ public:
 	Bit* getRight();
 	void setRight(Bit*);
 	
-	bool isLeftEnd();
-	bool isRightEnd();
+	bool getIsLeftEnd();
+	void setIsLeftEnd(bool);
+	bool getIsRightEnd();
+	void setIsRightEnd(bool);
 	
 private:
 	bool bit;
 	Bit* left;
 	Bit* right;
+	bool leftEnd;
+	bool rightEnd;
 };
 
 #endif /* Bit_hpp */

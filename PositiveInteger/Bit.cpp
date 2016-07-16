@@ -10,9 +10,13 @@
 
 Bit::Bit()
 {
+	/*
 	setBit(0);
 	setLeft(nullptr);
 	setRight(nullptr);
+	*/
+	setIsLeftEnd(false);
+	setIsRightEnd(false);
 }
 
 Bit::~Bit()
@@ -46,12 +50,21 @@ void Bit::setRight(Bit* newRight)
 	right = newRight;
 }
 
-bool Bit::isLeftEnd()
+bool Bit::getIsLeftEnd()
 {
-	return left==nullptr;
+	return leftEnd;
 }
 
-bool Bit::isRightEnd()
+void Bit::setIsLeftEnd(bool newIsLeftEnd)
 {
-	return right==nullptr;
+	leftEnd = newIsLeftEnd;
+}
+
+bool Bit::getIsRightEnd()
+{
+	return rightEnd;
+}
+void Bit::setIsRightEnd(bool newIsRightEnd)
+{
+	rightEnd = newIsRightEnd;
 }

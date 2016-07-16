@@ -17,18 +17,18 @@ PositiveInteger::PositiveInteger()
 
 PositiveInteger::~PositiveInteger()
 {
-	if(getLeftEnd() != nullptr && getRightEnd() != nullptr)
-	{
+	//if(getLeftEnd() != nullptr && getRightEnd() != nullptr)
+	//{
 		Bit* b1 = getLeftEnd();
 		Bit* b2;
-		while(!b1->isRightEnd())
+		while(!b1->getIsRightEnd())
 		{
 			b2 = b1->getRight();
 			delete b1;
 			b1 = b2;
 		}
 		delete b1;
-	}
+	//}
 }
 
 Bit* PositiveInteger::getLeftEnd()
@@ -53,11 +53,17 @@ PositiveInteger::PositiveInteger(std::string x)
     std::string::iterator i=x.begin();
     Bit* b1;
     Bit* b2 = new Bit;
+	b2->setLeft(nullptr);
+	b2->setIsLeftEnd(true);
     setLeftEnd(b2);
 	
 	while(true)
 	{
-		if(*i == '1')
+		if(*i == '0')
+		{
+			b2->setBit(0);
+		}
+		else if(*i == '1')
 		{
 			b2->setBit(1);
 		}
@@ -69,6 +75,8 @@ PositiveInteger::PositiveInteger(std::string x)
 		b1->setRight(b2);
 		b2->setLeft(b1);
 	}
+	b1->setRight(nullptr);
+	b1->setIsRightEnd(true);
 	setRightEnd(b1);
 }
 /*
@@ -211,7 +219,7 @@ void PositiveInteger::printBinary()
 	while(true)
 	{
 		cout<<b1->getBit();
-		if(b1->isRightEnd()) break;
+		if(b1->getIsRightEnd()) break;
 		b1 = b1->getRight();
 	}
 	cout<<endl;
@@ -226,18 +234,22 @@ PositiveInteger* PositiveInteger::copy()
 	
 	c1 = getRightEnd();
 	b2 = new Bit;
+	b2->setRight(nullptr);
+	b2->setIsRightEnd(true);
 	y->setRightEnd(b2);
 	while(true)
 	{
 		b2->setBit(c1->getBit());
 		b1 = b2;
 		
-		if(c1->isLeftEnd()) break;
+		if(c1->getIsLeftEnd()) break;
 		c1 = c1->getLeft();
 		b2 = new Bit;
 		b1->setLeft(b2);
 		b2->setRight(b1);
 	}
+	b1->setLeft(nullptr);
+	b1->setIsLeftEnd(true);
 	y->setLeftEnd(b1);
 	return y;
 }
@@ -252,9 +264,9 @@ CompareCode PositiveInteger::compare(PositiveInteger* x1, PositiveInteger* x2)
 
 	while(true)
 	{
-		if(b1->isLeftEnd())
+		if(b1->getIsLeftEnd())
 		{
-			if(b2->isLeftEnd())
+			if(b2->getIsLeftEnd())
 			{
 				break;
 			}
@@ -265,7 +277,7 @@ CompareCode PositiveInteger::compare(PositiveInteger* x1, PositiveInteger* x2)
 		}
 		else
 		{
-			if(b2->isLeftEnd())
+			if(b2->getIsLeftEnd())
 			{
 				return CompareCode(false,true);
 			}
@@ -294,7 +306,7 @@ CompareCode PositiveInteger::compare(PositiveInteger* x1, PositiveInteger* x2)
 			}
 		}
 		
-		if(b1->isRightEnd()) break;
+		if(b1->getIsRightEnd()) break;
 		b1 = b1->getRight();
 		b2 = b2->getRight();
 	}
@@ -371,7 +383,7 @@ void PositiveInteger::AddThreeBit(bool x1, bool x2, bool x3, bool &y1, bool &y2)
 		}
 	}
 }
-
+/*
 PositiveInteger* PositiveInteger::Add(PositiveInteger* x1,PositiveInteger* x2,bool overwrite)
 {
 	PositiveInteger* y = nullptr;
@@ -665,7 +677,7 @@ PositiveInteger* PositiveInteger::Add(PositiveInteger* x1,PositiveInteger* x2,bo
 		}
 	}
 }
-
+*/
 /*
 PositiveInteger* PositiveInteger::SubtractAux(Bit*& LeftEnd1,Bit* RightEnd1,PositiveInteger*& n1,bool& isOne1,bool& isTwo1,
 											  Bit* LeftEnd2,Bit* RightEnd2,PositiveInteger* n2,bool isOne2,bool isTwo2,
@@ -1921,6 +1933,8 @@ PositiveInteger::PositiveInteger(unsigned int x)
 {
 	Bit* b1 = nullptr;
 	Bit* b2 = new Bit;
+	b2->setRight(nullptr);
+	b2->setIsRightEnd(true);
 	setRightEnd(b2);
 	
 	while(true)
@@ -1934,6 +1948,8 @@ PositiveInteger::PositiveInteger(unsigned int x)
 		b1->setLeft(b2);
 		b2->setRight(b1);
 	}
+	b1->setLeft(nullptr);
+	b1->setIsLeftEnd(true);
 	setLeftEnd(b1);
 }
 
@@ -1945,15 +1961,18 @@ bool PositiveInteger::isComplete()
 	if(getRightEnd()==nullptr) return false;
 	b1 = getRightEnd();
 	if(b1->getRight()!=nullptr) return false;
+	if(!b1->getIsRightEnd()) return false;
 	while(true)
 	{
 		if(b1->getLeft()==nullptr) break;
+		if(b1->getIsLeftEnd()) return false;
 		b2 = b1->getLeft();
 		if(b2->getRight()==nullptr) return false;
+		if(b2->getIsRightEnd()) return false;
 		if(b2->getRight()!=b1) return false;
 		b1 = b2;
 	}
-
+    if(!b1->getIsLeftEnd()) return false;
 	if(!b1->getBit()) return false;
 	if(getLeftEnd()==nullptr) return false;
 	b2 = getLeftEnd();
@@ -1973,12 +1992,12 @@ bool PositiveInteger::isSame(unsigned int x)
 	while(true)
 	{
 		if(b1->getBit()!=b2->getBit()) return false;
-		if(b1->getLeft()==nullptr) break;
-		if(b2->getLeft()==nullptr) return false;
+		if(b1->getIsLeftEnd()) break;
+		if(b2->getIsLeftEnd()) return false;
 		b1 = b1->getLeft();
 		b2 = b2->getLeft();
 	}
-	if(b2->getLeft()!=nullptr) return false;
+	if(!b2->getIsLeftEnd()) return false;
 	
 	delete p1;
 	return true;
@@ -2042,7 +2061,7 @@ bool PositiveInteger::VerifyPositiveInteger(unsigned int max)
 			{
 				s.push_back('0');
 			}
-			if(b1->isRightEnd()) break;
+			if(b1->getIsRightEnd()) break;
 			b1 = b1->getRight();
 		}
 		//cout<<s<<endl;
@@ -2079,7 +2098,7 @@ bool PositiveInteger::VerifyCompare(unsigned int max)
 	}
 	return true;
 }
-
+/*
 bool PositiveInteger::VerifyAdd(unsigned int max,bool overwrite)
 {
 	PositiveInteger* p1;
@@ -2110,7 +2129,7 @@ bool PositiveInteger::VerifyAdd(unsigned int max,bool overwrite)
 	}
 	return true;
 }
-/*
+
 bool PositiveInteger::VerifySubtract(unsigned int max,bool overwrite)
 {
 	PositiveInteger* p1;
