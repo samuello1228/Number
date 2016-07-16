@@ -78,7 +78,7 @@ int main()
 			delete x4;
 			*/
 			
-			///*
+			/*
 			x3 = i->copy();
 			x4 = j->copy();
 			x1 = PositiveInteger::Multiply(x3,x4,1);
@@ -86,7 +86,7 @@ int main()
 			//delete x1;
 			delete x3;
 			delete x4;
-			//*/
+			*/
 			
 			/*
 			if(PositiveInteger::compare(i,j).isLarger())
@@ -143,6 +143,7 @@ int main()
 	//if(!PositiveInteger::VerifyCompare(100)) cout<<"Error"<<endl;
 	//if(!PositiveInteger::VerifyAdd(100,0)) cout<<"Error"<<endl;
 	//if(!PositiveInteger::VerifySubtract(100,0)) cout<<"Error"<<endl;
+	if(!PositiveInteger::VerifyMultiply(100,0)) cout<<"Error"<<endl;
 	if(!PositiveInteger::VerifyMultiply(100,1)) cout<<"Error"<<endl;
 	//if(!PositiveInteger::VerifyDivide(100,0)) cout<<"Error"<<endl;
 	else cout<<"OK"<<endl;
