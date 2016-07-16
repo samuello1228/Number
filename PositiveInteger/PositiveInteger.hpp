@@ -37,7 +37,7 @@ public:
 	static PositiveInteger* AddAux(Bit*,Bit*,bool,bool& isCarried,Bit*& LeftEnd);
 	static PositiveInteger* Add(PositiveInteger*,PositiveInteger*,bool);
 	static PositiveInteger* Subtract(PositiveInteger*,PositiveInteger*,bool,bool);
-	static PositiveInteger* Multiply(PositiveInteger*,PositiveInteger*);
+	static PositiveInteger* Multiply(PositiveInteger*,PositiveInteger*,bool);
 	static void Divide(PositiveInteger*,PositiveInteger*,PositiveInteger*&,PositiveInteger*&,bool&,bool,bool);
 	
 	struct ListOfPositiveInteger
@@ -62,7 +62,7 @@ public:
 	static bool VerifyCompare(unsigned int);
 	static bool VerifyAdd(unsigned int,bool);
 	static bool VerifySubtract(unsigned int,bool);
-	static bool VerifyMultiply(unsigned int);
+	static bool VerifyMultiply(unsigned int,bool);
 	static bool VerifyDivide(unsigned int,bool);
 private:
 	Bit* leftEnd;
