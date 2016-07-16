@@ -20,16 +20,17 @@ int main()
 	PositiveInteger* x5;
 	PositiveInteger* x6;
 	bool divisible=0;
-	/*
+	
 	PositiveInteger* one = new PositiveInteger("1");
 	PositiveInteger* i;
 	PositiveInteger* j;
 	PositiveInteger* iMax = new PositiveInteger("1000000000");
 	PositiveInteger* jMax = new PositiveInteger("1000000000");
+	//PositiveInteger* iMax = new PositiveInteger("1000");
+	//PositiveInteger* jMax = new PositiveInteger("1000");
 	
 	i = new PositiveInteger("1");
-	//while(true)
-	while(false)
+	while(true)
 	{
 		if(PositiveInteger::compare(i,iMax).isEqual())
 		{
@@ -47,14 +48,13 @@ int main()
 			{
 				break;
 			}
-	*/
 			/*
 			x3 = i->copy();
 			x4 = j->copy();
 			//cout<<PositiveInteger::compare(x3, x4)<<" ";
-			x1 = PositiveInteger::Add(x3,x4,0);
+			x1 = PositiveInteger::Add(x3,x4,1);
 			//x1->printBinary();
-			delete x1;
+			//delete x1;
 			//x3->printBinary();
 			delete x3;
 			delete x4;
@@ -122,7 +122,7 @@ int main()
 			delete x3;
 			delete x4;
 			*/
-	/*
+	
 			PositiveInteger::Add(j,one,true);
 		}
 		//cout<<endl;
@@ -134,16 +134,16 @@ int main()
 	delete one;
 	delete iMax;
 	delete jMax;
-	*/
+	
 	//if(!PositiveInteger::VerifyCopy(100)) cout<<"Error"<<endl;
 	//if(!PositiveInteger::VerifyCounter(100)) cout<<"Error"<<endl;
 	//if(!PositiveInteger::VerifyPositiveInteger(100)) cout<<"Error"<<endl;
-	if(!PositiveInteger::VerifyCompare(100)) cout<<"Error"<<endl;
-	//if(!PositiveInteger::VerifyAdd(100,0)) cout<<"Error"<<endl;
+	//if(!PositiveInteger::VerifyCompare(100)) cout<<"Error"<<endl;
+	//if(!PositiveInteger::VerifyAdd(100,1)) cout<<"Error"<<endl;
 	//if(!PositiveInteger::VerifySubtract(100,0)) cout<<"Error"<<endl;
 	//if(!PositiveInteger::VerifyMultiply(100)) cout<<"Error"<<endl;
 	//if(!PositiveInteger::VerifyDivide(100,0)) cout<<"Error"<<endl;
-	else cout<<"OK"<<endl;
+	//else cout<<"OK"<<endl;
 	
 	/*
 	PositiveInteger* max = new PositiveInteger(97);
