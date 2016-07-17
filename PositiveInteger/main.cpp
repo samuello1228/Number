@@ -144,8 +144,8 @@ int main()
 	//if(!PositiveInteger::VerifySubtract(1000,0)) cout<<"Error"<<endl;
 	//if(!PositiveInteger::VerifySubtract(1000,1)) cout<<"Error"<<endl;
 	//if(!PositiveInteger::VerifyMultiply(100)) cout<<"Error"<<endl;
-	if(!PositiveInteger::VerifyDivide(100,0)) cout<<"Error"<<endl;
-	if(!PositiveInteger::VerifyDivide(100,1)) cout<<"Error"<<endl;
+	if(!PositiveInteger::VerifyDivide(1000,0)) cout<<"Error"<<endl;
+	if(!PositiveInteger::VerifyDivide(1000,1)) cout<<"Error"<<endl;
 	else cout<<"OK"<<endl;
 	
 	/*

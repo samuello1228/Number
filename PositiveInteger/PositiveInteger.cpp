@@ -1085,7 +1085,7 @@ void PositiveInteger::Divide(PositiveInteger* x1,PositiveInteger* x2,PositiveInt
 	//create y1
 	y1 = new PositiveInteger;
 	b1 = new Bit;
-	b1->setBit(0);
+	//b1->setBit(0);
 	b1->setLeft(nullptr);
 	b1->setIsLeftEnd(true);
 	y1->setLeftEnd(b1);
@@ -1093,7 +1093,7 @@ void PositiveInteger::Divide(PositiveInteger* x1,PositiveInteger* x2,PositiveInt
 	{
 		if(d1->getIsRightEnd()) break;
 		b2 = new Bit;
-		b2->setBit(1);
+		//b2->setBit(0);
 		b2->setLeft(b1);
 		b1->setRight(b2);
 		b1 = b2;
@@ -1105,7 +1105,7 @@ void PositiveInteger::Divide(PositiveInteger* x1,PositiveInteger* x2,PositiveInt
 	
 	//////////////////
 	b1 = y1->getLeftEnd();
-	b2 = nullptr;
+	b2 = tLeft; //not nullptr //not b1 //any other thing
 	//b2 = y1->getLeftEnd();
 	isEnd = false;
 	isSubtract = true;
@@ -1707,10 +1707,10 @@ bool PositiveInteger::VerifyDivide(unsigned int max,bool overwrite)
 	PositiveInteger* p4;
 	bool divisible=0;
 	for(unsigned int i=1;i<=max;i++)
-	//for(unsigned int i=10;i<=10;i++)
+	//for(unsigned int i=4;i<=4;i++)
 	{
 		for(unsigned int j=1;j<=i;j++)
-		//for(unsigned int j=4;j<=4;j++)
+		//for(unsigned int j=3;j<=3;j++)
 		{
 			p1 = new PositiveInteger(i);
 			p2 = new PositiveInteger(j);
