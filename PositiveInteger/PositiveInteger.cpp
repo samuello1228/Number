@@ -1272,82 +1272,28 @@ PositiveInteger* PositiveInteger::Subtract(PositiveInteger* x1,PositiveInteger* 
 */
 PositiveInteger* PositiveInteger::Multiply(PositiveInteger* x1,PositiveInteger* x2,bool overwrite)
 {
-	PositiveInteger* y = nullptr;
-	Bit* b1 = nullptr;
+	PositiveInteger* y;
+	Bit* b1;
 	Bit* b2;
 	Bit* c1 = nullptr;
 	Bit* c2;
-	Bit* tLeft = nullptr;
 	Bit* tRight;
 	Bit* d1 = nullptr;
+	bool isCarried;
+	Bit* LeftEnd;
 	
-	//////////////// scan/copy zero of x1
+	////////////////add zero at the right, according to c2
 	if(overwrite)
 	{
 		y = x1;
-		
-		d1 = x1->getRightEnd();
-		while(true)
-		{
-			if(d1->getBit()) break;
-			d1 = d1->getLeft();
-		}
-		tRight = d1;
+		b1 = y->getRightEnd();
+		b1->setIsRightEnd(false);
 	}
 	else
 	{
 		y = new PositiveInteger;
 		b1 = new Bit;
-		y->setRightEnd(b1);
-		
-		c1 = x1->getRightEnd();
-		while(true)
-		{
-			if(c1->getBit()) break;
-			b1->setBit(0);
-			b2 = new Bit;
-			b1->setLeft(b2);
-			b2->setRight(b1);
-			c1 = c1->getLeft();
-			b1 = b2;
-		}
-		tRight = b1;
-	}
-	
-	////////////////copy x1 without zero at the right
-	if(overwrite)
-	{
-		c1 = new Bit;
-		b1 = c1;
-	}
-	else
-	{
-		d1 = c1;
-	}
-	while(true)
-	{
-		b1->setBit(d1->getBit());
-		if(d1->getIsLeftEnd()) break;
-		d1 = d1->getLeft();
-		b2 = new Bit;
-		b1->setLeft(b2);
-		b2->setRight(b1);
-		b1 = b2;
-	}
-	if(overwrite)
-	{
-		b1->setIsLeftEnd(true);
-	}
-	else
-	{
-		tLeft = b1;
-	}
-	
-	////////////////add zero at the right
-	b1 = y->getRightEnd();
-	if(overwrite)
-	{
-		b1->setIsRightEnd(false);
+		d1 = b1;
 	}
 	c2 = x2->getRightEnd();
 	while(true)
@@ -1363,57 +1309,110 @@ PositiveInteger* PositiveInteger::Multiply(PositiveInteger* x1,PositiveInteger* 
 	b1->setRight(nullptr);
 	b1->setIsRightEnd(true);
 	y->setRightEnd(b1);
-
 	
-	////////////////add zero at the left
+	//////////////// scan/copy zero of x1
 	if(overwrite)
 	{
-		b1 = x1->getLeftEnd();
-		b1->setIsLeftEnd(false);
-		tLeft = b1;
+		tRight = x1->getRightEnd();
+		while(true)
+		{
+			if(tRight->getBit()) break;
+			tRight = tRight->getLeft();
+		}
 	}
 	else
 	{
-		b1 = tLeft;
+		b1 = d1;
+		c1 = x1->getRightEnd();
+		while(true)
+		{
+			if(c1->getBit()) break;
+			b1->setBit(0);
+			b2 = new Bit;
+			b1->setLeft(b2);
+			b2->setRight(b1);
+			c1 = c1->getLeft();
+			b1 = b2;
+		}
+		tRight = b1;
 	}
-	d1 = c2;
+	
+	////////////////copy x1 without zero
+	if(overwrite)
+	{
+		c1 = new Bit;
+		b1 = c1;
+		d1 = tRight;
+	}
+	else
+	{
+		d1 = c1;
+	}
 	while(true)
 	{
+		b1->setBit(d1->getBit());
+		if(d1->getIsLeftEnd()) break;
+		d1 = d1->getLeft();
 		b2 = new Bit;
-		b2->setBit(0);
 		b1->setLeft(b2);
 		b2->setRight(b1);
 		b1 = b2;
-		if(d1->getIsLeftEnd()) break;
-		d1 = d1->getLeft();
 	}
-	b1->setLeft(nullptr);
-	y->setLeftEnd(b1);
-
+	b1->setIsLeftEnd(true);
+	
+	if(overwrite)
+	{
+		b1 = x1->getLeftEnd();
+	}
 	////////////////Add
 	if(!c2->getIsLeftEnd())
 	{
-		c2 = c2->getLeft();
-		
-		tRight = tRight->getLeft();
-		tLeft = tLeft->getLeft()->getLeft();
-		tLeft->setIsLeftEnd(true);
-		
-		bool isCarried;
-		Bit* LeftEnd;
 		while(true)
 		{
-			if(c2->getBit())
+			c2 = c2->getLeft();
+			if(tRight->getIsLeftEnd())
 			{
-				PositiveInteger::AddAux(tRight,c1,true,isCarried,LeftEnd);
+				if(c2->getBit())
+				{
+					d1 = c1;
+					b1->setIsLeftEnd(false);
+					while(true)
+					{
+						b2 = new Bit;
+						b2->setBit(d1->getBit());
+						b1->setLeft(b2);
+						b2->setRight(b1);
+						b1 = b2;
+						if(d1->getIsLeftEnd()) break;
+						d1 = d1->getLeft();
+					}
+					b1->setIsLeftEnd(true);
+				}
+				else
+				{
+					b1->setIsLeftEnd(false);
+					b2 = new Bit;
+					b2->setBit(0);
+					b1->setLeft(b2);
+					b2->setRight(b1);
+					b1 = b2;
+					b1->setIsLeftEnd(true);
+				}
+				tRight = tRight->getLeft();
+			}
+			else
+			{
+				tRight = tRight->getLeft();
+				if(c2->getBit())
+				{
+					PositiveInteger::AddAux(tRight,c1,true,isCarried,LeftEnd);
+					if(isCarried)
+					{
+						b1 = LeftEnd;
+					}
+				}
 			}
 			if(c2->getIsLeftEnd()) break;
-			
-			c2 = c2->getLeft();
-			tRight = tRight->getLeft();
-			tLeft->setIsLeftEnd(false);
-			tLeft = tLeft->getLeft();
-			tLeft->setIsLeftEnd(true);
 		}
 	}
 
@@ -1430,16 +1429,8 @@ PositiveInteger* PositiveInteger::Multiply(PositiveInteger* x1,PositiveInteger* 
 		delete d1;
 	}
 	
-	//delete carry
-	d1 = y->getLeftEnd();
-	if(!d1->getBit())
-	{
-		d1 = d1->getRight();
-		delete d1->getLeft();
-		d1->setLeft(nullptr);
-		d1->setIsLeftEnd(true);
-		y->setLeftEnd(d1);
-	}
+	b1->setLeft(nullptr);
+	y->setLeftEnd(b1);
 	return y;
 }
 /*
@@ -1990,31 +1981,31 @@ bool PositiveInteger::isComplete()
 	Bit* b1;
 	Bit* b2;
 	
-	if(getRightEnd()==nullptr) return false;
+	if(getRightEnd()==nullptr) {cout<<"Error Code: 1"<<endl; return false;}
 	b1 = getRightEnd();
-	if(b1->getRight()!=nullptr) return false;
-	if(!b1->getIsRightEnd()) return false;
+	if(b1->getRight()!=nullptr) {cout<<"Error Code: 2"<<endl; return false;}
+	if(!b1->getIsRightEnd()) {cout<<"Error Code: 3"<<endl; return false;}
 	while(true)
 	{
 		if(b1->getLeft()==nullptr) break;
-		if(b1->getIsLeftEnd()) return false;
+		if(b1->getIsLeftEnd()) {cout<<"Error Code: 4"<<endl; return false;}
 		b2 = b1->getLeft();
-		if(b2->getRight()==nullptr) return false;
-		if(b2->getIsRightEnd()) return false;
-		if(b2->getRight()!=b1) return false;
+		if(b2->getRight()==nullptr) {cout<<"Error Code: 5"<<endl; return false;}
+		if(b2->getIsRightEnd()) {cout<<"Error Code: 6"<<endl; return false;}
+		if(b2->getRight()!=b1) {cout<<"Error Code: 7"<<endl; return false;}
 		b1 = b2;
 	}
-	if(!b1->getIsLeftEnd()) return false;
-	if(!b1->getBit()) return false;
-	if(getLeftEnd()==nullptr) return false;
+	if(!b1->getIsLeftEnd()) {cout<<"Error Code: 8"<<endl; return false;}
+	if(!b1->getBit()) {cout<<"Error Code: 9"<<endl; return false;}
+	if(getLeftEnd()==nullptr) {cout<<"Error Code: 10"<<endl; return false;}
 	b2 = getLeftEnd();
-	if(b1!=b2) return false;
+	if(b1!=b2) {cout<<"Error Code: 11"<<endl; return false;}
 	
 	return true;
 }
 bool PositiveInteger::isSame(unsigned int x)
 {
-	if(!isComplete()) return false;
+	if(!isComplete()) {cout<<"Error Code: 12"<<endl; return false;}
 	PositiveInteger* p1 = new PositiveInteger(x);
 	Bit* b1;
 	Bit* b2;
@@ -2023,13 +2014,13 @@ bool PositiveInteger::isSame(unsigned int x)
 	b2 = p1->getRightEnd();
 	while(true)
 	{
-		if(b1->getBit()!=b2->getBit()) return false;
+		if(b1->getBit()!=b2->getBit()) {cout<<"Error Code: 13"<<endl; return false;}
 		if(b1->getIsLeftEnd()) break;
-		if(b2->getIsLeftEnd()) return false;
+		if(b2->getIsLeftEnd()) {cout<<"Error Code: 14"<<endl; return false;}
 		b1 = b1->getLeft();
 		b2 = b2->getLeft();
 	}
-	if(!b2->getIsLeftEnd()) return false;
+	if(!b2->getIsLeftEnd()) {cout<<"Error Code: 15"<<endl; return false;}
 	
 	delete p1;
 	return true;
@@ -2199,10 +2190,10 @@ bool PositiveInteger::VerifyMultiply(unsigned int max,bool overwrite)
 	PositiveInteger* p2;
 	PositiveInteger* p3;
 	for(unsigned int i=1;i<=max;i++)
-	//for(unsigned int i=1;i<=1;i++)
+	//for(unsigned int i=3;i<=3;i++)
 	{
 		for(unsigned int j=1;j<=max;j++)
-		//for(unsigned int j=3;j<=3;j++)
+		//for(unsigned int j=5;j<=5;j++)
 		{
 			p1 = new PositiveInteger(i);
 			p2 = new PositiveInteger(j);
