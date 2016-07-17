@@ -79,13 +79,12 @@ PositiveInteger::PositiveInteger(std::string x)
 	b1->setIsRightEnd(true);
 	setRightEnd(b1);
 }
-/*
+
 void PositiveInteger::printDecimal(bool overwrite)
 {
 	PositiveInteger* ten = new PositiveInteger("1010");
 	PositiveInteger* x1;
 	PositiveInteger* x2 = nullptr;
-	PositiveInteger* x3;
 	Bit* b1;
 	bool divisible = false;
 	bool isEnd = false;
@@ -110,77 +109,91 @@ void PositiveInteger::printDecimal(bool overwrite)
 		}
 		else
 		{
-			PositiveInteger::Divide(x1,ten,x2,x1,divisible,true,false);
+			PositiveInteger::Divide(x1,ten,x2,x1,divisible,true);
 		}
 		
 		if(divisible)
 		{
 			digit1->digit = '0';
 		}
-		else if(x1->getIsOne())
-		{
-			digit1->digit = '1';
-		}
-		else if(x1->getIsTwo())
-		{
-			digit1->digit = '2';
-		}
 		else
 		{
-			x3 = x1->getNumberOfDigit();
-			if(x3->getIsTwo())
+			b1 = x1->getRightEnd();
+			if(b1->getBit())
 			{
-				//x3 = 10 (binary)
-				digit1->digit = '3';
-			}
-			else if(x3->getRightEnd()->getBit())
-			{
-				//x3 = 11 (binary)
-				//x1 = 4,5,6,7
-				b1 = x1->getRightEnd();
-				if(b1->getBit())
+				//x3 = *1 (binary)
+				if(b1->getIsLeftEnd())
 				{
-					b1 = b1->getLeft();
-					if(b1->getBit())
-					{
-						//x1 = 111 (binary)
-						digit1->digit = '7';
-					}
-					else
-					{
-						//x1 = 101 (binary)
-						digit1->digit = '5';
-					}
+					//x3 = 1 (binary)
+					digit1->digit = '1';
 				}
 				else
 				{
 					b1 = b1->getLeft();
 					if(b1->getBit())
 					{
-						//x1 = 110 (binary)
-						digit1->digit = '6';
+						//x3 = *11 (binary)
+						if(b1->getIsLeftEnd())
+						{
+							//x3 = 11 (binary)
+							digit1->digit = '3';
+						}
+						else
+						{
+							//x3 = 111 (binary)
+							digit1->digit = '7';
+						}
 					}
 					else
 					{
-						//x1 = 100 (binary)
-						digit1->digit = '4';
+						//x3 = *01 (binary)
+						b1 = b1->getLeft();
+						if(b1->getBit())
+						{
+							//x3 = 101 (binary)
+							digit1->digit = '5';
+						}
+						else
+						{
+							//x3 = 1001 (binary)
+							digit1->digit = '9';
+							
+						}
 					}
 				}
 			}
 			else
 			{
-				//x3 = 100 (binary)
-				//x1 = 8,9
-				b1 = x1->getRightEnd();
+				//x3 = *0 (binary)
+				b1 = b1->getLeft();
 				if(b1->getBit())
 				{
-					//x1 = 1001 (binary)
-					digit1->digit = '9';
+					//x3 = *10 (binary)
+					if(b1->getIsLeftEnd())
+					{
+						//x3 = 10 (binary)
+						digit1->digit = '2';
+					}
+					else
+					{
+						//x3 = 110 (binary)
+						digit1->digit = '6';
+					}
 				}
 				else
 				{
-					//x1 = 1000 (binary)
-					digit1->digit = '8';
+					//x3 = *00 (binary)
+					b1 = b1->getLeft();
+					if(b1->getIsLeftEnd())
+					{
+						//x3 = 100 (binary)
+						digit1->digit = '4';
+					}
+					else
+					{
+						//x3 = 1000 (binary)
+						digit1->digit = '8';
+					}
 				}
 			}
 		}
@@ -212,7 +225,7 @@ void PositiveInteger::printDecimal(bool overwrite)
 		x1 = x2;
 	}
 }
-*/
+
 void PositiveInteger::printBinary()
 {
 	Bit* b1 = getLeftEnd();
