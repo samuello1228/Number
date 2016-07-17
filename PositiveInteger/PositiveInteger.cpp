@@ -811,6 +811,11 @@ void PositiveInteger::SubtractAux(Bit*& LeftEnd1,Bit* c1,Bit* LeftEnd2,Bit* c2,b
 
 			if(Divide && !isEnd)
 			{
+				if((!isSmall && Time>=1) ||
+				   (isSmall && Time>=2)  )
+				{
+					y1Digit->setBit(0);
+				}
 				
 				if(y1Digit->getIsRightEnd() ||
 				   (isSmall && y1Digit->getRight()->getIsRightEnd() && Time==0))
@@ -819,11 +824,7 @@ void PositiveInteger::SubtractAux(Bit*& LeftEnd1,Bit* c1,Bit* LeftEnd2,Bit* c2,b
 				}
 				else
 				{
-					if((!isSmall && Time>=1) ||
-					   (isSmall && Time>=2)  )
-					{
-						y1Digit->setBit(0);
-					}
+
 					y1Digit = y1Digit->getRight();
 					y2Right = y2Right->getRight();
 				}
@@ -1021,7 +1022,7 @@ PositiveInteger* PositiveInteger::Multiply(PositiveInteger* x1,PositiveInteger* 
 void PositiveInteger::Divide(PositiveInteger* x1,PositiveInteger* x2,PositiveInteger*& y1,PositiveInteger*& y2,bool& divisible, bool overwrite)
 {
 	Bit* b1;
-	Bit* b2;
+	Bit* b2 = nullptr;
 	Bit* tLeft;
 	Bit* tRight;
 	Bit* d1;
@@ -1092,7 +1093,7 @@ void PositiveInteger::Divide(PositiveInteger* x1,PositiveInteger* x2,PositiveInt
 	{
 		if(d1->getIsRightEnd()) break;
 		b2 = new Bit;
-		b2->setBit(0);
+		b2->setBit(1);
 		b2->setLeft(b1);
 		b1->setRight(b2);
 		b1 = b2;
@@ -1104,6 +1105,8 @@ void PositiveInteger::Divide(PositiveInteger* x1,PositiveInteger* x2,PositiveInt
 	
 	//////////////////
 	b1 = y1->getLeftEnd();
+	b2 = nullptr;
+	//b2 = y1->getLeftEnd();
 	isEnd = false;
 	isSubtract = true;
 	divisible = false;
@@ -1155,6 +1158,10 @@ void PositiveInteger::Divide(PositiveInteger* x1,PositiveInteger* x2,PositiveInt
 			}
 			else
 			{
+				if(b1->getLeft()!=b2)
+				{
+					b1->setBit(0);
+				}
 				b1->getRight()->setBit(1);
 			}
 		}
@@ -1258,6 +1265,7 @@ void PositiveInteger::Divide(PositiveInteger* x1,PositiveInteger* x2,PositiveInt
 		}
 		else if(compare.isSmaller())
 		{
+			b2 = b1;
 			PositiveInteger::SubtractAux(tLeft,tRight->getRight(),x2->getLeftEnd(),x2->getRightEnd(),isShorten,
 											  true,true,b1,tRight,isEnd,true);
 			
@@ -1699,17 +1707,17 @@ bool PositiveInteger::VerifyDivide(unsigned int max,bool overwrite)
 	PositiveInteger* p4;
 	bool divisible=0;
 	for(unsigned int i=1;i<=max;i++)
-	//for(unsigned int i=5;i<=5;i++)
+	//for(unsigned int i=10;i<=10;i++)
 	{
 		for(unsigned int j=1;j<=i;j++)
-		//for(unsigned int j=3;j<=3;j++)
+		//for(unsigned int j=4;j<=4;j++)
 		{
 			p1 = new PositiveInteger(i);
 			p2 = new PositiveInteger(j);
-			p1->printBinary();
-			p2->printBinary();
+			//p1->printBinary();
+			//p2->printBinary();
 			PositiveInteger::Divide(p1,p2,p3,p4,divisible,overwrite);
-			p3->printBinary();
+			//p3->printBinary();
 			if(!overwrite)
 			{
 				if(!p1->isSame(i)) {cout<<"Error Code: 16"<<endl; return false;}
@@ -1731,7 +1739,7 @@ bool PositiveInteger::VerifyDivide(unsigned int max,bool overwrite)
 			if(!overwrite) delete p1;
 			delete p2;
 			delete p3;
-			cout<<endl;
+			//cout<<endl;
 		}
 	}
 	return true;
