@@ -38,7 +38,7 @@ public:
 	static PositiveInteger* Add(PositiveInteger*,PositiveInteger*,bool);
 	static void SubtractAux(Bit*&,Bit*,
 							Bit*,Bit*,bool&,
-							bool,bool,Bit*&,Bit*&,bool&);
+							bool,bool,Bit*&,Bit*&,bool&,bool);
 	static PositiveInteger* Subtract(PositiveInteger*,PositiveInteger*,bool);
 	static void MultiplyAux(Bit*,Bit*,Bit*,Bit*&,bool&);
 	static PositiveInteger* Multiply(PositiveInteger*,PositiveInteger*,bool&);
