@@ -745,7 +745,6 @@ PositiveInteger* PositiveInteger::Add(PositiveInteger* x1,PositiveInteger* x2,bo
 	}
 }
 
-
 void PositiveInteger::SubtractAux(Bit*& LeftEnd1,Bit* c1,
 											  Bit* LeftEnd2,Bit* c2,bool& isShorten,
 											  bool overwrite, bool Divide, Bit*& y1Digit, Bit*& y2Right, bool& isEnd)
@@ -1713,7 +1712,7 @@ bool PositiveInteger::VerifySubtract(unsigned int max,bool overwrite)
 			p1 = new PositiveInteger(i);
 			p2 = new PositiveInteger(j);
 			p3 = PositiveInteger::Subtract(p1,p2,overwrite);
-			p3->printBinary();
+			//p3->printBinary();
 			if(overwrite)
 			{
 				if(!p1->isSame(i-j)) return false;
@@ -1729,33 +1728,33 @@ bool PositiveInteger::VerifySubtract(unsigned int max,bool overwrite)
 			delete p2;
 			if(!overwrite) delete p3;
 		}
-		cout<<endl;
+		//cout<<endl;
 	}
 	return true;
 }
 
 bool PositiveInteger::VerifyMultiply(unsigned int max)
 {
+	PositiveInteger* one = new PositiveInteger("1");
 	PositiveInteger* p1;
 	PositiveInteger* p2;
 	PositiveInteger* p3;
-	bool MultiplyIsCarried;
 	PositiveInteger* n1;
 	PositiveInteger* n2;
 	PositiveInteger* n3;
+	bool MultiplyIsCarried;
 	for(unsigned int i=1;i<=max;i++)
-	//for(unsigned int i=1;i<=1;i++)
 	{
 		for(unsigned int j=1;j<=max;j++)
-		//for(unsigned int j=6;j<=6;j++)
 		{
 			p1 = new PositiveInteger(i);
-			n1 = p1->getNumberOfBit();
 			p2 = new PositiveInteger(j);
-			n2 = p2->getNumberOfBit();
 			p3 = PositiveInteger::Multiply(p1,p2,MultiplyIsCarried);
 			//p3->printBinary();
+			n1 = p1->getNumberOfBit();
+			n2 = p2->getNumberOfBit();
 			n3 = p3->getNumberOfBit();
+			
 			if(MultiplyIsCarried)
 			{
 				PositiveInteger::Add(n1,n2,true);
@@ -1763,15 +1762,15 @@ bool PositiveInteger::VerifyMultiply(unsigned int max)
 			}
 			else
 			{
-				//PositiveInteger::Add(n1,n2,true);
-				//PositiveInteger::Subtract(n1, one, true);
-				//if(!PositiveInteger::compare(n1,n3).isEqual()) return false;
+				PositiveInteger::Add(n1,n2,true);
+				PositiveInteger::Subtract(n1,one,true);
+				if(!PositiveInteger::compare(n1,n3).isEqual()) return false;
 			}
 			
 			if(!p1->isSame(i)) return false;
 			if(!p2->isSame(j)) return false;
 			if(!p3->isSame(i*j)) return false;
-			
+		
 			delete p1;
 			delete p2;
 			delete p3;
@@ -1781,6 +1780,7 @@ bool PositiveInteger::VerifyMultiply(unsigned int max)
 		}
 		//cout<<endl;
 	}
+	delete one;
 	return true;
 }
 /*

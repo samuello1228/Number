@@ -66,14 +66,14 @@ int main()
 				PositiveInteger::Add(j,one,true);
 				continue;
 			}
-			x3 = i->copy();
-			x4 = j->copy();
-			x1 = PositiveInteger::Subtract(x3,x4,1,false);
-			//x1->printBinary();
-			//delete x1;
+			x1 = i->copy();
+			x2 = j->copy();
+			x3 = PositiveInteger::Subtract(x1,x2,1);
 			//x3->printBinary();
-			delete x3;
-			delete x4;
+			//delete x3;
+			//x1->printBinary();
+			delete x1;
+			delete x2;
 			*/
 			
 			/*
@@ -140,11 +140,11 @@ int main()
 	//if(!PositiveInteger::VerifyPositiveInteger(100)) cout<<"Error"<<endl;
 	//if(!PositiveInteger::VerifyCompare(100)) cout<<"Error"<<endl;
 	//if(!PositiveInteger::VerifyAdd(100,0)) cout<<"Error"<<endl;
-	if(!PositiveInteger::VerifySubtract(100,0)) cout<<"Error"<<endl;
-	if(!PositiveInteger::VerifySubtract(100,1)) cout<<"Error"<<endl;
+	//if(!PositiveInteger::VerifySubtract(1000,0)) cout<<"Error"<<endl;
+	//if(!PositiveInteger::VerifySubtract(1000,1)) cout<<"Error"<<endl;
 	//if(!PositiveInteger::VerifyMultiply(100)) cout<<"Error"<<endl;
 	//if(!PositiveInteger::VerifyDivide(100,0)) cout<<"Error"<<endl;
-	else cout<<"OK"<<endl;
+	//else cout<<"OK"<<endl;
 	
 	/*
 	PositiveInteger* max = new PositiveInteger(97);
