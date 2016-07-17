@@ -745,546 +745,112 @@ PositiveInteger* PositiveInteger::Add(PositiveInteger* x1,PositiveInteger* x2,bo
 	}
 }
 
-/*
-PositiveInteger* PositiveInteger::SubtractAux(Bit*& LeftEnd1,Bit* RightEnd1,PositiveInteger*& n1,bool& isOne1,bool& isTwo1,
-											  Bit* LeftEnd2,Bit* RightEnd2,PositiveInteger* n2,bool isOne2,bool isTwo2,
-											  bool overwrite, bool Divide, Bit*& y1Digit, Bit*& y2Right, bool& isEnd, PositiveInteger*& count)
+
+void PositiveInteger::SubtractAux(Bit*& LeftEnd1,Bit* c1,
+											  Bit* LeftEnd2,Bit* c2,bool& isShorten,
+											  bool overwrite, bool Divide, Bit*& y1Digit, Bit*& y2Right, bool& isEnd)
 {
-	PositiveInteger* y;
-	PositiveInteger* one;
-	PositiveInteger* p1 = nullptr;
+	Bit* d1;
+	isShorten = false;
 	
-	Bit* b1;
-	Bit* t1;
-	Bit* t2;
-	Bit* c1;
-	Bit* digitLeft1;
-	Bit* digitLeft2;
-	Bit* digitRight2;
-	CompareCode test1;
-	CompareCode test2;
-	
-	bool isCount = !Divide;
-	
-	if(isCount)
-	{
-		count = new PositiveInteger;
-		PositiveInteger::One(count);
-	}
-	one = new PositiveInteger;
-	PositiveInteger::One(one);
-	test1 = PositiveInteger::compare(n1,n2);
-	if(!test1.isEqual())
-	{
-		p1 = PositiveInteger::Add(n2,one,false);
-		test2 = PositiveInteger::compare(n1,p1);
-		delete p1;
-	}
-	
-	if(overwrite)
-	{
-		y = nullptr;
-	}
-	else
-	{
-		y = new PositiveInteger;
-	}
-	
-	if(test1.isEqual() || (!test1.isEqual() && test2.isEqual()))
-	{
-		if(test1.isEqual())
-		{
-			//n1 = n2
-			digitLeft1 = LeftEnd1;
-			digitLeft2 = LeftEnd2;
-			while(digitLeft1->getBit()==digitLeft2->getBit())
-			{
-				if(isCount)
-				{
-					PositiveInteger::Add(count,one,true);
-				}
-				//Because y>=1
-				digitLeft1 = digitLeft1->getRight();
-				digitLeft2 = digitLeft2->getRight();
-				if(overwrite)
-				{
-					delete digitLeft1->getLeft();
-					digitLeft1->setLeft(nullptr);
-					LeftEnd1 = digitLeft1;
-				}
-				if(Divide && !isEnd)
-				{
-					if(y1Digit->isRightEnd())
-					{
-						isEnd = true;
-						isCount = true;
-						count = new PositiveInteger;
-						PositiveInteger::One(count);
-					}
-					else
-					{
-						y1Digit = y1Digit->getRight();
-						y2Right = y2Right->getRight();
-					}
-				}
-			}
-			//digitLeft1 = 1,  digitLeft2 = 0
-			if(digitLeft1==RightEnd1)
-			{
-				//y = 1
-				if(overwrite)
-				{
-					//x1 originally cannot be one or two
-					isOne1 = true;
-					isTwo1 = false;
-				}
-				else
-				{
-					PositiveInteger::One(y);
-				}
-				if(!Divide)
-				{
-					delete count;
-				}
-				delete one;
-				return y;
-			}
-			digitLeft1 = digitLeft1->getRight();
-			digitLeft2 = digitLeft2->getRight();
-		}
-		else
-		{
-			//n1 - n2 = 1
-			digitLeft1 = LeftEnd1->getRight();
-			digitLeft2 = LeftEnd2;
-		}
-		
-		while(!digitLeft1->getBit() && digitLeft2->getBit())
-		{
-			//digitLeft1 = 0, digitLeft2 =1
-			if(isCount)
-			{
-				PositiveInteger::Add(count,one,true);
-			}
-			if(overwrite)
-			{
-				delete digitLeft1->getLeft();
-				digitLeft1->setLeft(nullptr);
-				LeftEnd1 = digitLeft1;
-				digitLeft1->setBit(1);
-			}
-			if(Divide && !isEnd)
-			{
-				if(y1Digit->isRightEnd())
-				{
-					isEnd = true;
-					isCount = true;
-					count = new PositiveInteger;
-					PositiveInteger::One(count);
-				}
-				else
-				{
-					y1Digit = y1Digit->getRight();
-					y2Right = y2Right->getRight();
-				}
-			}
-			
-			if(digitLeft1==RightEnd1)
-			{
-				//y = 1
-				if(overwrite)
-				{
-					isOne1 = true;
-					isTwo1 = false;
-				}
-				else
-				{
-					PositiveInteger::One(y);
-				}
-				if(!Divide)
-				{
-					delete count;
-				}
-				delete one;
-				return y;
-			}
-			digitLeft1 = digitLeft1->getRight();
-			digitLeft2 = digitLeft2->getRight();
-		}
-		
-		//(digitLeft1,digitLeft2) = (0,0) or (1,1) or (1,0)
-		if(overwrite)
-		{
-			t1 = digitLeft1;
-		}
-		else
-		{
-			t1 = new Bit;
-			t1->setBit(1);
-			y->setLeftEnd(t1);
-			
-			t2 = new Bit;
-			t1->setRight(t2);
-			t2->setLeft(t1);
-			t1 = t2;
-		}
-		if(digitLeft1->getBit() && !digitLeft2->getBit())
-		{
-			//case: (1,0)
-			t1->setBit(1);
-			if(digitLeft1==RightEnd1)
-			{
-				//y = 3
-				if(!Divide)
-				{
-					p1 = new PositiveInteger;
-					PositiveInteger::Two(p1);
-				}
-				if(overwrite)
-				{
-					isOne1 = false;
-					isTwo1 = false;
-					if(!Divide)
-					{
-						//x1 originally cannot be one or two
-						delete n1;
-						n1 = p1;
-					}
-				}
-				else
-				{
-					y->setRightEnd(t1);
-					y->setIsOne(false);
-					y->setIsTwo(false);
-					y->setNumberOfDigit(p1);
-					p1->setNumberOfDigitParent(y);
-				}
-				if(!Divide)
-				{
-					delete count;
-				}
-				delete one;
-				return y;
-			}
-		}
-		else
-		{
-			//case: (0,0) or (1,1)
-			t1->setBit(0);
-			if(digitLeft1==RightEnd1)
-			{
-				//y = 2
-				if(overwrite)
-				{
-					//x1 originally cannot be one or two
-					isOne1 = false;
-					isTwo1 = true;
-				}
-				else
-				{
-					y->setRightEnd(t1);
-					y->setIsOne(false);
-					y->setIsTwo(true);
-					y->setNumberOfDigit(y);
-				}
-				
-				if(!Divide)
-				{
-					delete count;
-				}
-				delete one;
-				return y;
-			}
-		}
-		
-		if(!overwrite)
-		{
-			while(digitLeft1!=RightEnd1)
-			{
-				digitLeft1 = digitLeft1->getRight();
-				t2 = new Bit;
-				t2->setBit(digitLeft1->getBit());
-				t1->setRight(t2);
-				t2->setLeft(t1);
-				t1 = t2;
-			}
-			y->setRightEnd(t1);
-		}
-		
-		digitLeft2 = digitLeft2->getRight();
-		while(true)
-		{
-			if(digitLeft2->getBit())
-			{
-				break;
-			}
-			if(digitLeft2==RightEnd2)
-			{
-				//y >= 4
-				if(overwrite)
-				{
-					isOne1 = false;
-					isTwo1 = false;
-					if(!Divide)
-					{
-						//x1 originally cannot be one or two
-						PositiveInteger::Subtract(n1,count,true,false);
-						PositiveInteger::Add(n1,one,true);
-					}
-				}
-				else
-				{
-					y->setIsOne(false);
-					y->setIsTwo(false);
-					p1 = PositiveInteger::Subtract(n1,count,false,false);
-					PositiveInteger::Add(p1,one,true);
-					y->setNumberOfDigit(p1);
-					p1->setNumberOfDigitParent(y);
-				}
-				if(!Divide)
-				{
-					delete count;
-				}
-				delete one;
-				return y;
-			}
-			digitLeft2 = digitLeft2->getRight();
-		}
-		
-	}
-	else
-	{
-		//n1 - n2 >= 2
-		//(x1 - x2) >= 3, if (n1 - n2) >= 2
-		if(!overwrite)
-		{
-			c1 = LeftEnd1;
-			t1 = new Bit;
-			t1->setBit(c1->getBit());
-			y->setLeftEnd(t1);
-			while(c1!=RightEnd1)
-			{
-				c1 = c1->getRight();
-				t2 = new Bit;
-				t2->setBit(c1->getBit());
-				t1->setRight(t2);
-				t2->setLeft(t1);
-				t1 = t2;
-			}
-			y->setRightEnd(t1);
-		}
-		digitLeft2 = LeftEnd2;
-	}
-	
-	if(overwrite)
-	{
-		isOne1 = false;
-		isTwo1 = false;
-		b1 = RightEnd1;
-	}
-	else
-	{
-		y->setIsOne(false);
-		y->setIsTwo(false);
-		b1 = y->getRightEnd();
-	}
-	
-	digitRight2 = RightEnd2;
 	while(true)
 	{
-		if(!b1->getBit() && digitRight2->getBit())
+		if(!c1->getBit() && c2->getBit())
 		{
-			b1->setBit(1);
+			c1->setBit(1);
 			
-			c1 = b1;
-			c1 = c1->getLeft();
-			while(!c1->getBit())
+			d1 = c1;
+			while(true)
 			{
-				c1->setBit(1);
-				c1 = c1->getLeft();
+				d1 = d1->getLeft();
+				if(d1->getBit()) break;
+				d1->setBit(1);
 			}
-			c1->setBit(0);
+			d1->setBit(0);
 		}
 		else
 		{
-			if(b1->getBit() && !digitRight2->getBit())
+			if(c1->getBit() && !c2->getBit())
 			{
-				b1->setBit(1);
+				c1->setBit(1);
 			}
 			else
 			{
-				b1->setBit(0);
+				c1->setBit(0);
 			}
 		}
 		
-		if(digitRight2==digitLeft2)
+		if(c2->getIsLeftEnd())
 		{
 			break;
 		}
 		else
 		{
-			b1 = b1->getLeft();
-			digitRight2 = digitRight2->getLeft();
+			c1 = c1->getLeft();
+			c2 = c2->getLeft();
 		}
 	}
+	
+	if(!LeftEnd1->getBit())
+	{
+		isShorten = true;
+		while(true)
+		{
+			LeftEnd1 = LeftEnd1->getRight();
+			delete LeftEnd1->getLeft();
+			if(LeftEnd1->getBit()) break;
+		}
+	}
+	LeftEnd1->setIsLeftEnd(true);
+}
+
+
+PositiveInteger* PositiveInteger::Subtract(PositiveInteger* x1,PositiveInteger* x2,bool overwrite)
+{
+	PositiveInteger* y;
+	Bit* b1;
+	Bit* b2;
+	Bit* d1;
+	Bit* temp1;
+	bool temp2;
+	bool isShorten;
 	
 	if(overwrite)
 	{
-		b1 = LeftEnd1;
+		y = x1;
+		d1 = x1->getLeftEnd();
 	}
 	else
 	{
-		b1 = y->getLeftEnd();
+		y = new PositiveInteger;
+		b1 = new Bit;
+		b1->setRight(nullptr);
+		b1->setIsRightEnd(true);
+		y->setRightEnd(b1);
+		d1 = x1->getRightEnd();
+		while(true)
+		{
+			b1->setBit(d1->getBit());
+			if(d1->getIsLeftEnd()) break;
+			b2 = new Bit;
+			b1->setLeft(b2);
+			b2->setRight(b1);
+			b1 = b2;
+			d1 = d1->getLeft();
+		}
+		b1->setIsLeftEnd(true);
+		y->setLeftEnd(b1);
+		
+		d1 = b1;
 	}
 	
-	if(b1->getBit())
-	{
-		if(overwrite)
-		{
-			if(!Divide)
-			{
-				PositiveInteger::Subtract(n1,count,true,false);
-				PositiveInteger::Add(n1,one,true);
-			}
-		}
-		else
-		{
-			p1 = PositiveInteger::Subtract(n1,count,false,false);
-			PositiveInteger::Add(p1,one,true);
-			y->setNumberOfDigit(p1);
-			p1->setNumberOfDigitParent(y);
-		}
-	}
-	else
-	{
-		c1 = b1->getRight();
-		delete c1->getLeft();
-		c1->setLeft(nullptr);
-		
-		if(overwrite)
-		{
-			LeftEnd1 = c1;
-			if(!Divide)
-			{
-				PositiveInteger::Subtract(n1,count,true,false);
-			}
-		}
-		else
-		{
-			y->setLeftEnd(c1);
-			p1 = PositiveInteger::Subtract(n1,count,false,false);
-			y->setNumberOfDigit(p1);
-			p1->setNumberOfDigitParent(y);
-		}
-		
-		if(Divide)
-		{
-			if(isCount)
-			{
-				PositiveInteger::Add(count,one,true);
-			}
-			if(!isEnd)
-			{
-				if(y1Digit->isRightEnd())
-				{
-					isEnd = true;
-					//isCount = true;
-					count = new PositiveInteger;
-					PositiveInteger::One(count);
-				}
-				else
-				{
-					y1Digit = y1Digit->getRight();
-					y2Right = y2Right->getRight();
-				}
-			}
-		}
-	}
-	if(!Divide)
-	{
-		delete count;
-	}
-	delete one;
+	PositiveInteger::SubtractAux(d1,y->getRightEnd(),x2->getLeftEnd(),x2->getRightEnd(),isShorten,
+									 overwrite,false,temp1,temp1,temp2);
+	d1->setLeft(nullptr);
+	if(isShorten) y->setLeftEnd(d1);
 	return y;
 }
 
-PositiveInteger* PositiveInteger::Subtract(PositiveInteger* x1,PositiveInteger* x2,bool overwrite,bool checking)
-{
-	PositiveInteger* y;
-	PositiveInteger* p1;
-	
-	
-	CompareCode test1;
-	if(checking)
-	{
-		test1 = PositiveInteger::compare(x1,x2);
-		if(test1.isEqual())
-		{
-			cout<<"Error! PositiveInteger does not support number zero."<<endl;
-			y = new PositiveInteger;
-			return y;
-		}
-		
-		if(test1.isSmaller())
-		{
-			p1=x1;
-			x1=x2;
-			x2=p1;
-		}
-	}
-	
-	Bit* d1 = x1->getLeftEnd();
-	p1 = x1->getNumberOfDigit();
-	bool w1;
-	bool w2;
-	Bit* temp1;
-	bool temp2;
-	PositiveInteger* temp3;
-	y = PositiveInteger::SubtractAux(d1,x1->getRightEnd(),p1,w1,w2,
-									 x2->getLeftEnd(),x2->getRightEnd(),x2->getNumberOfDigit(),x2->getIsOne(),x2->getIsTwo(),
-									 overwrite,false,temp1,temp1,temp2,temp3);
-	if(overwrite)
-	{
-		if(w1)
-		{
-			if(!x1->isOneOrTwo())
-			{
-				delete x1->getNumberOfDigit();
-			}
-			x1->setIsOne(true);
-			x1->setIsTwo(false);
-			x1->setLeftEnd(d1);
-			x1->setNumberOfDigit(x1);
-			
-		}
-		else if(w2)
-		{
-			if(!x1->isOneOrTwo())
-			{
-				delete x1->getNumberOfDigit();
-			}
-			x1->setIsOne(false);
-			x1->setIsTwo(true);
-			x1->setLeftEnd(d1);
-			x1->setNumberOfDigit(x1);
-		}
-		else
-		{
-			x1->setIsOne(false);
-			x1->setIsTwo(false);
-			x1->setLeftEnd(d1);
-			//For x1 = 1,2,3
-			x1->setNumberOfDigit(p1);
-			p1->setNumberOfDigitParent(x1);
-		}
-		return x1;
-	}
-	else
-	{
-		return y;
-	}
-}
-*/
 void PositiveInteger::MultiplyAux(Bit* c1,Bit* c2,Bit* tRight,Bit*& b1,bool& MultiplyIsCarried)
 {
 
@@ -1362,7 +928,6 @@ PositiveInteger* PositiveInteger::Multiply(PositiveInteger* x1,PositiveInteger* 
 	Bit* c2;
 	Bit* tRight;
 	Bit* d1;
-	MultiplyIsCarried = false;
 	
 	y = new PositiveInteger;
 	b1 = new Bit;
@@ -1412,7 +977,6 @@ PositiveInteger* PositiveInteger::Multiply(PositiveInteger* x1,PositiveInteger* 
 	b1->setIsLeftEnd(true);
 	
 	PositiveInteger::MultiplyAux(c1,c2,tRight,b1,MultiplyIsCarried);
-	
 	b1->setLeft(nullptr);
 	y->setLeftEnd(b1);
 	return y;
@@ -2136,7 +1700,7 @@ bool PositiveInteger::VerifyAdd(unsigned int max,bool overwrite)
 	}
 	return true;
 }
-/*
+
 bool PositiveInteger::VerifySubtract(unsigned int max,bool overwrite)
 {
 	PositiveInteger* p1;
@@ -2148,7 +1712,8 @@ bool PositiveInteger::VerifySubtract(unsigned int max,bool overwrite)
 		{
 			p1 = new PositiveInteger(i);
 			p2 = new PositiveInteger(j);
-			p3 = PositiveInteger::Subtract(p1,p2,overwrite,false);
+			p3 = PositiveInteger::Subtract(p1,p2,overwrite);
+			p3->printBinary();
 			if(overwrite)
 			{
 				if(!p1->isSame(i-j)) return false;
@@ -2164,10 +1729,11 @@ bool PositiveInteger::VerifySubtract(unsigned int max,bool overwrite)
 			delete p2;
 			if(!overwrite) delete p3;
 		}
+		cout<<endl;
 	}
 	return true;
 }
-*/
+
 bool PositiveInteger::VerifyMultiply(unsigned int max)
 {
 	PositiveInteger* p1;

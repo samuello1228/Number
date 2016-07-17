@@ -36,7 +36,10 @@ public:
 	static CompareCode compare(PositiveInteger*,PositiveInteger*);
 	static PositiveInteger* AddAux(Bit*,Bit*,bool,bool&,Bit*&);
 	static PositiveInteger* Add(PositiveInteger*,PositiveInteger*,bool);
-	static PositiveInteger* Subtract(PositiveInteger*,PositiveInteger*,bool,bool);
+	static void SubtractAux(Bit*&,Bit*,
+							Bit*,Bit*,bool&,
+							bool,bool,Bit*&,Bit*&,bool&);
+	static PositiveInteger* Subtract(PositiveInteger*,PositiveInteger*,bool);
 	static void MultiplyAux(Bit*,Bit*,Bit*,Bit*&,bool&);
 	static PositiveInteger* Multiply(PositiveInteger*,PositiveInteger*,bool&);
 	static void Divide(PositiveInteger*,PositiveInteger*,PositiveInteger*&,PositiveInteger*&,bool&,bool,bool);
@@ -71,9 +74,7 @@ private:
 	Bit* rightEnd;
 	
 	static void AddThreeBit(bool,bool,bool,bool&,bool&);
-	static PositiveInteger* SubtractAux(Bit*&,Bit*,PositiveInteger*&,bool&,bool&,
-										Bit*,Bit*,PositiveInteger*,bool,bool,
-										bool,bool,Bit*&,Bit*&,bool&,PositiveInteger*&);
+
 };
 
 class CompareCode
