@@ -51,15 +51,13 @@ int main()
 			}
 			
 			/*
-			x3 = i->copy();
-			x4 = j->copy();
-			//cout<<PositiveInteger::compare(x3, x4)<<" ";
-			x1 = PositiveInteger::Add(x3,x4,0);
-			//x1->printBinary();
-			//delete x1;
+			x1 = i->copy();
+			x2 = j->copy();
+			x3 = PositiveInteger::Add(x1,x2,0);
 			//x3->printBinary();
 			delete x3;
-			delete x4;
+			delete x1;
+			delete x2;
 			*/
 			
 			/*
@@ -79,13 +77,13 @@ int main()
 			*/
 			
 			/*
-			x3 = i->copy();
-			x4 = j->copy();
-			x1 = PositiveInteger::Multiply(x3,x4,1);
+			x1 = i->copy();
+			x2 = j->copy();
+			x3 = PositiveInteger::Multiply(x1,x2);
 			//x1->printBinary();
-			//delete x1;
-			delete x3;
-			delete x4;
+			//delete x3;
+			delete x1;
+			delete x2;
 			*/
 			
 			/*
@@ -143,8 +141,7 @@ int main()
 	//if(!PositiveInteger::VerifyCompare(100)) cout<<"Error"<<endl;
 	//if(!PositiveInteger::VerifyAdd(100,0)) cout<<"Error"<<endl;
 	//if(!PositiveInteger::VerifySubtract(100,0)) cout<<"Error"<<endl;
-	if(!PositiveInteger::VerifyMultiply(100,0)) cout<<"Error"<<endl;
-	if(!PositiveInteger::VerifyMultiply(100,1)) cout<<"Error"<<endl;
+	if(!PositiveInteger::VerifyMultiply(1000)) cout<<"Error"<<endl;
 	//if(!PositiveInteger::VerifyDivide(100,0)) cout<<"Error"<<endl;
 	else cout<<"OK"<<endl;
 	

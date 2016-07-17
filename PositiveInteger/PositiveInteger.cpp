@@ -225,6 +225,21 @@ void PositiveInteger::printBinary()
 	cout<<endl;
 }
 
+PositiveInteger* PositiveInteger::getNumberOfBit()
+{
+	PositiveInteger* one = new PositiveInteger("1");
+	PositiveInteger* y = new PositiveInteger("1");
+	Bit* c1 = getRightEnd();
+	while(true)
+	{
+		if(c1->getIsLeftEnd()) break;
+		PositiveInteger::Add(y,one,true);
+		c1 = c1->getLeft();
+	}
+	delete one;
+	return y;
+}
+
 PositiveInteger* PositiveInteger::copy()
 {
 	PositiveInteger* y = new PositiveInteger;
@@ -446,7 +461,7 @@ PositiveInteger* PositiveInteger::AddAux(Bit* c1, Bit* c2,bool overwrite,bool& i
 				}
 				else
 				{
-					cout<<"logic error: the left end is not 1"<<endl;
+					//cout<<"For multiply: the left end of x1 is 0"<<endl;
 					if(overwrite)
 					{
 						return nullptr;
@@ -1270,31 +1285,23 @@ PositiveInteger* PositiveInteger::Subtract(PositiveInteger* x1,PositiveInteger* 
 	}
 }
 */
-PositiveInteger* PositiveInteger::Multiply(PositiveInteger* x1,PositiveInteger* x2,bool overwrite)
+PositiveInteger* PositiveInteger::Multiply(PositiveInteger* x1,PositiveInteger* x2,bool& MultiplyIsCarried)
 {
 	PositiveInteger* y;
 	Bit* b1;
 	Bit* b2;
-	Bit* c1 = nullptr;
+	Bit* c1;
 	Bit* c2;
 	Bit* tRight;
-	Bit* d1 = nullptr;
-	bool isCarried;
+	Bit* d1;
+	bool AddIsCarried;
+	MultiplyIsCarried = false;
 	Bit* LeftEnd;
 	
-	////////////////add zero at the right, according to c2
-	if(overwrite)
-	{
-		y = x1;
-		b1 = y->getRightEnd();
-		b1->setIsRightEnd(false);
-	}
-	else
-	{
-		y = new PositiveInteger;
-		b1 = new Bit;
-		d1 = b1;
-	}
+	////////////////copy zero of x2 at the right
+	y = new PositiveInteger;
+	b1 = new Bit;
+	d1 = b1;
 	c2 = x2->getRightEnd();
 	while(true)
 	{
@@ -1310,44 +1317,23 @@ PositiveInteger* PositiveInteger::Multiply(PositiveInteger* x1,PositiveInteger* 
 	b1->setIsRightEnd(true);
 	y->setRightEnd(b1);
 	
-	//////////////// scan/copy zero of x1
-	if(overwrite)
+	//////////////// copy zero of x1 at the left
+	b1 = d1;
+	c1 = x1->getRightEnd();
+	while(true)
 	{
-		tRight = x1->getRightEnd();
-		while(true)
-		{
-			if(tRight->getBit()) break;
-			tRight = tRight->getLeft();
-		}
+		if(c1->getBit()) break;
+		b1->setBit(0);
+		b2 = new Bit;
+		b1->setLeft(b2);
+		b2->setRight(b1);
+		c1 = c1->getLeft();
+		b1 = b2;
 	}
-	else
-	{
-		b1 = d1;
-		c1 = x1->getRightEnd();
-		while(true)
-		{
-			if(c1->getBit()) break;
-			b1->setBit(0);
-			b2 = new Bit;
-			b1->setLeft(b2);
-			b2->setRight(b1);
-			c1 = c1->getLeft();
-			b1 = b2;
-		}
-		tRight = b1;
-	}
+	tRight = b1;
 	
 	////////////////copy x1 without zero
-	if(overwrite)
-	{
-		c1 = new Bit;
-		b1 = c1;
-		d1 = tRight;
-	}
-	else
-	{
-		d1 = c1;
-	}
+	d1 = c1;
 	while(true)
 	{
 		b1->setBit(d1->getBit());
@@ -1360,10 +1346,6 @@ PositiveInteger* PositiveInteger::Multiply(PositiveInteger* x1,PositiveInteger* 
 	}
 	b1->setIsLeftEnd(true);
 	
-	if(overwrite)
-	{
-		b1 = x1->getLeftEnd();
-	}
 	////////////////Add
 	if(!c2->getIsLeftEnd())
 	{
@@ -1372,21 +1354,43 @@ PositiveInteger* PositiveInteger::Multiply(PositiveInteger* x1,PositiveInteger* 
 			c2 = c2->getLeft();
 			if(tRight->getIsLeftEnd())
 			{
+				b1->setIsLeftEnd(false);
+				b2 = new Bit;
 				if(c2->getBit())
 				{
-					d1 = c1;
-					b1->setIsLeftEnd(false);
-					while(true)
+					//x1 must be 2^n
+					//c1 must be 1
+					//x1->printBinary();
+					b2->setBit(1);
+				}
+				else
+				{
+					b2->setBit(0);
+				}
+				b1->setLeft(b2);
+				b2->setRight(b1);
+				b1 = b2;
+				b1->setIsLeftEnd(true);
+				tRight = tRight->getLeft();
+			}
+			else
+			{
+				tRight = tRight->getLeft();
+				if(c2->getBit())
+				{
+					PositiveInteger::AddAux(tRight,c1,true,AddIsCarried,LeftEnd);
+					if(AddIsCarried)
 					{
-						b2 = new Bit;
-						b2->setBit(d1->getBit());
-						b1->setLeft(b2);
-						b2->setRight(b1);
-						b1 = b2;
-						if(d1->getIsLeftEnd()) break;
-						d1 = d1->getLeft();
+						if(!b1->getLeft()->getIsLeftEnd())
+						{
+							MultiplyIsCarried = true;
+						}
+						b1 = LeftEnd;
 					}
-					b1->setIsLeftEnd(true);
+					else
+					{
+						MultiplyIsCarried = false;
+					}
 				}
 				else
 				{
@@ -1398,35 +1402,9 @@ PositiveInteger* PositiveInteger::Multiply(PositiveInteger* x1,PositiveInteger* 
 					b1 = b2;
 					b1->setIsLeftEnd(true);
 				}
-				tRight = tRight->getLeft();
-			}
-			else
-			{
-				tRight = tRight->getLeft();
-				if(c2->getBit())
-				{
-					PositiveInteger::AddAux(tRight,c1,true,isCarried,LeftEnd);
-					if(isCarried)
-					{
-						b1 = LeftEnd;
-					}
-				}
 			}
 			if(c2->getIsLeftEnd()) break;
 		}
-	}
-
-	//delete
-	if(overwrite)
-	{
-		d1 = c1;
-		while(true)
-		{
-			if(d1->getIsLeftEnd()) break;
-			d1 = d1->getLeft();
-			delete d1->getRight();
-		}
-		delete d1;
 	}
 	
 	b1->setLeft(nullptr);
@@ -2184,36 +2162,48 @@ bool PositiveInteger::VerifySubtract(unsigned int max,bool overwrite)
 	return true;
 }
 */
-bool PositiveInteger::VerifyMultiply(unsigned int max,bool overwrite)
+bool PositiveInteger::VerifyMultiply(unsigned int max)
 {
 	PositiveInteger* p1;
 	PositiveInteger* p2;
 	PositiveInteger* p3;
+	bool MultiplyIsCarried;
+	PositiveInteger* n1;
+	PositiveInteger* n2;
+	PositiveInteger* n3;
 	for(unsigned int i=1;i<=max;i++)
 	//for(unsigned int i=3;i<=3;i++)
 	{
 		for(unsigned int j=1;j<=max;j++)
-		//for(unsigned int j=5;j<=5;j++)
+		//for(unsigned int j=19;j<=19;j++)
 		{
 			p1 = new PositiveInteger(i);
+			n1 = p1->getNumberOfBit();
 			p2 = new PositiveInteger(j);
-			p3 = PositiveInteger::Multiply(p1,p2,overwrite);
-			p3->printBinary();
-			if(overwrite)
+			n2 = p2->getNumberOfBit();
+			p3 = PositiveInteger::Multiply(p1,p2,MultiplyIsCarried);
+			n3 = p3->getNumberOfBit();
+			if(MultiplyIsCarried)
 			{
+				//p1->printBinary();
+				//p2->printBinary();
+				//p3->printBinary();
+				//cout<<endl;
 				
-				if(!p1->isSame(i*j)) return false;
+				PositiveInteger::Add(n1,n2,true);
+				if(!PositiveInteger::compare(n1,n3).isEqual()) return false;
 			}
-			else
-			{
-				if(!p1->isSame(i)) return false;
-			}
+			//p3->printBinary();
+			if(!p1->isSame(i)) return false;
 			if(!p2->isSame(j)) return false;
 			if(!p3->isSame(i*j)) return false;
 			
 			delete p1;
 			delete p2;
-			if(!overwrite) delete p3;
+			delete p3;
+			delete n1;
+			delete n2;
+			delete n3;
 		}
 		//cout<<endl;
 	}
