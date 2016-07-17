@@ -42,7 +42,7 @@ public:
 	static PositiveInteger* Subtract(PositiveInteger*,PositiveInteger*,bool);
 	static void MultiplyAux(Bit*,Bit*,Bit*,Bit*&,bool&);
 	static PositiveInteger* Multiply(PositiveInteger*,PositiveInteger*,bool&);
-	static void Divide(PositiveInteger*,PositiveInteger*,PositiveInteger*&,PositiveInteger*&,bool&,bool,bool);
+	static void Divide(PositiveInteger*,PositiveInteger*,PositiveInteger*&,PositiveInteger*&,bool&,bool);
 	PositiveInteger* getNumberOfBit();
 	
 	struct ListOfPositiveInteger
