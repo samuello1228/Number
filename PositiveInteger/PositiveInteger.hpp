@@ -34,9 +34,10 @@ public:
 	void printDecimal(bool);
 	PositiveInteger* copy();
 	static CompareCode compare(PositiveInteger*,PositiveInteger*);
-	static PositiveInteger* AddAux(Bit*,Bit*,bool,bool& isCarried,Bit*& LeftEnd);
+	static PositiveInteger* AddAux(Bit*,Bit*,bool,bool&,Bit*&);
 	static PositiveInteger* Add(PositiveInteger*,PositiveInteger*,bool);
 	static PositiveInteger* Subtract(PositiveInteger*,PositiveInteger*,bool,bool);
+	static void MultiplyAux(Bit*,Bit*,Bit*,Bit*&,bool&);
 	static PositiveInteger* Multiply(PositiveInteger*,PositiveInteger*,bool&);
 	static void Divide(PositiveInteger*,PositiveInteger*,PositiveInteger*&,PositiveInteger*&,bool&,bool,bool);
 	PositiveInteger* getNumberOfBit();

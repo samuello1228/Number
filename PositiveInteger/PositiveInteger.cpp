@@ -400,7 +400,7 @@ void PositiveInteger::AddThreeBit(bool x1, bool x2, bool x3, bool &y1, bool &y2)
 }
 
 
-PositiveInteger* PositiveInteger::AddAux(Bit* c1, Bit* c2,bool overwrite,bool& isCarried,Bit*& LeftEnd)
+PositiveInteger* PositiveInteger::AddAux(Bit* c1, Bit* c2,bool overwrite,bool& AddIsCarried,Bit*& LeftEnd)
 {
 	PositiveInteger* y = nullptr;
 	Bit* b1 = nullptr;
@@ -408,7 +408,7 @@ PositiveInteger* PositiveInteger::AddAux(Bit* c1, Bit* c2,bool overwrite,bool& i
 	bool carry=0;
 	bool result1;
 	bool result2;
-	isCarried = false;
+	AddIsCarried = false;
 	
 	if(!overwrite)
 	{
@@ -448,7 +448,7 @@ PositiveInteger* PositiveInteger::AddAux(Bit* c1, Bit* c2,bool overwrite,bool& i
 						c1->setLeft(b2);
 						b2->setRight(c1);
 						LeftEnd = b2;
-						isCarried = true;
+						AddIsCarried = true;
 						return nullptr;
 					}
 					else
@@ -515,7 +515,7 @@ PositiveInteger* PositiveInteger::AddAux(Bit* c1, Bit* c2,bool overwrite,bool& i
 									c1->setLeft(b2);
 									b2->setRight(c1);
 									LeftEnd = b2;
-									isCarried = true;
+									AddIsCarried = true;
 									return nullptr;
 								}
 								else
@@ -550,7 +550,7 @@ PositiveInteger* PositiveInteger::AddAux(Bit* c1, Bit* c2,bool overwrite,bool& i
 								if(overwrite)
 								{
 									LeftEnd = c1;
-									isCarried = true;
+									AddIsCarried = true;
 									return nullptr;
 								}
 								else
@@ -592,7 +592,7 @@ PositiveInteger* PositiveInteger::AddAux(Bit* c1, Bit* c2,bool overwrite,bool& i
 					c1->setLeft(nullptr);
 					c1->setIsLeftEnd(true);
 					LeftEnd = c1;
-					isCarried = true;
+					AddIsCarried = true;
 					return nullptr;
 				}
 				else
@@ -642,7 +642,7 @@ PositiveInteger* PositiveInteger::AddAux(Bit* c1, Bit* c2,bool overwrite,bool& i
 									c1->setLeft(b2);
 									b2->setRight(c1);
 									LeftEnd = b2;
-									isCarried = true;
+									AddIsCarried = true;
 									return nullptr;
 								}
 								else
@@ -728,12 +728,12 @@ PositiveInteger* PositiveInteger::Add(PositiveInteger* x1,PositiveInteger* x2,bo
 	Bit* c1 = x1->getRightEnd();
 	Bit* c2 = x2->getRightEnd();
 	Bit* LeftEnd = nullptr;
-	bool isCarried = false;
+	bool AddIsCarried = false;
 	
-	y = PositiveInteger::AddAux(c1,c2,overwrite,isCarried,LeftEnd);
+	y = PositiveInteger::AddAux(c1,c2,overwrite,AddIsCarried,LeftEnd);
 	if(overwrite)
 	{
-		if(isCarried)
+		if(AddIsCarried)
 		{
 			x1->setLeftEnd(LeftEnd);
 		}
@@ -1285,68 +1285,14 @@ PositiveInteger* PositiveInteger::Subtract(PositiveInteger* x1,PositiveInteger* 
 	}
 }
 */
-PositiveInteger* PositiveInteger::Multiply(PositiveInteger* x1,PositiveInteger* x2,bool& MultiplyIsCarried)
+void PositiveInteger::MultiplyAux(Bit* c1,Bit* c2,Bit* tRight,Bit*& b1,bool& MultiplyIsCarried)
 {
-	PositiveInteger* y;
-	Bit* b1;
+
 	Bit* b2;
-	Bit* c1;
-	Bit* c2;
-	Bit* tRight;
-	Bit* d1;
+	Bit* LeftEnd;
 	bool AddIsCarried;
 	MultiplyIsCarried = false;
-	Bit* LeftEnd;
 	
-	////////////////copy zero of x2 at the right
-	y = new PositiveInteger;
-	b1 = new Bit;
-	d1 = b1;
-	c2 = x2->getRightEnd();
-	while(true)
-	{
-		if(c2->getBit()) break;
-		b2 = new Bit;
-		b2->setBit(0);
-		b1->setRight(b2);
-		b2->setLeft(b1);
-		b1 = b2;
-		c2 = c2->getLeft();
-	}
-	b1->setRight(nullptr);
-	b1->setIsRightEnd(true);
-	y->setRightEnd(b1);
-	
-	//////////////// copy zero of x1 at the left
-	b1 = d1;
-	c1 = x1->getRightEnd();
-	while(true)
-	{
-		if(c1->getBit()) break;
-		b1->setBit(0);
-		b2 = new Bit;
-		b1->setLeft(b2);
-		b2->setRight(b1);
-		c1 = c1->getLeft();
-		b1 = b2;
-	}
-	tRight = b1;
-	
-	////////////////copy x1 without zero
-	d1 = c1;
-	while(true)
-	{
-		b1->setBit(d1->getBit());
-		if(d1->getIsLeftEnd()) break;
-		d1 = d1->getLeft();
-		b2 = new Bit;
-		b1->setLeft(b2);
-		b2->setRight(b1);
-		b1 = b2;
-	}
-	b1->setIsLeftEnd(true);
-	
-	////////////////Add
 	if(!c2->getIsLeftEnd())
 	{
 		while(true)
@@ -1406,6 +1352,66 @@ PositiveInteger* PositiveInteger::Multiply(PositiveInteger* x1,PositiveInteger* 
 			if(c2->getIsLeftEnd()) break;
 		}
 	}
+}
+PositiveInteger* PositiveInteger::Multiply(PositiveInteger* x1,PositiveInteger* x2,bool& MultiplyIsCarried)
+{
+	PositiveInteger* y;
+	Bit* b1;
+	Bit* b2;
+	Bit* c1;
+	Bit* c2;
+	Bit* tRight;
+	Bit* d1;
+	MultiplyIsCarried = false;
+	
+	y = new PositiveInteger;
+	b1 = new Bit;
+	b1->setRight(nullptr);
+	b1->setIsRightEnd(true);
+	y->setRightEnd(b1);
+	
+	//////////////// copy zero of x1
+	c1 = x1->getRightEnd();
+	while(true)
+	{
+		if(c1->getBit()) break;
+		b1->setBit(0);
+		b2 = new Bit;
+		b1->setLeft(b2);
+		b2->setRight(b1);
+		b1 = b2;
+		c1 = c1->getLeft();
+	}
+	
+	////////////////copy zero of x2
+	c2 = x2->getRightEnd();
+	while(true)
+	{
+		if(c2->getBit()) break;
+		b1->setBit(0);
+		b2 = new Bit;
+		b1->setLeft(b2);
+		b2->setRight(b1);
+		b1 = b2;
+		c2 = c2->getLeft();
+	}
+	tRight = b1;
+	
+	////////////////copy x1 without zero
+	d1 = c1;
+	while(true)
+	{
+		b1->setBit(d1->getBit());
+		if(d1->getIsLeftEnd()) break;
+		d1 = d1->getLeft();
+		b2 = new Bit;
+		b1->setLeft(b2);
+		b2->setRight(b1);
+		b1 = b2;
+	}
+	b1->setIsLeftEnd(true);
+	
+	PositiveInteger::MultiplyAux(c1,c2,tRight,b1,MultiplyIsCarried);
 	
 	b1->setLeft(nullptr);
 	y->setLeftEnd(b1);
@@ -2172,28 +2178,30 @@ bool PositiveInteger::VerifyMultiply(unsigned int max)
 	PositiveInteger* n2;
 	PositiveInteger* n3;
 	for(unsigned int i=1;i<=max;i++)
-	//for(unsigned int i=3;i<=3;i++)
+	//for(unsigned int i=1;i<=1;i++)
 	{
 		for(unsigned int j=1;j<=max;j++)
-		//for(unsigned int j=19;j<=19;j++)
+		//for(unsigned int j=6;j<=6;j++)
 		{
 			p1 = new PositiveInteger(i);
 			n1 = p1->getNumberOfBit();
 			p2 = new PositiveInteger(j);
 			n2 = p2->getNumberOfBit();
 			p3 = PositiveInteger::Multiply(p1,p2,MultiplyIsCarried);
+			//p3->printBinary();
 			n3 = p3->getNumberOfBit();
 			if(MultiplyIsCarried)
 			{
-				//p1->printBinary();
-				//p2->printBinary();
-				//p3->printBinary();
-				//cout<<endl;
-				
 				PositiveInteger::Add(n1,n2,true);
 				if(!PositiveInteger::compare(n1,n3).isEqual()) return false;
 			}
-			//p3->printBinary();
+			else
+			{
+				//PositiveInteger::Add(n1,n2,true);
+				//PositiveInteger::Subtract(n1, one, true);
+				//if(!PositiveInteger::compare(n1,n3).isEqual()) return false;
+			}
+			
 			if(!p1->isSame(i)) return false;
 			if(!p2->isSame(j)) return false;
 			if(!p3->isSame(i*j)) return false;
