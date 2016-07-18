@@ -17,8 +17,6 @@ int main()
 	PositiveInteger* x2;
 	PositiveInteger* x3;
 	PositiveInteger* x4;
-	PositiveInteger* x5;
-	PositiveInteger* x6;
 	bool divisible=0;
 	
 	PositiveInteger* one = new PositiveInteger("1");
@@ -93,23 +91,23 @@ int main()
 				PositiveInteger::Add(j,one,true);
 				continue;
 			}
-			x3 = j->copy();
-			x4 = i->copy();
-			PositiveInteger::Divide(x3,x4,x5,x6,divisible,1,0);
-			//x5->printBinary();
+			x1 = j->copy();
+			x2 = i->copy();
+			PositiveInteger::Divide(x1,x2,x3,x4,divisible,1);
+			//x3->printBinary();
 			if(!divisible)
 			{
-				//x6->printBinary();
-				delete x6;
+				//x4->printBinary();
+				delete x4;
 			}
 			else
 			{
 				//cout<<"0"<<endl;
 			}
 			//cout<<endl;
-			//delete x3;
-			delete x4;
-			delete x5;
+			//delete x1;
+			delete x2;
+			delete x3;
 			*/
 			
 			/*
@@ -144,8 +142,8 @@ int main()
 	//if(!PositiveInteger::VerifySubtract(1000,0)) cout<<"Error"<<endl;
 	//if(!PositiveInteger::VerifySubtract(1000,1)) cout<<"Error"<<endl;
 	//if(!PositiveInteger::VerifyMultiply(100)) cout<<"Error"<<endl;
-	if(!PositiveInteger::VerifyDivide(1000,0)) cout<<"Error"<<endl;
-	if(!PositiveInteger::VerifyDivide(1000,1)) cout<<"Error"<<endl;
+	if(!PositiveInteger::VerifyDivide(100,0)) cout<<"Error"<<endl;
+	if(!PositiveInteger::VerifyDivide(100,1)) cout<<"Error"<<endl;
 	else cout<<"OK"<<endl;
 	
 	/*

@@ -1032,6 +1032,7 @@ void PositiveInteger::Divide(PositiveInteger* x1,PositiveInteger* x2,PositiveInt
 	bool isEnd;
 	bool isSubtract;
 	bool isShorten;
+	bool b1IsProtected;
 	
 	if(overwrite)
 	{
@@ -1085,7 +1086,7 @@ void PositiveInteger::Divide(PositiveInteger* x1,PositiveInteger* x2,PositiveInt
 	//create y1
 	y1 = new PositiveInteger;
 	b1 = new Bit;
-	//b1->setBit(0);
+	b1->setBit(0);
 	b1->setLeft(nullptr);
 	b1->setIsLeftEnd(true);
 	y1->setLeftEnd(b1);
@@ -1093,7 +1094,7 @@ void PositiveInteger::Divide(PositiveInteger* x1,PositiveInteger* x2,PositiveInt
 	{
 		if(d1->getIsRightEnd()) break;
 		b2 = new Bit;
-		//b2->setBit(0);
+		b2->setBit(0);
 		b2->setLeft(b1);
 		b1->setRight(b2);
 		b1 = b2;
@@ -1106,9 +1107,9 @@ void PositiveInteger::Divide(PositiveInteger* x1,PositiveInteger* x2,PositiveInt
 	//////////////////
 	b1 = y1->getLeftEnd();
 	b2 = tLeft; //not nullptr //not b1 //any other thing
+	b1IsProtected = false;
 	//b2 = y1->getLeftEnd();
 	isEnd = false;
-	isSubtract = true;
 	divisible = false;
 	while(true)
 	{
@@ -1147,6 +1148,7 @@ void PositiveInteger::Divide(PositiveInteger* x1,PositiveInteger* x2,PositiveInt
 					break;
 				}
 			}
+			
 			if(b1->getIsRightEnd() && compare.isSmaller())
 			{
 				b1->setBit(0);
@@ -1163,6 +1165,89 @@ void PositiveInteger::Divide(PositiveInteger* x1,PositiveInteger* x2,PositiveInt
 					b1->setBit(0);
 				}
 				b1->getRight()->setBit(1);
+			}
+		}
+		
+		if(!isEnd)
+		{
+			if(compare.isEqual())
+			{
+				firstTime = true;
+				isSubtract = true;
+				d1 = x2->getLeftEnd();
+				while(true)
+				{
+					if(isSubtract)
+					{
+						tLeft->setBit(0);
+						if(d1->getIsRightEnd())
+						{
+							isSubtract = false;
+						}
+						else
+						{
+							d1 = d1->getRight();
+						}
+					}
+					
+					if(tLeft->getBit())
+					{
+						divisible = false;
+						tLeft->setIsLeftEnd(true);
+						break;
+					}
+					else
+					{
+						if(!isEnd)
+						{
+							if(firstTime)
+							{
+								firstTime = false;
+							}
+							else
+							{
+								b1->setBit(0);
+							}
+							if(b1->getIsRightEnd())
+							{
+								isEnd = true;
+							}
+							else
+							{
+								b1 = b1->getRight();
+								tRight = tRight->getRight();
+							}
+						}
+						
+						if(tLeft->getIsRightEnd())
+						{
+							//isEnd must be true, because tLeft is left, relative to b1
+							divisible = true;
+							delete y2->getRightEnd();
+							y2->setRightEnd(nullptr);
+							y2->setLeftEnd(nullptr);
+							break;
+						}
+						else
+						{
+							tLeft = tLeft->getRight();
+							delete tLeft->getLeft();
+							tLeft->setLeft(nullptr);
+						}
+					}
+				}
+			}
+			else if(compare.isLarger())
+			{
+				PositiveInteger::SubtractAux(tLeft,tRight,x2->getLeftEnd(),x2->getRightEnd(),isShorten,
+											 true,true,b1,tRight,isEnd,false);
+			}
+			else if(compare.isSmaller())
+			{
+				b2 = b1;
+				PositiveInteger::SubtractAux(tLeft,tRight->getRight(),x2->getLeftEnd(),x2->getRightEnd(),isShorten,
+											 true,true,b1,tRight,isEnd,true);
+				
 			}
 		}
 		
@@ -1189,86 +1274,6 @@ void PositiveInteger::Divide(PositiveInteger* x1,PositiveInteger* x2,PositiveInt
 				y2->setLeftEnd(tLeft);
 			}
 			return;
-		}
-		
-		firstTime = true;
-		if(compare.isEqual())
-		{
-			isSubtract = true;
-			d1 = x2->getLeftEnd();
-			while(true)
-			{
-				if(isSubtract)
-				{
-					tLeft->setBit(0);
-					if(d1->getIsRightEnd())
-					{
-						isSubtract = false;
-					}
-					else
-					{
-						d1 = d1->getRight();
-					}
-				}
-				
-				if(tLeft->getBit())
-				{
-					divisible = false;
-					tLeft->setIsLeftEnd(true);
-					break;
-				}
-				else
-				{
-					if(!isEnd)
-					{
-						if(firstTime)
-						{
-							firstTime = false;
-						}
-						else
-						{
-							b1->setBit(0);
-						}
-						if(b1->getIsRightEnd())
-						{
-							isEnd = true;
-						}
-						else
-						{
-							b1 = b1->getRight();
-							tRight = tRight->getRight();
-						}
-					}
-					
-					if(tLeft->getIsRightEnd())
-					{
-						//isEnd must be true, because tLeft is left, relative to b1
-						divisible = true;
-						delete y2->getRightEnd();
-						y2->setRightEnd(nullptr);
-						y2->setLeftEnd(nullptr);
-						break;
-					}
-					else
-					{
-						tLeft = tLeft->getRight();
-						delete tLeft->getLeft();
-						tLeft->setLeft(nullptr);
-					}
-				}
-			}
-		}
-		else if(compare.isLarger())
-		{
-			PositiveInteger::SubtractAux(tLeft,tRight,x2->getLeftEnd(),x2->getRightEnd(),isShorten,
-											  true,true,b1,tRight,isEnd,false);
-		}
-		else if(compare.isSmaller())
-		{
-			b2 = b1;
-			PositiveInteger::SubtractAux(tLeft,tRight->getRight(),x2->getLeftEnd(),x2->getRightEnd(),isShorten,
-											  true,true,b1,tRight,isEnd,true);
-			
 		}
 	}
 }
