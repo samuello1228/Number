@@ -19,10 +19,13 @@ public:
 	static void setBase(unsigned int);
 	
 	bool getByte();
-	void setByte(bool);
+	unsigned int getByteInt();
+	char getByteChar();
 	
-	//unsigned int getByte(unsigned int base);
-	//void setByte(unsigned int);
+	void setByte(bool);
+	void setByteInt(unsigned int);
+	void setBytePointer(Byte*);
+	void setByteChar(char);
 	
 	Byte* getLeft();
 	void setLeft(Byte*);
@@ -33,6 +36,10 @@ public:
 	void setIsLeftEnd(bool);
 	bool getIsRightEnd();
 	void setIsRightEnd(bool);
+	
+	bool isZero();
+	bool isMax();
+	bool isSame(Byte*);
 	
 private:
 	static unsigned int base;

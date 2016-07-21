@@ -30,24 +30,81 @@ void Byte::setBase(unsigned int newBase)
 	base = newBase;
 }
 
+//getByte
 bool Byte::getByte()
 {
 	return bit;
 }
+char Byte::getByteChar()
+{
+	if(base == 2)
+	{
+		if(bit) return '1';
+		else return '0';
+	}
+	
+	return '0';
+}
+unsigned int Byte::getByteInt()
+{
+	if(base == 2)
+	{
+		return bit;
+	}
+	else
+	{
+		return byte;
+	}
+}
+//setByte
 void Byte::setByte(bool newBit)
 {
 	bit = newBit;
 }
-/*
-unsigned int Byte::getByte(unsigned int base)
+void Byte::setByteInt(unsigned int x)
 {
-	return byte;
+	if(base == 2)
+	{
+		if(x==0)
+		{
+			bit = 0;
+		}
+		else
+		{
+			bit = 1;
+		}
+	}
+	else
+	{
+		
+	}
 }
-void Byte::setByte(unsigned int newByte)
+void Byte::setByteChar(char newByte)
 {
-	byte = newByte;
+	if(base == 2)
+	{
+		if(newByte=='0') bit = 0;
+		else if (newByte=='1') bit = 1;
+	}
+	else
+	{
+		
+	}
 }
-*/
+void Byte::setBytePointer(Byte* newByte)
+{
+	if(base == 2)
+	{
+		bit = newByte->bit;
+	}
+	else
+	{
+		byte = newByte->byte;
+	}
+}
+
+
+
 Byte* Byte::getLeft()
 {
 	return left;
@@ -83,4 +140,38 @@ bool Byte::getIsRightEnd()
 void Byte::setIsRightEnd(bool newIsRightEnd)
 {
 	rightEnd = newIsRightEnd;
+}
+
+bool Byte::isZero()
+{
+	if(base == 2)
+	{
+		return !bit;
+	}
+	else
+	{
+		return byte == 0;
+	}
+}
+bool Byte::isMax()
+{
+	if(base == 2)
+	{
+		return bit;
+	}
+	else
+	{
+		return byte == base-1;
+	}
+}
+bool Byte::isSame(Byte *b)
+{
+	if(base == 2)
+	{
+		return bit == b->bit;
+	}
+	else
+	{
+		return byte == b->byte;
+	}
 }

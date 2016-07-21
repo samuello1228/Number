@@ -57,14 +57,7 @@ PositiveInteger::PositiveInteger(std::string x)
 	
 	while(true)
 	{
-		if(*i == '0')
-		{
-			b2->setByte(0);
-		}
-		else if(*i == '1')
-		{
-			b2->setByte(1);
-		}
+		b2->setByteChar(*i);
 		b1 = b2;
 		i++;
 		
@@ -77,7 +70,7 @@ PositiveInteger::PositiveInteger(std::string x)
 	b1->setIsRightEnd(true);
 	setRightEnd(b1);
 }
-
+/*
 void PositiveInteger::printDecimal(bool overwrite)
 {
 	PositiveInteger* ten = new PositiveInteger("1010");
@@ -223,13 +216,13 @@ void PositiveInteger::printDecimal(bool overwrite)
 		x1 = x2;
 	}
 }
-
+*/
 void PositiveInteger::printBinary()
 {
 	Byte* b1 = getLeftEnd();
 	while(true)
 	{
-		cout<<b1->getByte();
+		cout<<b1->getByteChar();
 		if(b1->getIsRightEnd()) break;
 		b1 = b1->getRight();
 	}
@@ -265,7 +258,7 @@ PositiveInteger* PositiveInteger::copy()
 	y->setRightEnd(b2);
 	while(true)
 	{
-		b2->setByte(c1->getByte());
+		b2->setBytePointer(c1);
 		b1 = b2;
 		
 		if(c1->getIsLeftEnd()) break;
@@ -1455,6 +1448,7 @@ PositiveInteger* PositiveInteger::GCD(PositiveInteger* x1,PositiveInteger* x2)
 //verification
 PositiveInteger::PositiveInteger(unsigned int x)
 {
+	unsigned int base = Byte::getBase();
 	Byte* b1 = nullptr;
 	Byte* b2 = new Byte;
 	b2->setRight(nullptr);
@@ -1463,8 +1457,8 @@ PositiveInteger::PositiveInteger(unsigned int x)
 	
 	while(true)
 	{
-		b2->setByte(x%2);
-		x = (x - b2->getByte())/2;
+		b2->setByteInt(x%base);
+		x = (x - b2->getByteInt())/base;
 		b1 = b2;
 		
 		if(x==0) break;
@@ -1497,7 +1491,7 @@ bool PositiveInteger::isComplete()
 		b1 = b2;
 	}
 	if(!b1->getIsLeftEnd()) {cout<<"Error Code: 8"<<endl; return false;}
-	if(!b1->getByte()) {cout<<"Error Code: 9"<<endl; return false;}
+	if(b1->isZero()) {cout<<"Error Code: 9"<<endl; return false;}
 	if(getLeftEnd()==nullptr) {cout<<"Error Code: 10"<<endl; return false;}
 	b2 = getLeftEnd();
 	if(b1!=b2) {cout<<"Error Code: 11"<<endl; return false;}
@@ -1515,7 +1509,7 @@ bool PositiveInteger::isSame(unsigned int x)
 	b2 = p1->getRightEnd();
 	while(true)
 	{
-		if(b1->getByte()!=b2->getByte()) {cout<<"Error Code: 13"<<endl; return false;}
+		if(!b1->isSame(b2)) {cout<<"Error Code: 13"<<endl; return false;}
 		if(b1->getIsLeftEnd()) break;
 		if(b2->getIsLeftEnd()) {cout<<"Error Code: 14"<<endl; return false;}
 		b1 = b1->getLeft();
@@ -1535,7 +1529,7 @@ bool PositiveInteger::VerifyCopy(unsigned int max)
 	{
 		p1 = new PositiveInteger(i);
 		//if(!p1->isComplete()) return false;
-		//p1->printBinary();
+		p1->printBinary();
 		
 		p2 = p1->copy();
 		if(!p1->isSame(i)) return false;
