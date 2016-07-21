@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7E9FD11F1D4063A800DF9B63 /* Byte.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7E9FD11D1D4063A800DF9B63 /* Byte.cpp */; };
 		7EAE307A1D355BCB0076B4D3 /* RealNumber.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7EAE30781D355BCB0076B4D3 /* RealNumber.cpp */; };
 		7EAE307D1D355C6A0076B4D3 /* RealNumberBound.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7EAE307B1D355C6A0076B4D3 /* RealNumberBound.cpp */; };
 		7EF1D8A11C750259002DA38C /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7EF1D8A01C750259002DA38C /* main.cpp */; };
@@ -28,6 +29,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		7E9FD11D1D4063A800DF9B63 /* Byte.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Byte.cpp; sourceTree = "<group>"; };
+		7E9FD11E1D4063A800DF9B63 /* Byte.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Byte.hpp; sourceTree = "<group>"; };
 		7EAE30781D355BCB0076B4D3 /* RealNumber.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RealNumber.cpp; sourceTree = "<group>"; };
 		7EAE30791D355BCB0076B4D3 /* RealNumber.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = RealNumber.hpp; sourceTree = "<group>"; };
 		7EAE307B1D355C6A0076B4D3 /* RealNumberBound.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RealNumberBound.cpp; sourceTree = "<group>"; };
@@ -83,6 +86,8 @@
 				7EAE30791D355BCB0076B4D3 /* RealNumber.hpp */,
 				7EAE307B1D355C6A0076B4D3 /* RealNumberBound.cpp */,
 				7EAE307C1D355C6A0076B4D3 /* RealNumberBound.hpp */,
+				7E9FD11D1D4063A800DF9B63 /* Byte.cpp */,
+				7E9FD11E1D4063A800DF9B63 /* Byte.hpp */,
 			);
 			name = Number;
 			path = PositiveInteger;
@@ -148,6 +153,7 @@
 				7EF1D8A11C750259002DA38C /* main.cpp in Sources */,
 				7EFA56531CF72F8E0004B5A2 /* Integer.cpp in Sources */,
 				7EAE307D1D355C6A0076B4D3 /* RealNumberBound.cpp in Sources */,
+				7E9FD11F1D4063A800DF9B63 /* Byte.cpp in Sources */,
 				7EAE307A1D355BCB0076B4D3 /* RealNumber.cpp in Sources */,
 				7EF1D8A91C750562002DA38C /* PositiveInteger.cpp in Sources */,
 			);

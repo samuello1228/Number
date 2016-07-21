@@ -12,6 +12,7 @@ using namespace std;
 
 int main()
 {
+	Byte::setBase(2);
 	
 	PositiveInteger* x1;
 	PositiveInteger* x2;
@@ -138,11 +139,11 @@ int main()
 	//if(!PositiveInteger::VerifyCounter(100)) cout<<"Error"<<endl;
 	//if(!PositiveInteger::VerifyPositiveInteger(100)) cout<<"Error"<<endl;
 	//if(!PositiveInteger::VerifyCompare(100)) cout<<"Error"<<endl;
-	if(!PositiveInteger::VerifyAdd(100,0)) cout<<"Error"<<endl;
+	//if(!PositiveInteger::VerifyAdd(100,0)) cout<<"Error"<<endl;
 	//if(!PositiveInteger::VerifySubtract(1000,0)) cout<<"Error"<<endl;
 	//if(!PositiveInteger::VerifySubtract(1000,1)) cout<<"Error"<<endl;
 	//if(!PositiveInteger::VerifyMultiply(100)) cout<<"Error"<<endl;
-	//if(!PositiveInteger::VerifyDivide(1000,0)) cout<<"Error"<<endl;
+	if(!PositiveInteger::VerifyDivide(1000,0)) cout<<"Error"<<endl;
 	//if(!PositiveInteger::VerifyDivide(1000,1)) cout<<"Error"<<endl;
 	else cout<<"OK"<<endl;
 	

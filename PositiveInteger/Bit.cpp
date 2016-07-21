@@ -10,11 +10,6 @@
 
 Bit::Bit()
 {
-	/*
-	setBit(0);
-	setLeft(nullptr);
-	setRight(nullptr);
-	*/
 	setIsLeftEnd(false);
 	setIsRightEnd(false);
 }

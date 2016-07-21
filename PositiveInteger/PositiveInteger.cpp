@@ -10,8 +10,6 @@
 #include <iostream>
 using namespace std;
 
-unsigned int PositiveInteger::base = 2;
-
 PositiveInteger::PositiveInteger()
 {
 	setLeftEnd(nullptr);
@@ -20,8 +18,8 @@ PositiveInteger::PositiveInteger()
 
 PositiveInteger::~PositiveInteger()
 {
-	Bit* b1 = getLeftEnd();
-	Bit* b2;
+	Byte* b1 = getLeftEnd();
+	Byte* b2;
 	while(!b1->getIsRightEnd())
 	{
 		b2 = b1->getRight();
@@ -31,30 +29,19 @@ PositiveInteger::~PositiveInteger()
 	delete b1;
 }
 
-unsigned int PositiveInteger::getBase()
-{
-	return base;
-}
-
-void PositiveInteger::setBase(unsigned int newBase)
-{
-	base = newBase;
-}
-
-
-Bit* PositiveInteger::getLeftEnd()
+Byte* PositiveInteger::getLeftEnd()
 {
 	return leftEnd;
 }
-void PositiveInteger::setLeftEnd(Bit* newLeftEnd)
+void PositiveInteger::setLeftEnd(Byte* newLeftEnd)
 {
 	leftEnd = newLeftEnd;
 }
-Bit* PositiveInteger::getRightEnd()
+Byte* PositiveInteger::getRightEnd()
 {
 	return rightEnd;
 }
-void PositiveInteger::setRightEnd(Bit* newRightEnd)
+void PositiveInteger::setRightEnd(Byte* newRightEnd)
 {
 	rightEnd = newRightEnd;
 }
@@ -62,8 +49,8 @@ void PositiveInteger::setRightEnd(Bit* newRightEnd)
 PositiveInteger::PositiveInteger(std::string x)
 {
     std::string::iterator i=x.begin();
-    Bit* b1;
-    Bit* b2 = new Bit;
+    Byte* b1;
+    Byte* b2 = new Byte;
 	b2->setLeft(nullptr);
 	b2->setIsLeftEnd(true);
     setLeftEnd(b2);
@@ -72,17 +59,17 @@ PositiveInteger::PositiveInteger(std::string x)
 	{
 		if(*i == '0')
 		{
-			b2->setBit(0);
+			b2->setByte(0);
 		}
 		else if(*i == '1')
 		{
-			b2->setBit(1);
+			b2->setByte(1);
 		}
 		b1 = b2;
 		i++;
 		
 		if(i==x.end()) break;
-		b2 = new Bit;
+		b2 = new Byte;
 		b1->setRight(b2);
 		b2->setLeft(b1);
 	}
@@ -96,7 +83,7 @@ void PositiveInteger::printDecimal(bool overwrite)
 	PositiveInteger* ten = new PositiveInteger("1010");
 	PositiveInteger* x1;
 	PositiveInteger* x2 = nullptr;
-	Bit* b1;
+	Byte* b1;
 	bool divisible = false;
 	bool isEnd = false;
 	
@@ -130,7 +117,7 @@ void PositiveInteger::printDecimal(bool overwrite)
 		else
 		{
 			b1 = x1->getRightEnd();
-			if(b1->getBit())
+			if(b1->getByte())
 			{
 				//x3 = *1 (binary)
 				if(b1->getIsLeftEnd())
@@ -141,7 +128,7 @@ void PositiveInteger::printDecimal(bool overwrite)
 				else
 				{
 					b1 = b1->getLeft();
-					if(b1->getBit())
+					if(b1->getByte())
 					{
 						//x3 = *11 (binary)
 						if(b1->getIsLeftEnd())
@@ -159,7 +146,7 @@ void PositiveInteger::printDecimal(bool overwrite)
 					{
 						//x3 = *01 (binary)
 						b1 = b1->getLeft();
-						if(b1->getBit())
+						if(b1->getByte())
 						{
 							//x3 = 101 (binary)
 							digit1->digit = '5';
@@ -177,7 +164,7 @@ void PositiveInteger::printDecimal(bool overwrite)
 			{
 				//x3 = *0 (binary)
 				b1 = b1->getLeft();
-				if(b1->getBit())
+				if(b1->getByte())
 				{
 					//x3 = *10 (binary)
 					if(b1->getIsLeftEnd())
@@ -239,21 +226,21 @@ void PositiveInteger::printDecimal(bool overwrite)
 
 void PositiveInteger::printBinary()
 {
-	Bit* b1 = getLeftEnd();
+	Byte* b1 = getLeftEnd();
 	while(true)
 	{
-		cout<<b1->getBit();
+		cout<<b1->getByte();
 		if(b1->getIsRightEnd()) break;
 		b1 = b1->getRight();
 	}
 	cout<<endl;
 }
 
-PositiveInteger* PositiveInteger::getNumberOfBit()
+PositiveInteger* PositiveInteger::getNumberOfByte()
 {
 	PositiveInteger* one = new PositiveInteger("1");
 	PositiveInteger* y = new PositiveInteger("1");
-	Bit* c1 = getRightEnd();
+	Byte* c1 = getRightEnd();
 	while(true)
 	{
 		if(c1->getIsLeftEnd()) break;
@@ -267,23 +254,23 @@ PositiveInteger* PositiveInteger::getNumberOfBit()
 PositiveInteger* PositiveInteger::copy()
 {
 	PositiveInteger* y = new PositiveInteger;
-	Bit* b1;
-	Bit* b2;
-	Bit* c1;
+	Byte* b1;
+	Byte* b2;
+	Byte* c1;
 	
 	c1 = getRightEnd();
-	b2 = new Bit;
+	b2 = new Byte;
 	b2->setRight(nullptr);
 	b2->setIsRightEnd(true);
 	y->setRightEnd(b2);
 	while(true)
 	{
-		b2->setBit(c1->getBit());
+		b2->setByte(c1->getByte());
 		b1 = b2;
 		
 		if(c1->getIsLeftEnd()) break;
 		c1 = c1->getLeft();
-		b2 = new Bit;
+		b2 = new Byte;
 		b1->setLeft(b2);
 		b2->setRight(b1);
 	}
@@ -295,8 +282,8 @@ PositiveInteger* PositiveInteger::copy()
 
 CompareCode PositiveInteger::compare(PositiveInteger* x1, PositiveInteger* x2)
 {
-	Bit* b1;
-	Bit* b2;
+	Byte* b1;
+	Byte* b2;
 	
 	b1 = x1->getRightEnd();
 	b2 = x2->getRightEnd();
@@ -330,16 +317,16 @@ CompareCode PositiveInteger::compare(PositiveInteger* x1, PositiveInteger* x2)
 	
 	while(true)
 	{
-		if(b1->getBit())
+		if(b1->getByte())
 		{
-			if(!b2->getBit())
+			if(!b2->getByte())
 			{
 				return CompareCode(false,true);
 			}
 		}
 		else
 		{
-			if(b2->getBit())
+			if(b2->getByte())
 			{
 				return CompareCode(false,false);
 			}
@@ -353,7 +340,7 @@ CompareCode PositiveInteger::compare(PositiveInteger* x1, PositiveInteger* x2)
 	return CompareCode(true);
 }
 
-void PositiveInteger::AddThreeBit(bool x1, bool x2, bool x3, bool &y1, bool &y2)
+void PositiveInteger::AddThreeByte(bool x1, bool x2, bool x3, bool &y1, bool &y2)
 {
 	if(!x1)
 	{
@@ -424,11 +411,11 @@ void PositiveInteger::AddThreeBit(bool x1, bool x2, bool x3, bool &y1, bool &y2)
 }
 
 
-PositiveInteger* PositiveInteger::AddAux(Bit* c1, Bit* c2,bool overwrite,bool& AddIsCarried,Bit*& LeftEnd)
+PositiveInteger* PositiveInteger::AddAux(Byte* c1, Byte* c2,bool overwrite,bool& AddIsCarried,Byte*& LeftEnd)
 {
 	PositiveInteger* y = nullptr;
-	Bit* b1 = nullptr;
-	Bit* b2 = nullptr;
+	Byte* b1 = nullptr;
+	Byte* b2 = nullptr;
 	bool carry=0;
 	bool result1;
 	bool result2;
@@ -437,7 +424,7 @@ PositiveInteger* PositiveInteger::AddAux(Bit* c1, Bit* c2,bool overwrite,bool& A
 	if(!overwrite)
 	{
 		y = new PositiveInteger();
-		b2 = new Bit;
+		b2 = new Byte;
 		b2->setRight(nullptr);
 		b2->setIsRightEnd(true);
 		y->setRightEnd(b2);
@@ -446,14 +433,14 @@ PositiveInteger* PositiveInteger::AddAux(Bit* c1, Bit* c2,bool overwrite,bool& A
 	while(true)
 	{
 		//Add
-		PositiveInteger::AddThreeBit(c1->getBit(),c2->getBit(),carry,result1,result2);
+		PositiveInteger::AddThreeByte(c1->getByte(),c2->getByte(),carry,result1,result2);
 		if(overwrite)
 		{
-			c1->setBit(result2);
+			c1->setByte(result2);
 		}
 		else
 		{
-			b2->setBit(result2);
+			b2->setByte(result2);
 			b1 = b2;
 		}
 		carry = result1;
@@ -467,10 +454,10 @@ PositiveInteger* PositiveInteger::AddAux(Bit* c1, Bit* c2,bool overwrite,bool& A
 				if(carry)
 				{
 					//fill 1 for carry
-					b2 = new Bit;
+					b2 = new Byte;
 					b2->setLeft(nullptr);
 					b2->setIsLeftEnd(true);
-					b2->setBit(1);
+					b2->setByte(1);
 					if(overwrite)
 					{
 						c1->setIsLeftEnd(false);
@@ -517,10 +504,10 @@ PositiveInteger* PositiveInteger::AddAux(Bit* c1, Bit* c2,bool overwrite,bool& A
 					while(true)
 					{
 						c2 = c2->getLeft();
-						if(c2->getBit())
+						if(c2->getByte())
 						{
-							b2 = new Bit;
-							b2->setBit(0);
+							b2 = new Byte;
+							b2->setByte(0);
 							if(overwrite)
 							{
 								c1->setLeft(b2);
@@ -536,10 +523,10 @@ PositiveInteger* PositiveInteger::AddAux(Bit* c1, Bit* c2,bool overwrite,bool& A
 							
 							if(c2->getIsLeftEnd())
 							{
-								b2 = new Bit;
+								b2 = new Byte;
 								b2->setLeft(nullptr);
 								b2->setIsLeftEnd(true);
-								b2->setBit(1);
+								b2->setByte(1);
 								if(overwrite)
 								{
 									c1->setLeft(b2);
@@ -559,8 +546,8 @@ PositiveInteger* PositiveInteger::AddAux(Bit* c1, Bit* c2,bool overwrite,bool& A
 						}
 						else
 						{
-							b2 = new Bit;
-							b2->setBit(1);
+							b2 = new Byte;
+							b2->setByte(1);
 							if(overwrite)
 							{
 								c1->setLeft(b2);
@@ -599,8 +586,8 @@ PositiveInteger* PositiveInteger::AddAux(Bit* c1, Bit* c2,bool overwrite,bool& A
 				while(true)
 				{
 					c2 = c2->getLeft();
-					b2 = new Bit;
-					b2->setBit(c2->getBit());
+					b2 = new Byte;
+					b2->setByte(c2->getByte());
 					if(overwrite)
 					{
 						c1->setLeft(b2);
@@ -646,16 +633,16 @@ PositiveInteger* PositiveInteger::AddAux(Bit* c1, Bit* c2,bool overwrite,bool& A
 					while(true)
 					{
 						c1 = c1->getLeft();
-						if(c1->getBit())
+						if(c1->getByte())
 						{
 							if(overwrite)
 							{
-								c1->setBit(0);
+								c1->setByte(0);
 							}
 							else
 							{
-								b2 = new Bit;
-								b2->setBit(0);
+								b2 = new Byte;
+								b2->setByte(0);
 								b1->setLeft(b2);
 								b2->setRight(b1);
 								b1 = b2;
@@ -663,10 +650,10 @@ PositiveInteger* PositiveInteger::AddAux(Bit* c1, Bit* c2,bool overwrite,bool& A
 							
 							if(c1->getIsLeftEnd())
 							{
-								b2 = new Bit;
+								b2 = new Byte;
 								b2->setLeft(nullptr);
 								b2->setIsLeftEnd(true);
-								b2->setBit(1);
+								b2->setByte(1);
 								if(overwrite)
 								{
 									c1->setIsLeftEnd(false);
@@ -690,13 +677,13 @@ PositiveInteger* PositiveInteger::AddAux(Bit* c1, Bit* c2,bool overwrite,bool& A
 						{
 							if(overwrite)
 							{
-								c1->setBit(1);
+								c1->setByte(1);
 								return nullptr;
 							}
 							else
 							{
-								b2 = new Bit;
-								b2->setBit(1);
+								b2 = new Byte;
+								b2->setByte(1);
 								b1->setLeft(b2);
 								b2->setRight(b1);
 								b1 = b2;
@@ -724,8 +711,8 @@ PositiveInteger* PositiveInteger::AddAux(Bit* c1, Bit* c2,bool overwrite,bool& A
 					while(true)
 					{
 						c1 = c1->getLeft();
-						b2 = new Bit;
-						b2->setBit(c1->getBit());
+						b2 = new Byte;
+						b2->setByte(c1->getByte());
 						b1->setLeft(b2);
 						b2->setRight(b1);
 						b1 = b2;
@@ -748,7 +735,7 @@ PositiveInteger* PositiveInteger::AddAux(Bit* c1, Bit* c2,bool overwrite,bool& A
 		
 		if(!overwrite)
 		{
-			b2 = new Bit;
+			b2 = new Byte;
 			b1->setLeft(b2);
 			b2->setRight(b1);
 		}
@@ -757,9 +744,9 @@ PositiveInteger* PositiveInteger::AddAux(Bit* c1, Bit* c2,bool overwrite,bool& A
 PositiveInteger* PositiveInteger::Add(PositiveInteger* x1,PositiveInteger* x2,bool overwrite)
 {
 	PositiveInteger* y = nullptr;
-	Bit* c1 = x1->getRightEnd();
-	Bit* c2 = x2->getRightEnd();
-	Bit* LeftEnd = nullptr;
+	Byte* c1 = x1->getRightEnd();
+	Byte* c2 = x2->getRightEnd();
+	Byte* LeftEnd = nullptr;
 	bool AddIsCarried = false;
 	
 	y = PositiveInteger::AddAux(c1,c2,overwrite,AddIsCarried,LeftEnd);
@@ -777,36 +764,36 @@ PositiveInteger* PositiveInteger::Add(PositiveInteger* x1,PositiveInteger* x2,bo
 	}
 }
 
-void PositiveInteger::SubtractAux(Bit*& LeftEnd1,Bit* c1,Bit* LeftEnd2,Bit* c2,bool& isShorten,bool overwrite,
-									bool Divide,Bit*& b1,Bit*& tRight,bool isSmall,bool& b1IsFilledBy1,bool& isEnd)
+void PositiveInteger::SubtractAux(Byte*& LeftEnd1,Byte* c1,Byte* LeftEnd2,Byte* c2,bool& isShorten,bool overwrite,
+									bool Divide,Byte*& b1,Byte*& tRight,bool isSmall,bool& b1IsFilledBy1,bool& isEnd)
 {
-	Bit* d1;
+	Byte* d1;
 	bool isDelay;
 	
 	while(true)
 	{
-		if(!c1->getBit() && c2->getBit())
+		if(!c1->getByte() && c2->getByte())
 		{
-			c1->setBit(1);
+			c1->setByte(1);
 			
 			d1 = c1;
 			while(true)
 			{
 				d1 = d1->getLeft();
-				if(d1->getBit()) break;
-				d1->setBit(1);
+				if(d1->getByte()) break;
+				d1->setByte(1);
 			}
-			d1->setBit(0);
+			d1->setByte(0);
 		}
 		else
 		{
-			if(c1->getBit() && !c2->getBit())
+			if(c1->getByte() && !c2->getByte())
 			{
-				c1->setBit(1);
+				c1->setByte(1);
 			}
 			else
 			{
-				c1->setBit(0);
+				c1->setByte(0);
 			}
 		}
 		
@@ -824,7 +811,7 @@ void PositiveInteger::SubtractAux(Bit*& LeftEnd1,Bit* c1,Bit* LeftEnd2,Bit* c2,b
 	//delete 0 at the left
 	isShorten = false;
 	isDelay = isSmall;
-	if(!LeftEnd1->getBit())
+	if(!LeftEnd1->getByte())
 	{
 		isShorten = true;
 		while(true)
@@ -851,7 +838,7 @@ void PositiveInteger::SubtractAux(Bit*& LeftEnd1,Bit* c1,Bit* LeftEnd2,Bit* c2,b
 						}
 						else
 						{
-							b1->setBit(0);
+							b1->setByte(0);
 						}
 						
 						if(b1->getIsRightEnd())
@@ -870,7 +857,7 @@ void PositiveInteger::SubtractAux(Bit*& LeftEnd1,Bit* c1,Bit* LeftEnd2,Bit* c2,b
 			//delete
 			LeftEnd1 = LeftEnd1->getRight();
 			delete LeftEnd1->getLeft();
-			if(LeftEnd1->getBit()) break;
+			if(LeftEnd1->getByte()) break;
 		}
 	}
 	LeftEnd1->setIsLeftEnd(true);
@@ -880,10 +867,10 @@ void PositiveInteger::SubtractAux(Bit*& LeftEnd1,Bit* c1,Bit* LeftEnd2,Bit* c2,b
 PositiveInteger* PositiveInteger::Subtract(PositiveInteger* x1,PositiveInteger* x2,bool overwrite)
 {
 	PositiveInteger* y;
-	Bit* b1;
-	Bit* b2;
-	Bit* d1;
-	Bit* temp1;
+	Byte* b1;
+	Byte* b2;
+	Byte* d1;
+	Byte* temp1;
 	bool temp2;
 	bool isShorten;
 	
@@ -895,16 +882,16 @@ PositiveInteger* PositiveInteger::Subtract(PositiveInteger* x1,PositiveInteger* 
 	else
 	{
 		y = new PositiveInteger;
-		b1 = new Bit;
+		b1 = new Byte;
 		b1->setRight(nullptr);
 		b1->setIsRightEnd(true);
 		y->setRightEnd(b1);
 		d1 = x1->getRightEnd();
 		while(true)
 		{
-			b1->setBit(d1->getBit());
+			b1->setByte(d1->getByte());
 			if(d1->getIsLeftEnd()) break;
-			b2 = new Bit;
+			b2 = new Byte;
 			b1->setLeft(b2);
 			b2->setRight(b1);
 			b1 = b2;
@@ -923,11 +910,11 @@ PositiveInteger* PositiveInteger::Subtract(PositiveInteger* x1,PositiveInteger* 
 	return y;
 }
 
-void PositiveInteger::MultiplyAux(Bit* c1,Bit* c2,Bit* tRight,Bit*& b1,bool& MultiplyIsCarried)
+void PositiveInteger::MultiplyAux(Byte* c1,Byte* c2,Byte* tRight,Byte*& b1,bool& MultiplyIsCarried)
 {
 
-	Bit* b2;
-	Bit* LeftEnd;
+	Byte* b2;
+	Byte* LeftEnd;
 	bool AddIsCarried;
 	MultiplyIsCarried = false;
 	
@@ -940,21 +927,21 @@ void PositiveInteger::MultiplyAux(Bit* c1,Bit* c2,Bit* tRight,Bit*& b1,bool& Mul
 			{
 				//tRight->getLeft() for y does not exist
 				b1->setIsLeftEnd(false);
-				b2 = new Bit;
-				if(c2->getBit())
+				b2 = new Byte;
+				if(c2->getByte())
 				{
 					//copy c1
 					//x1 must be 2^n
 					//c1 must be 1
 					//x1->printBinary();
-					b2->setBit(1);
+					b2->setByte(1);
 				}
 				else
 				{
 					//c2 = 0, and no need to add
 					//y remain unchanged
 					//add one more 0 at the left end, in order to count MultiplyIsCarried
-					b2->setBit(0);
+					b2->setByte(0);
 				}
 				b1->setLeft(b2);
 				b2->setRight(b1);
@@ -965,7 +952,7 @@ void PositiveInteger::MultiplyAux(Bit* c1,Bit* c2,Bit* tRight,Bit*& b1,bool& Mul
 			else
 			{
 				tRight = tRight->getLeft();
-				if(c2->getBit())
+				if(c2->getByte())
 				{
 					//Add y(tRight) and x1(c1)
 					PositiveInteger::AddAux(tRight,c1,true,AddIsCarried,LeftEnd);
@@ -988,8 +975,8 @@ void PositiveInteger::MultiplyAux(Bit* c1,Bit* c2,Bit* tRight,Bit*& b1,bool& Mul
 					//y remain unchanged
 					//add one more 0 at the left end, in order to count MultiplyIsCarried
 					b1->setIsLeftEnd(false);
-					b2 = new Bit;
-					b2->setBit(0);
+					b2 = new Byte;
+					b2->setByte(0);
 					b1->setLeft(b2);
 					b2->setRight(b1);
 					b1 = b2;
@@ -1003,15 +990,15 @@ void PositiveInteger::MultiplyAux(Bit* c1,Bit* c2,Bit* tRight,Bit*& b1,bool& Mul
 PositiveInteger* PositiveInteger::Multiply(PositiveInteger* x1,PositiveInteger* x2,bool& MultiplyIsCarried)
 {
 	PositiveInteger* y;
-	Bit* b1;
-	Bit* b2;
-	Bit* c1;
-	Bit* c2;
-	Bit* tRight;
-	Bit* d1;
+	Byte* b1;
+	Byte* b2;
+	Byte* c1;
+	Byte* c2;
+	Byte* tRight;
+	Byte* d1;
 	
 	y = new PositiveInteger;
-	b1 = new Bit;
+	b1 = new Byte;
 	b1->setRight(nullptr);
 	b1->setIsRightEnd(true);
 	y->setRightEnd(b1);
@@ -1020,9 +1007,9 @@ PositiveInteger* PositiveInteger::Multiply(PositiveInteger* x1,PositiveInteger* 
 	c1 = x1->getRightEnd();
 	while(true)
 	{
-		if(c1->getBit()) break;
-		b1->setBit(0);
-		b2 = new Bit;
+		if(c1->getByte()) break;
+		b1->setByte(0);
+		b2 = new Byte;
 		b1->setLeft(b2);
 		b2->setRight(b1);
 		b1 = b2;
@@ -1033,9 +1020,9 @@ PositiveInteger* PositiveInteger::Multiply(PositiveInteger* x1,PositiveInteger* 
 	c2 = x2->getRightEnd();
 	while(true)
 	{
-		if(c2->getBit()) break;
-		b1->setBit(0);
-		b2 = new Bit;
+		if(c2->getByte()) break;
+		b1->setByte(0);
+		b2 = new Byte;
 		b1->setLeft(b2);
 		b2->setRight(b1);
 		b1 = b2;
@@ -1047,10 +1034,10 @@ PositiveInteger* PositiveInteger::Multiply(PositiveInteger* x1,PositiveInteger* 
 	d1 = c1;
 	while(true)
 	{
-		b1->setBit(d1->getBit());
+		b1->setByte(d1->getByte());
 		if(d1->getIsLeftEnd()) break;
 		d1 = d1->getLeft();
-		b2 = new Bit;
+		b2 = new Byte;
 		b1->setLeft(b2);
 		b2->setRight(b1);
 		b1 = b2;
@@ -1065,12 +1052,12 @@ PositiveInteger* PositiveInteger::Multiply(PositiveInteger* x1,PositiveInteger* 
 
 void PositiveInteger::Divide(PositiveInteger* x1,PositiveInteger* x2,PositiveInteger*& y1,PositiveInteger*& y2,bool& divisible, bool overwrite)
 {
-	Bit* b1;
-	Bit* b2 = nullptr;
-	Bit* tLeft;
-	Bit* tRight;
-	Bit* d1;
-	Bit* d2;
+	Byte* b1;
+	Byte* b2 = nullptr;
+	Byte* tLeft;
+	Byte* tRight;
+	Byte* d1;
+	Byte* d2;
 	CompareCode compare;
 	bool isEnd;
 	bool isSubtract;
@@ -1085,7 +1072,7 @@ void PositiveInteger::Divide(PositiveInteger* x1,PositiveInteger* x2,PositiveInt
 	{
 		//copy x1
 		y2 = new PositiveInteger;
-		b1 = new Bit;
+		b1 = new Byte;
 		b1->setRight(nullptr);
 		b1->setIsRightEnd(true);
 		y2->setRightEnd(b1);
@@ -1093,10 +1080,10 @@ void PositiveInteger::Divide(PositiveInteger* x1,PositiveInteger* x2,PositiveInt
 		d1 = x1->getRightEnd();
 		while(true)
 		{
-			b1->setBit(d1->getBit());
+			b1->setByte(d1->getByte());
 			if(d1->getIsLeftEnd()) break;
 			d1 = d1->getLeft();
-			b2 = new Bit;
+			b2 = new Byte;
 			b1->setLeft(b2);
 			b2->setRight(b1);
 			b1 = b2;
@@ -1128,16 +1115,16 @@ void PositiveInteger::Divide(PositiveInteger* x1,PositiveInteger* x2,PositiveInt
 	
 	//create y1
 	y1 = new PositiveInteger;
-	b1 = new Bit;
-	//b1->setBit(1);
+	b1 = new Byte;
+	//b1->setByte(1);
 	b1->setLeft(nullptr);
 	b1->setIsLeftEnd(true);
 	y1->setLeftEnd(b1);
 	while(true)
 	{
 		if(d1->getIsRightEnd()) break;
-		b2 = new Bit;
-		//b2->setBit(1);
+		b2 = new Byte;
+		//b2->setByte(1);
 		b2->setLeft(b1);
 		b1->setRight(b2);
 		b1 = b2;
@@ -1176,14 +1163,14 @@ void PositiveInteger::Divide(PositiveInteger* x1,PositiveInteger* x2,PositiveInt
 				
 				d1 = d1->getRight();
 				d2 = d2->getRight();
-				if(d1->getBit() && !d2->getBit())
+				if(d1->getByte() && !d2->getByte())
 				{
 					//y1(tLeft to tRight) is larger than x2
 					//c1 = 1, c2 = 0
 					compare = CompareCode(false,true);
 					break;
 				}
-				if(!d1->getBit() && d2->getBit())
+				if(!d1->getByte() && d2->getByte())
 				{
 					//y1(tLeft to tRight) is smaller than x2
 					//c1 = 0, c2 = 1
@@ -1197,7 +1184,7 @@ void PositiveInteger::Divide(PositiveInteger* x1,PositiveInteger* x2,PositiveInt
 			{
 				if(!b1IsFilledBy1)
 				{
-					b1->setBit(0);
+					b1->setByte(0);
 				}
 				
 				if(b1->getIsRightEnd())
@@ -1208,12 +1195,12 @@ void PositiveInteger::Divide(PositiveInteger* x1,PositiveInteger* x2,PositiveInt
 				{
 					b1 = b1->getRight();
 					tRight = tRight->getRight();
-					b1->setBit(1);
+					b1->setByte(1);
 				}
 			}
 			else
 			{
-				b1->setBit(1);
+				b1->setByte(1);
 			}
 		}
 		
@@ -1231,7 +1218,7 @@ void PositiveInteger::Divide(PositiveInteger* x1,PositiveInteger* x2,PositiveInt
 					//do subtraction
 					if(isSubtract)
 					{
-						tLeft->setBit(0);
+						tLeft->setByte(0);
 						if(d1->getIsRightEnd())
 						{
 							isSubtract = false;
@@ -1243,7 +1230,7 @@ void PositiveInteger::Divide(PositiveInteger* x1,PositiveInteger* x2,PositiveInt
 					}
 					
 					//find tLeft = 1
-					if(tLeft->getBit())
+					if(tLeft->getByte())
 					{
 						divisible = false;
 						tLeft->setIsLeftEnd(true);
@@ -1260,7 +1247,7 @@ void PositiveInteger::Divide(PositiveInteger* x1,PositiveInteger* x2,PositiveInt
 							}
 							else
 							{
-								b1->setBit(0);
+								b1->setByte(0);
 							}
 							
 							if(b1->getIsRightEnd())
@@ -1302,7 +1289,7 @@ void PositiveInteger::Divide(PositiveInteger* x1,PositiveInteger* x2,PositiveInt
 		
 		if(isEnd)
 		{
-			if(!y1->getLeftEnd()->getBit())
+			if(!y1->getLeftEnd()->getByte())
 			{
 				//delete the additional 0 at the left end of y1
 				b1 = y1->getLeftEnd()->getRight();
@@ -1468,20 +1455,20 @@ PositiveInteger* PositiveInteger::GCD(PositiveInteger* x1,PositiveInteger* x2)
 //verification
 PositiveInteger::PositiveInteger(unsigned int x)
 {
-	Bit* b1 = nullptr;
-	Bit* b2 = new Bit;
+	Byte* b1 = nullptr;
+	Byte* b2 = new Byte;
 	b2->setRight(nullptr);
 	b2->setIsRightEnd(true);
 	setRightEnd(b2);
 	
 	while(true)
 	{
-		b2->setBit(x%2);
-		x = (x - b2->getBit())/2;
+		b2->setByte(x%2);
+		x = (x - b2->getByte())/2;
 		b1 = b2;
 		
 		if(x==0) break;
-		b2 = new Bit;
+		b2 = new Byte;
 		b1->setLeft(b2);
 		b2->setRight(b1);
 	}
@@ -1492,8 +1479,8 @@ PositiveInteger::PositiveInteger(unsigned int x)
 
 bool PositiveInteger::isComplete()
 {
-	Bit* b1;
-	Bit* b2;
+	Byte* b1;
+	Byte* b2;
 	
 	if(getRightEnd()==nullptr) {cout<<"Error Code: 1"<<endl; return false;}
 	b1 = getRightEnd();
@@ -1510,7 +1497,7 @@ bool PositiveInteger::isComplete()
 		b1 = b2;
 	}
 	if(!b1->getIsLeftEnd()) {cout<<"Error Code: 8"<<endl; return false;}
-	if(!b1->getBit()) {cout<<"Error Code: 9"<<endl; return false;}
+	if(!b1->getByte()) {cout<<"Error Code: 9"<<endl; return false;}
 	if(getLeftEnd()==nullptr) {cout<<"Error Code: 10"<<endl; return false;}
 	b2 = getLeftEnd();
 	if(b1!=b2) {cout<<"Error Code: 11"<<endl; return false;}
@@ -1521,14 +1508,14 @@ bool PositiveInteger::isSame(unsigned int x)
 {
 	if(!isComplete()) {cout<<"Error Code: 12"<<endl; return false;}
 	PositiveInteger* p1 = new PositiveInteger(x);
-	Bit* b1;
-	Bit* b2;
+	Byte* b1;
+	Byte* b2;
 	
 	b1 = getRightEnd();
 	b2 = p1->getRightEnd();
 	while(true)
 	{
-		if(b1->getBit()!=b2->getBit()) {cout<<"Error Code: 13"<<endl; return false;}
+		if(b1->getByte()!=b2->getByte()) {cout<<"Error Code: 13"<<endl; return false;}
 		if(b1->getIsLeftEnd()) break;
 		if(b2->getIsLeftEnd()) {cout<<"Error Code: 14"<<endl; return false;}
 		b1 = b1->getLeft();
@@ -1579,7 +1566,7 @@ bool PositiveInteger::VerifyPositiveInteger(unsigned int max)
 	PositiveInteger* p1;
 	PositiveInteger* p2;
 	std::string s;
-	Bit* b1;
+	Byte* b1;
 	for(unsigned int i=1;i<=max;i++)
 	{
 		s.clear();
@@ -1587,7 +1574,7 @@ bool PositiveInteger::VerifyPositiveInteger(unsigned int max)
 		b1 = p1->getLeftEnd();
 		while(true)
 		{
-			if(b1->getBit())
+			if(b1->getByte())
 			{
 				s.push_back('1');
 			}
@@ -1715,9 +1702,9 @@ bool PositiveInteger::VerifyMultiply(unsigned int max)
 			p2 = new PositiveInteger(j);
 			p3 = PositiveInteger::Multiply(p1,p2,MultiplyIsCarried);
 			//p3->printBinary();
-			n1 = p1->getNumberOfBit();
-			n2 = p2->getNumberOfBit();
-			n3 = p3->getNumberOfBit();
+			n1 = p1->getNumberOfByte();
+			n2 = p2->getNumberOfByte();
+			n3 = p3->getNumberOfByte();
 			
 			if(MultiplyIsCarried)
 			{

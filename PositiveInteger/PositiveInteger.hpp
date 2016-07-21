@@ -10,6 +10,7 @@
 #define PositiveInteger_hpp
 
 #include "Bit.hpp"
+#include "Byte.hpp"
 #include <string>
 
 class CompareCode;
@@ -20,13 +21,10 @@ public:
     PositiveInteger(std::string);
 	~PositiveInteger();
 	
-	static unsigned int getBase();
-	static void setBase(unsigned int);
-	
-	Bit* getLeftEnd();
-	void setLeftEnd(Bit*);
-	Bit* getRightEnd();
-	void setRightEnd(Bit*);
+	Byte* getLeftEnd();
+	void setLeftEnd(Byte*);
+	Byte* getRightEnd();
+	void setRightEnd(Byte*);
 	
 	void printBinary();
 	struct Digit
@@ -37,15 +35,15 @@ public:
 	void printDecimal(bool);
 	PositiveInteger* copy();
 	static CompareCode compare(PositiveInteger*,PositiveInteger*);
-	static PositiveInteger* AddAux(Bit*,Bit*,bool,bool&,Bit*&);
+	static PositiveInteger* AddAux(Byte*,Byte*,bool,bool&,Byte*&);
 	static PositiveInteger* Add(PositiveInteger*,PositiveInteger*,bool);
-	static void SubtractAux(Bit*&,Bit*,Bit*,Bit*,bool&,bool,
-							bool,Bit*&,Bit*&,bool,bool&,bool&);
+	static void SubtractAux(Byte*&,Byte*,Byte*,Byte*,bool&,bool,
+							bool,Byte*&,Byte*&,bool,bool&,bool&);
 	static PositiveInteger* Subtract(PositiveInteger*,PositiveInteger*,bool);
-	static void MultiplyAux(Bit*,Bit*,Bit*,Bit*&,bool&);
+	static void MultiplyAux(Byte*,Byte*,Byte*,Byte*&,bool&);
 	static PositiveInteger* Multiply(PositiveInteger*,PositiveInteger*,bool&);
 	static void Divide(PositiveInteger*,PositiveInteger*,PositiveInteger*&,PositiveInteger*&,bool&,bool);
-	PositiveInteger* getNumberOfBit();
+	PositiveInteger* getNumberOfByte();
 	
 	struct ListOfPositiveInteger
 	{
@@ -73,12 +71,9 @@ public:
 	static bool VerifyDivide(unsigned int,bool);
 	
 private:
-	static unsigned int base;
-	Bit* leftEnd;
-	Bit* rightEnd;
-	
-	static void AddThreeBit(bool,bool,bool,bool&,bool&);
-
+	Byte* leftEnd;
+	Byte* rightEnd;
+	static void AddThreeByte(bool,bool,bool,bool&,bool&);
 };
 
 class CompareCode
