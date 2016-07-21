@@ -322,8 +322,8 @@ PositiveInteger* PositiveInteger::AddAux(Byte* c1, Byte* c2,bool overwrite,bool&
 	PositiveInteger* y = nullptr;
 	Byte* b1 = nullptr;
 	Byte* b2 = nullptr;
-	bool carry=0;
-	bool result1;
+	bool carry1=0;
+	bool carry2;
 	AddIsCarried = false;
 	
 	if(!overwrite)
@@ -340,14 +340,14 @@ PositiveInteger* PositiveInteger::AddAux(Byte* c1, Byte* c2,bool overwrite,bool&
 		//Add
 		if(overwrite)
 		{
-			Byte::AddThreeByte(c1,c2,carry,result1,c1);
+			Byte::AddThreeByte(c1,c2,carry1,carry2,c1);
 		}
 		else
 		{
-			Byte::AddThreeByte(c1,c2,carry,result1,b2);
+			Byte::AddThreeByte(c1,c2,carry1,carry2,b2);
 			b1 = b2;
 		}
-		carry = result1;
+		carry1 = carry2;
 		
 		//find left end
 		if(c1->getIsLeftEnd())
@@ -355,7 +355,7 @@ PositiveInteger* PositiveInteger::AddAux(Byte* c1, Byte* c2,bool overwrite,bool&
 			if(c2->getIsLeftEnd())
 			{
 				//the length of x1 and x2 are equal
-				if(carry)
+				if(carry1)
 				{
 					//fill 1 for carry
 					b2 = new Byte;
@@ -403,15 +403,15 @@ PositiveInteger* PositiveInteger::AddAux(Byte* c1, Byte* c2,bool overwrite,bool&
 				{
 					c1->setIsLeftEnd(false);
 				}
-				if(carry)
+				if(carry1)
 				{
 					while(true)
 					{
 						c2 = c2->getLeft();
-						if(c2->getByte())
+						if(c2->isMax())
 						{
 							b2 = new Byte;
-							b2->setByte(0);
+							b2->setByteZero();
 							if(overwrite)
 							{
 								c1->setLeft(b2);
@@ -428,30 +428,26 @@ PositiveInteger* PositiveInteger::AddAux(Byte* c1, Byte* c2,bool overwrite,bool&
 							if(c2->getIsLeftEnd())
 							{
 								b2 = new Byte;
-								b2->setLeft(nullptr);
-								b2->setIsLeftEnd(true);
-								b2->setByte(1);
+								b2->setByteOne();
 								if(overwrite)
 								{
 									c1->setLeft(b2);
 									b2->setRight(c1);
-									LeftEnd = b2;
-									AddIsCarried = true;
-									return nullptr;
+									c1 = b2;
 								}
 								else
 								{
 									b1->setLeft(b2);
 									b2->setRight(b1);
-									y->setLeftEnd(b2);
-									return y;
+									b1 = b2;
 								}
+								break;
 							}
 						}
 						else
 						{
 							b2 = new Byte;
-							b2->setByte(1);
+							b2->setByteAddOne(c2);
 							if(overwrite)
 							{
 								c1->setLeft(b2);
@@ -464,24 +460,6 @@ PositiveInteger* PositiveInteger::AddAux(Byte* c1, Byte* c2,bool overwrite,bool&
 								b2->setRight(b1);
 								b1 = b2;
 							}
-							
-							if(c2->getIsLeftEnd())
-							{
-								cout<<"logic error: the left end of x2 is not 1"<<endl;
-								if(overwrite)
-								{
-									LeftEnd = c1;
-									AddIsCarried = true;
-									return nullptr;
-								}
-								else
-								{
-									b1->setLeft(nullptr);
-									b1->setIsLeftEnd(true);
-									y->setLeftEnd(b1);
-									return y;
-								}
-							}
 							break;
 						}
 					}
@@ -489,9 +467,10 @@ PositiveInteger* PositiveInteger::AddAux(Byte* c1, Byte* c2,bool overwrite,bool&
 				
 				while(true)
 				{
+					if(c2->getIsLeftEnd()) break;
 					c2 = c2->getLeft();
 					b2 = new Byte;
-					b2->setByte(c2->getByte());
+					b2->setBytePointer(c2);
 					if(overwrite)
 					{
 						c1->setLeft(b2);
@@ -504,8 +483,6 @@ PositiveInteger* PositiveInteger::AddAux(Byte* c1, Byte* c2,bool overwrite,bool&
 						b2->setRight(b1);
 						b1 = b2;
 					}
-					
-					if(c2->getIsLeftEnd()) break;
 				}
 				
 				if(overwrite)
@@ -532,21 +509,21 @@ PositiveInteger* PositiveInteger::AddAux(Byte* c1, Byte* c2,bool overwrite,bool&
 			{
 				///////////////////////////start
 				//the length of x1 is longer than x2
-				if(carry)
+				if(carry1)
 				{
 					while(true)
 					{
 						c1 = c1->getLeft();
-						if(c1->getByte())
+						if(c1->isMax())
 						{
 							if(overwrite)
 							{
-								c1->setByte(0);
+								c1->setByteZero();
 							}
 							else
 							{
 								b2 = new Byte;
-								b2->setByte(0);
+								b2->setByteZero();
 								b1->setLeft(b2);
 								b2->setRight(b1);
 								b1 = b2;
@@ -557,7 +534,7 @@ PositiveInteger* PositiveInteger::AddAux(Byte* c1, Byte* c2,bool overwrite,bool&
 								b2 = new Byte;
 								b2->setLeft(nullptr);
 								b2->setIsLeftEnd(true);
-								b2->setByte(1);
+								b2->setByteOne();
 								if(overwrite)
 								{
 									c1->setIsLeftEnd(false);
@@ -575,33 +552,22 @@ PositiveInteger* PositiveInteger::AddAux(Byte* c1, Byte* c2,bool overwrite,bool&
 									return y;
 								}
 							}
-							
 						}
 						else
 						{
 							if(overwrite)
 							{
-								c1->setByte(1);
-								return nullptr;
+								c1->setByteAddOne(c1);
 							}
 							else
 							{
 								b2 = new Byte;
-								b2->setByte(1);
+								b2->setByteAddOne(c1);
 								b1->setLeft(b2);
 								b2->setRight(b1);
 								b1 = b2;
-								
-								if(c1->getIsLeftEnd())
-								{
-									cout<<"the left end of x1 is not 1"<<endl;
-									b1->setLeft(nullptr);
-									b1->setIsLeftEnd(true);
-									y->setLeftEnd(b1);
-									return y;
-								}
-								break;
 							}
+							break;
 						}
 					}
 				}
@@ -614,13 +580,13 @@ PositiveInteger* PositiveInteger::AddAux(Byte* c1, Byte* c2,bool overwrite,bool&
 				{
 					while(true)
 					{
+						if(c1->getIsLeftEnd()) break;
 						c1 = c1->getLeft();
 						b2 = new Byte;
-						b2->setByte(c1->getByte());
+						b2->setBytePointer(c1);
 						b1->setLeft(b2);
 						b2->setRight(b1);
 						b1 = b2;
-						if(c1->getIsLeftEnd()) break;
 					}
 					b1->setLeft(nullptr);
 					b1->setIsLeftEnd(true);
@@ -1440,7 +1406,7 @@ bool PositiveInteger::VerifyCopy(unsigned int max)
 	{
 		p1 = new PositiveInteger(i);
 		//if(!p1->isComplete()) return false;
-		p1->printBinary();
+		//p1->printBinary();
 		
 		p2 = p1->copy();
 		if(!p1->isSame(i)) return false;
@@ -1536,7 +1502,10 @@ bool PositiveInteger::VerifyAdd(unsigned int max,bool overwrite)
 		{
 			p1 = new PositiveInteger(i);
 			p2 = new PositiveInteger(j);
+			//p1->printBinary();
+			//p2->printBinary();
 			p3 = PositiveInteger::Add(p1,p2,overwrite);
+			//p3->printBinary();
 			if(overwrite)
 			{
 				if(!p1->isSame(i+j)) return false;

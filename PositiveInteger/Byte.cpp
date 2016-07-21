@@ -148,6 +148,18 @@ void Byte::setBytePointer(Byte* newByte)
 	}
 }
 
+void Byte::setByteZero()
+{
+	if(base == 2)
+	{
+		bit = 0;
+	}
+	else
+	{
+		byte = 0;
+	}
+}
+
 void Byte::setByteOne()
 {
 	if(base == 2)
@@ -160,6 +172,25 @@ void Byte::setByteOne()
 	}
 }
 
+void Byte::setByteAddOne(Byte* x)
+{
+	if(base == 2)
+	{
+		bit = 1;
+	}
+	else
+	{
+		if(x->byte == 0) byte = 1;
+		else if(x->byte == 1) byte = 2;
+		else if(x->byte == 2) byte = 3;
+		else if(x->byte == 3) byte = 4;
+		else if(x->byte == 4) byte = 5;
+		else if(x->byte == 5) byte = 6;
+		else if(x->byte == 6) byte = 7;
+		else if(x->byte == 7) byte = 8;
+		else if(x->byte == 8) byte = 9;
+	}
+}
 
 
 Byte* Byte::getLeft()
@@ -257,6 +288,7 @@ CompareCode Byte::compare(Byte* b1, Byte* b2)
 
 void Byte::AddThreeByte(Byte* x1,Byte* x2,bool carry1,bool &carry2,Byte* &y2)
 {
+	unsigned int y;
 	if(base == 2)
 	{
 		if(!x1->bit)
@@ -324,6 +356,22 @@ void Byte::AddThreeByte(Byte* x1,Byte* x2,bool carry1,bool &carry2,Byte* &y2)
 					y2->bit = 1;
 				}
 			}
+		}
+	}
+	else
+	{
+		y = x1->byte + x2->byte;
+		if(carry1) y = y+1;
+		
+		y2->byte = y%base;
+		y = y - y2->byte;
+		if(y==0)
+		{
+			carry2 = false;
+		}
+		else
+		{
+			carry2 = true;
 		}
 	}
 }

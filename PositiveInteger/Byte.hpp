@@ -27,7 +27,9 @@ public:
 	void setByteInt(unsigned int);
 	void setBytePointer(Byte*);
 	//void setByteChar(char);
+	void setByteZero();
 	void setByteOne();
+	void setByteAddOne(Byte*);
 	
 	Byte* getLeft();
 	void setLeft(Byte*);
