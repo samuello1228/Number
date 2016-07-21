@@ -20,17 +20,15 @@ int main()
 	PositiveInteger* x4;
 	bool divisible=0;
 	
-	PositiveInteger* one = new PositiveInteger("1");
+	PositiveInteger* one = new PositiveInteger(true,true);
 	PositiveInteger* i;
 	PositiveInteger* j;
-	PositiveInteger* iMax = new PositiveInteger("10000000000");
-	PositiveInteger* jMax = new PositiveInteger("10000000000");
-	//PositiveInteger* iMax = new PositiveInteger("1000");
-	//PositiveInteger* jMax = new PositiveInteger("1000");
+	PositiveInteger* iMax = new PositiveInteger(1024);
+	PositiveInteger* jMax = new PositiveInteger(1024);
 	
-	i = new PositiveInteger("1");
+	i = new PositiveInteger(true,true);
 
-	while(1)
+	while(0)
 	{
 		if(PositiveInteger::compare(i,iMax).isEqual())
 		{
@@ -42,7 +40,7 @@ int main()
 		//x1->printDecimal(0);
 		//delete x1;
 		
-		j = new PositiveInteger("1");
+		j = new PositiveInteger(true,true);
 		while(true)
 		{
 			if(PositiveInteger::compare(j,jMax).isEqual())
@@ -136,15 +134,15 @@ int main()
 	delete jMax;
 	
 	if(!PositiveInteger::VerifyCopy(100)) cout<<"Error"<<endl;
-	if(!PositiveInteger::VerifyCounter(100)) cout<<"Error"<<endl;
-	if(!PositiveInteger::VerifyPositiveInteger(100)) cout<<"Error"<<endl;
-	if(!PositiveInteger::VerifyCompare(100)) cout<<"Error"<<endl;
-	if(!PositiveInteger::VerifyAdd(100,0)) cout<<"Error"<<endl;
-	if(!PositiveInteger::VerifySubtract(100,0)) cout<<"Error"<<endl;
-	if(!PositiveInteger::VerifySubtract(100,1)) cout<<"Error"<<endl;
-	if(!PositiveInteger::VerifyMultiply(100)) cout<<"Error"<<endl;
-	if(!PositiveInteger::VerifyDivide(100,0)) cout<<"Error"<<endl;
-	if(!PositiveInteger::VerifyDivide(100,1)) cout<<"Error"<<endl;
+	//if(!PositiveInteger::VerifyCounter(100)) cout<<"Error"<<endl;
+	//if(!PositiveInteger::VerifyPositiveInteger(100)) cout<<"Error"<<endl;
+	//if(!PositiveInteger::VerifyCompare(100)) cout<<"Error"<<endl;
+	//if(!PositiveInteger::VerifyAdd(100,0)) cout<<"Error"<<endl;
+	//if(!PositiveInteger::VerifySubtract(100,0)) cout<<"Error"<<endl;
+	//if(!PositiveInteger::VerifySubtract(100,1)) cout<<"Error"<<endl;
+	//if(!PositiveInteger::VerifyMultiply(100)) cout<<"Error"<<endl;
+	//if(!PositiveInteger::VerifyDivide(100,0)) cout<<"Error"<<endl;
+	//if(!PositiveInteger::VerifyDivide(100,1)) cout<<"Error"<<endl;
 	else cout<<"OK"<<endl;
 	
 	/*

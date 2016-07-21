@@ -9,6 +9,7 @@
 #ifndef Byte_hpp
 #define Byte_hpp
 
+class CompareCode;
 class Byte
 {
 public:
@@ -25,7 +26,8 @@ public:
 	void setByte(bool);
 	void setByteInt(unsigned int);
 	void setBytePointer(Byte*);
-	void setByteChar(char);
+	//void setByteChar(char);
+	void setByteOne();
 	
 	Byte* getLeft();
 	void setLeft(Byte*);
@@ -39,7 +41,8 @@ public:
 	
 	bool isZero();
 	bool isMax();
-	bool isSame(Byte*);
+	static CompareCode compare(Byte*,Byte*);
+	static void AddThreeByte(Byte*,Byte*,bool,bool&,Byte*&);
 	
 private:
 	static unsigned int base;
@@ -49,6 +52,19 @@ private:
 	Byte* right;
 	bool leftEnd;
 	bool rightEnd;
+};
+
+class CompareCode
+{
+public:
+	CompareCode(){Equal=false;Larger=false;}
+	CompareCode(bool newEqual, bool newLarger=false){Equal=newEqual;Larger=newLarger;}
+	bool isEqual(){return Equal;}
+	bool isLarger(){return !Equal && Larger;}
+	bool isSmaller(){return !Equal && !Larger;}
+private:
+	bool Equal;
+	bool Larger;
 };
 
 

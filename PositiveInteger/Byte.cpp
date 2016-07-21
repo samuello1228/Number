@@ -42,6 +42,49 @@ char Byte::getByteChar()
 		if(bit) return '1';
 		else return '0';
 	}
+	else
+	{
+		if(byte==0)
+		{
+			return '0';
+		}
+		else if(byte==1)
+		{
+			return '1';
+		}
+		else if(byte==2)
+		{
+			return '2';
+		}
+		else if(byte==3)
+		{
+			return '3';
+		}
+		else if(byte==4)
+		{
+			return '4';
+		}
+		else if(byte==5)
+		{
+			return '5';
+		}
+		else if(byte==6)
+		{
+			return '6';
+		}
+		else if(byte==7)
+		{
+			return '7';
+		}
+		else if(byte==8)
+		{
+			return '8';
+		}
+		else if(byte==9)
+		{
+			return '9';
+		}
+	}
 	
 	return '0';
 }
@@ -76,9 +119,10 @@ void Byte::setByteInt(unsigned int x)
 	}
 	else
 	{
-		
+		byte = x;
 	}
 }
+/*
 void Byte::setByteChar(char newByte)
 {
 	if(base == 2)
@@ -91,6 +135,7 @@ void Byte::setByteChar(char newByte)
 		
 	}
 }
+*/
 void Byte::setBytePointer(Byte* newByte)
 {
 	if(base == 2)
@@ -100,6 +145,18 @@ void Byte::setBytePointer(Byte* newByte)
 	else
 	{
 		byte = newByte->byte;
+	}
+}
+
+void Byte::setByteOne()
+{
+	if(base == 2)
+	{
+		bit = 1;
+	}
+	else
+	{
+		byte = 1;
 	}
 }
 
@@ -164,14 +221,109 @@ bool Byte::isMax()
 		return byte == base-1;
 	}
 }
-bool Byte::isSame(Byte *b)
+CompareCode Byte::compare(Byte* b1, Byte* b2)
 {
 	if(base == 2)
 	{
-		return bit == b->bit;
+		if(b1->bit == b2->bit)
+		{
+			return CompareCode(true);
+		}
+		else if(b1->bit)
+		{
+			return CompareCode(false,true);
+		}
+		else
+		{
+			return CompareCode(false,false);
+		}
 	}
 	else
 	{
-		return byte == b->byte;
+		if(b1->byte == b2->byte)
+		{
+			return CompareCode(true);
+		}
+		else if(b1->byte > b2->byte)
+		{
+			return CompareCode(false,true);
+		}
+		else
+		{
+			return CompareCode(false,false);
+		}
+	}
+}
+
+void Byte::AddThreeByte(Byte* x1,Byte* x2,bool carry1,bool &carry2,Byte* &y2)
+{
+	if(base == 2)
+	{
+		if(!x1->bit)
+		{
+			if(!x2->bit)
+			{
+				if(!carry1)
+				{
+					//000
+					carry2=0;
+					y2->bit = 0;
+				}
+				else
+				{
+					//001
+					carry2=0;
+					y2->bit = 1;
+				}
+			}
+			else
+			{
+				if(!carry1)
+				{
+					//010
+					carry2=0;
+					y2->bit = 1;
+				}
+				else
+				{
+					//011
+					carry2=1;
+					y2->bit = 0;
+				}
+			}
+		}
+		else
+		{
+			if(!x2->bit)
+			{
+				if(!carry1)
+				{
+					//100
+					carry2=0;
+					y2->bit = 1;
+				}
+				else
+				{
+					//101
+					carry2=1;
+					y2->bit = 0;
+				}
+			}
+			else
+			{
+				if(!carry1)
+				{
+					//110
+					carry2=1;
+					y2->bit = 0;
+				}
+				else
+				{
+					//111
+					carry2=1;
+					y2->bit = 1;
+				}
+			}
+		}
 	}
 }

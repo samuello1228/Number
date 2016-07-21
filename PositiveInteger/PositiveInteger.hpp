@@ -13,12 +13,12 @@
 #include "Byte.hpp"
 #include <string>
 
-class CompareCode;
+
 class PositiveInteger
 {
 public:
 	PositiveInteger();
-    PositiveInteger(std::string);
+    PositiveInteger(bool,bool);
 	~PositiveInteger();
 	
 	Byte* getLeftEnd();
@@ -63,7 +63,7 @@ public:
 	
 	static bool VerifyCopy(unsigned int);
 	static bool VerifyCounter(unsigned int);
-	static bool VerifyPositiveInteger(unsigned int);
+	//static bool VerifyPositiveInteger(unsigned int);
 	static bool VerifyCompare(unsigned int);
 	static bool VerifyAdd(unsigned int,bool);
 	static bool VerifySubtract(unsigned int,bool);
@@ -73,20 +73,8 @@ public:
 private:
 	Byte* leftEnd;
 	Byte* rightEnd;
-	static void AddThreeByte(bool,bool,bool,bool&,bool&);
 };
 
-class CompareCode
-{
-public:
-	CompareCode(){Equal=false;Larger=false;}
-	CompareCode(bool newEqual, bool newLarger=false){Equal=newEqual;Larger=newLarger;}
-	bool isEqual(){return Equal;}
-	bool isLarger(){return !Equal && Larger;}
-	bool isSmaller(){return !Equal && !Larger;}
-private:
-	bool Equal;
-	bool Larger;
-};
+
 
 #endif /* PositiveInteger_hpp */

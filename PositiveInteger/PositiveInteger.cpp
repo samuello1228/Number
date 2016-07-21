@@ -46,29 +46,20 @@ void PositiveInteger::setRightEnd(Byte* newRightEnd)
 	rightEnd = newRightEnd;
 }
 
-PositiveInteger::PositiveInteger(std::string x)
+PositiveInteger::PositiveInteger(bool x,bool temp)
 {
-    std::string::iterator i=x.begin();
-    Byte* b1;
-    Byte* b2 = new Byte;
-	b2->setLeft(nullptr);
-	b2->setIsLeftEnd(true);
-    setLeftEnd(b2);
-	
-	while(true)
+	if(x)
 	{
-		b2->setByteChar(*i);
-		b1 = b2;
-		i++;
+		Byte* b1 = new Byte;
+		b1->setByteOne();
+		b1->setLeft(nullptr);
+		b1->setIsLeftEnd(true);
+		setLeftEnd(b1);
+		b1->setRight(nullptr);
+		b1->setIsRightEnd(true);
+		setRightEnd(b1);
 		
-		if(i==x.end()) break;
-		b2 = new Byte;
-		b1->setRight(b2);
-		b2->setLeft(b1);
 	}
-	b1->setRight(nullptr);
-	b1->setIsRightEnd(true);
-	setRightEnd(b1);
 }
 /*
 void PositiveInteger::printDecimal(bool overwrite)
@@ -231,8 +222,8 @@ void PositiveInteger::printBinary()
 
 PositiveInteger* PositiveInteger::getNumberOfByte()
 {
-	PositiveInteger* one = new PositiveInteger("1");
-	PositiveInteger* y = new PositiveInteger("1");
+	PositiveInteger* one = new PositiveInteger(true,true);
+	PositiveInteger* y = new PositiveInteger(true,true);
 	Byte* c1 = getRightEnd();
 	while(true)
 	{
@@ -277,6 +268,7 @@ CompareCode PositiveInteger::compare(PositiveInteger* x1, PositiveInteger* x2)
 {
 	Byte* b1;
 	Byte* b2;
+	CompareCode code;
 	
 	b1 = x1->getRightEnd();
 	b2 = x2->getRightEnd();
@@ -310,19 +302,10 @@ CompareCode PositiveInteger::compare(PositiveInteger* x1, PositiveInteger* x2)
 	
 	while(true)
 	{
-		if(b1->getByte())
+		code = Byte::compare(b1,b2);
+		if(!code.isEqual())
 		{
-			if(!b2->getByte())
-			{
-				return CompareCode(false,true);
-			}
-		}
-		else
-		{
-			if(b2->getByte())
-			{
-				return CompareCode(false,false);
-			}
+			return code;
 		}
 		
 		if(b1->getIsRightEnd()) break;
@@ -333,76 +316,6 @@ CompareCode PositiveInteger::compare(PositiveInteger* x1, PositiveInteger* x2)
 	return CompareCode(true);
 }
 
-void PositiveInteger::AddThreeByte(bool x1, bool x2, bool x3, bool &y1, bool &y2)
-{
-	if(!x1)
-	{
-		if(!x2)
-		{
-			if(!x3)
-			{
-				//000
-				y1=0;
-				y2=0;
-			}
-			else
-			{
-				//001
-				y1=0;
-				y2=1;
-			}
-		}
-		else
-		{
-			if(!x3)
-			{
-				//010
-				y1=0;
-				y2=1;
-			}
-			else
-			{
-				//011
-				y1=1;
-				y2=0;
-			}
-		}
-	}
-	else
-	{
-		if(!x2)
-		{
-			if(!x3)
-			{
-				//100
-				y1=0;
-				y2=1;
-			}
-			else
-			{
-				//101
-				y1=1;
-				y2=0;
-			}
-		}
-		else
-		{
-			if(!x3)
-			{
-				//110
-				y1=1;
-				y2=0;
-			}
-			else
-			{
-				//111
-				y1=1;
-				y2=1;
-			}
-		}
-	}
-}
-
 
 PositiveInteger* PositiveInteger::AddAux(Byte* c1, Byte* c2,bool overwrite,bool& AddIsCarried,Byte*& LeftEnd)
 {
@@ -411,12 +324,11 @@ PositiveInteger* PositiveInteger::AddAux(Byte* c1, Byte* c2,bool overwrite,bool&
 	Byte* b2 = nullptr;
 	bool carry=0;
 	bool result1;
-	bool result2;
 	AddIsCarried = false;
 	
 	if(!overwrite)
 	{
-		y = new PositiveInteger();
+		y = new PositiveInteger;
 		b2 = new Byte;
 		b2->setRight(nullptr);
 		b2->setIsRightEnd(true);
@@ -426,14 +338,13 @@ PositiveInteger* PositiveInteger::AddAux(Byte* c1, Byte* c2,bool overwrite,bool&
 	while(true)
 	{
 		//Add
-		PositiveInteger::AddThreeByte(c1->getByte(),c2->getByte(),carry,result1,result2);
 		if(overwrite)
 		{
-			c1->setByte(result2);
+			Byte::AddThreeByte(c1,c2,carry,result1,c1);
 		}
 		else
 		{
-			b2->setByte(result2);
+			Byte::AddThreeByte(c1,c2,carry,result1,b2);
 			b1 = b2;
 		}
 		carry = result1;
@@ -450,7 +361,7 @@ PositiveInteger* PositiveInteger::AddAux(Byte* c1, Byte* c2,bool overwrite,bool&
 					b2 = new Byte;
 					b2->setLeft(nullptr);
 					b2->setIsLeftEnd(true);
-					b2->setByte(1);
+					b2->setByteOne();
 					if(overwrite)
 					{
 						c1->setIsLeftEnd(false);
@@ -1509,7 +1420,7 @@ bool PositiveInteger::isSame(unsigned int x)
 	b2 = p1->getRightEnd();
 	while(true)
 	{
-		if(!b1->isSame(b2)) {cout<<"Error Code: 13"<<endl; return false;}
+		if(!Byte::compare(b1,b2).isEqual()) {cout<<"Error Code: 13"<<endl; return false;}
 		if(b1->getIsLeftEnd()) break;
 		if(b2->getIsLeftEnd()) {cout<<"Error Code: 14"<<endl; return false;}
 		b1 = b1->getLeft();
@@ -1543,8 +1454,8 @@ bool PositiveInteger::VerifyCopy(unsigned int max)
 
 bool PositiveInteger::VerifyCounter(unsigned int max)
 {
-	PositiveInteger* one = new PositiveInteger("1");
-	PositiveInteger* count = new PositiveInteger("1");
+	PositiveInteger* one = new PositiveInteger(true,true);
+	PositiveInteger* count = new PositiveInteger(true,true);
 	for(unsigned int i=1;i<=max;i++)
 	{
 		if(!count->isSame(i)) return false;
@@ -1554,7 +1465,7 @@ bool PositiveInteger::VerifyCounter(unsigned int max)
 	delete count;
 	return true;
 }
-
+/*
 bool PositiveInteger::VerifyPositiveInteger(unsigned int max)
 {
 	PositiveInteger* p1;
@@ -1588,7 +1499,7 @@ bool PositiveInteger::VerifyPositiveInteger(unsigned int max)
 	}
 	return true;
 }
-
+*/
 bool PositiveInteger::VerifyCompare(unsigned int max)
 {
 	PositiveInteger* p1;
@@ -1680,7 +1591,7 @@ bool PositiveInteger::VerifySubtract(unsigned int max,bool overwrite)
 
 bool PositiveInteger::VerifyMultiply(unsigned int max)
 {
-	PositiveInteger* one = new PositiveInteger("1");
+	PositiveInteger* one = new PositiveInteger(true,true);
 	PositiveInteger* p1;
 	PositiveInteger* p2;
 	PositiveInteger* p3;
