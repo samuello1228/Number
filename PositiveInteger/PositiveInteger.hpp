@@ -20,6 +20,9 @@ public:
     PositiveInteger(std::string);
 	~PositiveInteger();
 	
+	static unsigned int getBase();
+	static void setBase(unsigned int);
+	
 	Bit* getLeftEnd();
 	void setLeftEnd(Bit*);
 	Bit* getRightEnd();
@@ -68,7 +71,9 @@ public:
 	static bool VerifySubtract(unsigned int,bool);
 	static bool VerifyMultiply(unsigned int);
 	static bool VerifyDivide(unsigned int,bool);
+	
 private:
+	static unsigned int base;
 	Bit* leftEnd;
 	Bit* rightEnd;
 	

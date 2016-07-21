@@ -9,6 +9,9 @@
 #include "PositiveInteger.hpp"
 #include <iostream>
 using namespace std;
+
+unsigned int PositiveInteger::base = 2;
+
 PositiveInteger::PositiveInteger()
 {
 	setLeftEnd(nullptr);
@@ -27,6 +30,17 @@ PositiveInteger::~PositiveInteger()
 	}
 	delete b1;
 }
+
+unsigned int PositiveInteger::getBase()
+{
+	return base;
+}
+
+void PositiveInteger::setBase(unsigned int newBase)
+{
+	base = newBase;
+}
+
 
 Bit* PositiveInteger::getLeftEnd()
 {
@@ -431,6 +445,7 @@ PositiveInteger* PositiveInteger::AddAux(Bit* c1, Bit* c2,bool overwrite,bool& A
 	
 	while(true)
 	{
+		//Add
 		PositiveInteger::AddThreeBit(c1->getBit(),c2->getBit(),carry,result1,result2);
 		if(overwrite)
 		{
@@ -442,12 +457,16 @@ PositiveInteger* PositiveInteger::AddAux(Bit* c1, Bit* c2,bool overwrite,bool& A
 			b1 = b2;
 		}
 		carry = result1;
+		
+		//find left end
 		if(c1->getIsLeftEnd())
 		{
 			if(c2->getIsLeftEnd())
 			{
+				//the length of x1 and x2 are equal
 				if(carry)
 				{
+					//fill 1 for carry
 					b2 = new Bit;
 					b2->setLeft(nullptr);
 					b2->setIsLeftEnd(true);
@@ -487,7 +506,8 @@ PositiveInteger* PositiveInteger::AddAux(Bit* c1, Bit* c2,bool overwrite,bool& A
 			}
 			else
 			{
-				///////////////////////////start
+				///////////////////////////
+				//the length of x1 is shorter than x2
 				if(overwrite)
 				{
 					c1->setIsLeftEnd(false);
@@ -620,6 +640,7 @@ PositiveInteger* PositiveInteger::AddAux(Bit* c1, Bit* c2,bool overwrite,bool& A
 			if(c2->getIsLeftEnd())
 			{
 				///////////////////////////start
+				//the length of x1 is longer than x2
 				if(carry)
 				{
 					while(true)
@@ -719,6 +740,7 @@ PositiveInteger* PositiveInteger::AddAux(Bit* c1, Bit* c2,bool overwrite,bool& A
 			}
 			else
 			{
+				//continue to find left end
 				c1 = c1->getLeft();
 				c2 = c2->getLeft();
 			}
@@ -799,6 +821,7 @@ void PositiveInteger::SubtractAux(Bit*& LeftEnd1,Bit* c1,Bit* LeftEnd2,Bit* c2,b
 		}
 	}
 	
+	//delete 0 at the left
 	isShorten = false;
 	isDelay = isSmall;
 	if(!LeftEnd1->getBit())
@@ -844,6 +867,7 @@ void PositiveInteger::SubtractAux(Bit*& LeftEnd1,Bit* c1,Bit* LeftEnd2,Bit* c2,b
 				}
 			}
 			
+			//delete
 			LeftEnd1 = LeftEnd1->getRight();
 			delete LeftEnd1->getLeft();
 			if(LeftEnd1->getBit()) break;
@@ -914,10 +938,12 @@ void PositiveInteger::MultiplyAux(Bit* c1,Bit* c2,Bit* tRight,Bit*& b1,bool& Mul
 			c2 = c2->getLeft();
 			if(tRight->getIsLeftEnd())
 			{
+				//tRight->getLeft() for y does not exist
 				b1->setIsLeftEnd(false);
 				b2 = new Bit;
 				if(c2->getBit())
 				{
+					//copy c1
 					//x1 must be 2^n
 					//c1 must be 1
 					//x1->printBinary();
@@ -925,6 +951,9 @@ void PositiveInteger::MultiplyAux(Bit* c1,Bit* c2,Bit* tRight,Bit*& b1,bool& Mul
 				}
 				else
 				{
+					//c2 = 0, and no need to add
+					//y remain unchanged
+					//add one more 0 at the left end, in order to count MultiplyIsCarried
 					b2->setBit(0);
 				}
 				b1->setLeft(b2);
@@ -938,6 +967,7 @@ void PositiveInteger::MultiplyAux(Bit* c1,Bit* c2,Bit* tRight,Bit*& b1,bool& Mul
 				tRight = tRight->getLeft();
 				if(c2->getBit())
 				{
+					//Add y(tRight) and x1(c1)
 					PositiveInteger::AddAux(tRight,c1,true,AddIsCarried,LeftEnd);
 					if(AddIsCarried)
 					{
@@ -954,6 +984,9 @@ void PositiveInteger::MultiplyAux(Bit* c1,Bit* c2,Bit* tRight,Bit*& b1,bool& Mul
 				}
 				else
 				{
+					//c2 = 0, and do not need to add
+					//y remain unchanged
+					//add one more 0 at the left end, in order to count MultiplyIsCarried
 					b1->setIsLeftEnd(false);
 					b2 = new Bit;
 					b2->setBit(0);
@@ -1123,6 +1156,7 @@ void PositiveInteger::Divide(PositiveInteger* x1,PositiveInteger* x2,PositiveInt
 	{
 		if(!isEnd)
 		{
+			//compare y1(tLeft to tRight) and x2
 			d1 = tLeft;
 			d2 = x2->getLeftEnd();
 			while(true)
@@ -1135,7 +1169,7 @@ void PositiveInteger::Divide(PositiveInteger* x1,PositiveInteger* x2,PositiveInt
 				}
 				if(d1->getIsRightEnd())
 				{
-					//y1(tLeft to tRight) are less than x2
+					//x1 < x2
 					cout<<"Logic Error!"<<endl;
 					return;
 				}
@@ -1144,18 +1178,21 @@ void PositiveInteger::Divide(PositiveInteger* x1,PositiveInteger* x2,PositiveInt
 				d2 = d2->getRight();
 				if(d1->getBit() && !d2->getBit())
 				{
+					//y1(tLeft to tRight) is larger than x2
 					//c1 = 1, c2 = 0
 					compare = CompareCode(false,true);
 					break;
 				}
 				if(!d1->getBit() && d2->getBit())
 				{
+					//y1(tLeft to tRight) is smaller than x2
 					//c1 = 0, c2 = 1
 					compare = CompareCode(false,false);
 					break;
 				}
 			}
-
+			
+			//fill y1
 			if(compare.isSmaller())
 			{
 				if(!b1IsFilledBy1)
@@ -1180,6 +1217,7 @@ void PositiveInteger::Divide(PositiveInteger* x1,PositiveInteger* x2,PositiveInt
 			}
 		}
 		
+		//do subtraction
 		if(!isEnd)
 		{
 			b1IsFilledBy1 = true;
@@ -1190,6 +1228,7 @@ void PositiveInteger::Divide(PositiveInteger* x1,PositiveInteger* x2,PositiveInt
 				d1 = x2->getLeftEnd();
 				while(true)
 				{
+					//do subtraction
 					if(isSubtract)
 					{
 						tLeft->setBit(0);
@@ -1203,6 +1242,7 @@ void PositiveInteger::Divide(PositiveInteger* x1,PositiveInteger* x2,PositiveInt
 						}
 					}
 					
+					//find tLeft = 1
 					if(tLeft->getBit())
 					{
 						divisible = false;
@@ -1213,6 +1253,7 @@ void PositiveInteger::Divide(PositiveInteger* x1,PositiveInteger* x2,PositiveInt
 					{
 						if(!isEnd)
 						{
+							//fill y1 with 0
 							if(b1IsFilledBy1)
 							{
 								b1IsFilledBy1 = false;
@@ -1235,6 +1276,7 @@ void PositiveInteger::Divide(PositiveInteger* x1,PositiveInteger* x2,PositiveInt
 						
 						if(tLeft->getIsRightEnd())
 						{
+							//cannot find tLeft = 1
 							//isEnd must be true, because tLeft is left, relative to b1
 							divisible = true;
 							y2->setLeftEnd(tLeft);
@@ -1243,6 +1285,7 @@ void PositiveInteger::Divide(PositiveInteger* x1,PositiveInteger* x2,PositiveInt
 						}
 						else
 						{
+							//continue to find tLeft = 1
 							tLeft = tLeft->getRight();
 							delete tLeft->getLeft();
 						}
@@ -1261,7 +1304,7 @@ void PositiveInteger::Divide(PositiveInteger* x1,PositiveInteger* x2,PositiveInt
 		{
 			if(!y1->getLeftEnd()->getBit())
 			{
-				//delete the additional 0 at the left end
+				//delete the additional 0 at the left end of y1
 				b1 = y1->getLeftEnd()->getRight();
 				delete b1->getLeft();
 				b1->setLeft(nullptr);
