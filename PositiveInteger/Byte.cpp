@@ -171,8 +171,7 @@ void Byte::setByteOne()
 		byte = 1;
 	}
 }
-
-void Byte::setByteAddOne(Byte* x)
+void Byte::setByteMax()
 {
 	if(base == 2)
 	{
@@ -180,19 +179,67 @@ void Byte::setByteAddOne(Byte* x)
 	}
 	else
 	{
-		if(x->byte == 0) byte = 1;
-		else if(x->byte == 1) byte = 2;
-		else if(x->byte == 2) byte = 3;
-		else if(x->byte == 3) byte = 4;
-		else if(x->byte == 4) byte = 5;
-		else if(x->byte == 5) byte = 6;
-		else if(x->byte == 6) byte = 7;
-		else if(x->byte == 7) byte = 8;
-		else if(x->byte == 8) byte = 9;
+		byte = base-1;
+	}
+}
+
+void Byte::setByteAddOne(Byte* x)
+{
+	//for x->byte <= base -2
+	if(base == 2)
+	{
+		bit = 1;
+	}
+	else
+	{
+		byte = x->byte + 1;
 	}
 }
 
 
+
+void Byte::setByteSubtractOne()
+{
+	if(base == 2)
+	{
+		bit = 0;
+	}
+	else
+	{
+		byte = byte - 1;
+	}
+}
+
+void Byte::setByteSubtract(Byte* x)
+{
+	if(base == 2)
+	{
+		if(bit && !x->bit)
+		{
+			bit = 1;
+		}
+		else
+		{
+			bit = 0;
+		}
+	}
+	else
+	{
+		byte = byte - x->byte;
+	}
+}
+
+void Byte::setByteSubtractBorrow(Byte* x)
+{
+	if(base == 2)
+	{
+		bit = 1;
+	}
+	else
+	{
+		byte = byte + base - x->byte;
+	}
+}
 Byte* Byte::getLeft()
 {
 	return left;

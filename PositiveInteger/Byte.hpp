@@ -29,7 +29,11 @@ public:
 	//void setByteChar(char);
 	void setByteZero();
 	void setByteOne();
+	void setByteMax();
 	void setByteAddOne(Byte*);
+	void setByteSubtractOne();
+	void setByteSubtract(Byte*);
+	void setByteSubtractBorrow(Byte*);
 	
 	Byte* getLeft();
 	void setLeft(Byte*);

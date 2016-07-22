@@ -642,29 +642,22 @@ void PositiveInteger::SubtractAux(Byte*& LeftEnd1,Byte* c1,Byte* LeftEnd2,Byte* 
 	
 	while(true)
 	{
-		if(!c1->getByte() && c2->getByte())
+		if(Byte::compare(c1,c2).isSmaller())
 		{
-			c1->setByte(1);
+			c1->setByteSubtractBorrow(c2);
 			
 			d1 = c1;
 			while(true)
 			{
 				d1 = d1->getLeft();
-				if(d1->getByte()) break;
-				d1->setByte(1);
+				if(!d1->isZero()) break;
+				d1->setByteMax();
 			}
-			d1->setByte(0);
+			d1->setByteSubtractOne();
 		}
 		else
 		{
-			if(c1->getByte() && !c2->getByte())
-			{
-				c1->setByte(1);
-			}
-			else
-			{
-				c1->setByte(0);
-			}
+			c1->setByteSubtract(c2);
 		}
 		
 		if(c2->getIsLeftEnd())
@@ -681,7 +674,7 @@ void PositiveInteger::SubtractAux(Byte*& LeftEnd1,Byte* c1,Byte* LeftEnd2,Byte* 
 	//delete 0 at the left
 	isShorten = false;
 	isDelay = isSmall;
-	if(!LeftEnd1->getByte())
+	if(LeftEnd1->isZero())
 	{
 		isShorten = true;
 		while(true)
@@ -727,7 +720,7 @@ void PositiveInteger::SubtractAux(Byte*& LeftEnd1,Byte* c1,Byte* LeftEnd2,Byte* 
 			//delete
 			LeftEnd1 = LeftEnd1->getRight();
 			delete LeftEnd1->getLeft();
-			if(LeftEnd1->getByte()) break;
+			if(!LeftEnd1->isZero()) break;
 		}
 	}
 	LeftEnd1->setIsLeftEnd(true);
@@ -759,7 +752,7 @@ PositiveInteger* PositiveInteger::Subtract(PositiveInteger* x1,PositiveInteger* 
 		d1 = x1->getRightEnd();
 		while(true)
 		{
-			b1->setByte(d1->getByte());
+			b1->setBytePointer(d1);
 			if(d1->getIsLeftEnd()) break;
 			b2 = new Byte;
 			b1->setLeft(b2);
@@ -1536,6 +1529,8 @@ bool PositiveInteger::VerifySubtract(unsigned int max,bool overwrite)
 		{
 			p1 = new PositiveInteger(i);
 			p2 = new PositiveInteger(j);
+			//p1->printBinary();
+			//p2->printBinary();
 			p3 = PositiveInteger::Subtract(p1,p2,overwrite);
 			//p3->printBinary();
 			if(overwrite)
