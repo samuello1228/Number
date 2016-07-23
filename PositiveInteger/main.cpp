@@ -19,16 +19,19 @@ int main()
 	PositiveInteger* x3;
 	PositiveInteger* x4;
 	bool divisible=0;
+	bool temp;
 	
 	PositiveInteger* one = new PositiveInteger(true,true);
 	PositiveInteger* i;
 	PositiveInteger* j;
-	PositiveInteger* iMax = new PositiveInteger(1024);
-	PositiveInteger* jMax = new PositiveInteger(1024);
+	//PositiveInteger* iMax = new PositiveInteger(1024);
+	//PositiveInteger* jMax = new PositiveInteger(1024);
+	PositiveInteger* iMax = new PositiveInteger(10);
+	PositiveInteger* jMax = new PositiveInteger(10);
 	
 	i = new PositiveInteger(true,true);
 
-	while(1)
+	while(0)
 	{
 		if(PositiveInteger::compare(i,iMax).isEqual())
 		{
@@ -75,11 +78,11 @@ int main()
 			*/
 			
 			/*
-			x1 = i->copy();
-			x2 = j->copy();
-			x3 = PositiveInteger::Multiply(x1,x2);
-			//x1->printBinary();
-			//delete x3;
+			x1 = i->copy(temp);
+			x2 = j->copy(temp);
+			x3 = PositiveInteger::Multiply(x1,x2,temp);
+			//x3->printBinary();
+			delete x3;
 			delete x1;
 			delete x2;
 			*/
@@ -123,7 +126,7 @@ int main()
 	
 			PositiveInteger::Add(j,one,true);
 		}
-		//cout<<endl;
+		cout<<endl;
 		
 		PositiveInteger::Add(i,one,true);
 		delete j;
@@ -133,18 +136,19 @@ int main()
 	delete iMax;
 	delete jMax;
 	
+	///*
 	if(!PositiveInteger::VerifyCopy(100)) cout<<"Error"<<endl;
 	if(!PositiveInteger::VerifyCounter(100)) cout<<"Error"<<endl;
-	//if(!PositiveInteger::VerifyPositiveInteger(100)) cout<<"Error"<<endl;
 	if(!PositiveInteger::VerifyCompare(100)) cout<<"Error"<<endl;
 	if(!PositiveInteger::VerifyAdd(100,0)) cout<<"Error"<<endl;
 	if(!PositiveInteger::VerifyAdd(100,1)) cout<<"Error"<<endl;
 	if(!PositiveInteger::VerifySubtract(100,0)) cout<<"Error"<<endl;
 	if(!PositiveInteger::VerifySubtract(100,1)) cout<<"Error"<<endl;
 	if(!PositiveInteger::VerifyMultiply(100)) cout<<"Error"<<endl;
-	if(!PositiveInteger::VerifyDivide(100,0)) cout<<"Error"<<endl;
-	if(!PositiveInteger::VerifyDivide(100,1)) cout<<"Error"<<endl;
+	//if(!PositiveInteger::VerifyDivide(100,0)) cout<<"Error"<<endl;
+	//if(!PositiveInteger::VerifyDivide(100,1)) cout<<"Error"<<endl;
 	else cout<<"OK"<<endl;
+	//*/
 	
 	/*
 	PositiveInteger* max = new PositiveInteger(97);

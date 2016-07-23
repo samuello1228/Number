@@ -49,7 +49,8 @@ public:
 	bool isMax();
 	static CompareCode compare(Byte*,Byte*);
 	static void AddThreeByte(Byte*,Byte*,bool,bool&,Byte*&);
-	static void MultiplyAux(Byte*,Byte*,Byte*,Byte*,Byte*&,Byte*&);
+	static void MultiplyAux1(Byte*,Byte*,Byte*,Byte*&,Byte*&);
+	static void MultiplyAux2(Byte*,Byte*,Byte*,Byte*,Byte*&,Byte*&);
 	
 private:
 	static unsigned int base;
