@@ -649,6 +649,7 @@ PositiveInteger* PositiveInteger::Add(PositiveInteger* x1,PositiveInteger* x2,bo
 void PositiveInteger::SubtractAux(Byte*& LeftEnd1,Byte* c1,Byte* LeftEnd2,Byte* c2,bool& isShorten,bool overwrite,
 									bool Divide,Byte*& b1,Byte*& tRight,bool isSmall,bool& b1IsFilledBy1,bool& isEnd)
 {
+	Byte* b2;
 	Byte* d1;
 	bool isDelay;
 	
@@ -696,7 +697,7 @@ void PositiveInteger::SubtractAux(Byte*& LeftEnd1,Byte* c1,Byte* LeftEnd2,Byte* 
 				if(isDelay)
 				{
 					//b1 is delay for isSamll
-					if(b1->getIsRightEnd())
+					if(tRight->getIsRightEnd())
 					{
 						isEnd = true;
 					}
@@ -716,14 +717,17 @@ void PositiveInteger::SubtractAux(Byte*& LeftEnd1,Byte* c1,Byte* LeftEnd2,Byte* 
 							b1->setByte(0);
 						}
 						
-						if(b1->getIsRightEnd())
+						if(tRight->getIsRightEnd())
 						{
 							isEnd = true;
 						}
 						else
 						{
-							b1 = b1->getRight();
 							tRight = tRight->getRight();
+							b2 = new Byte;
+							b2->setLeft(b1);
+							b1->setRight(b2);
+							b1 = b2;
 						}
 					}
 				}
@@ -960,50 +964,31 @@ void PositiveInteger::Divide(PositiveInteger* x1,PositiveInteger* x2,PositiveInt
 		y2 = x1->copy();
 	}
 	
-	//////////////////
-	//find tRight
+	//find tLeft and tRight
 	tLeft = y2->getLeftEnd();
-	d1 = y2->getLeftEnd();
-	d2 = x2->getLeftEnd();
+	tRight = y2->getLeftEnd();
+	d1 = x2->getLeftEnd();
 	while(true)
 	{
-		if(d2->getIsRightEnd())
+		if(d1->getIsRightEnd())
 		{
 			break;
 		}
-		if(d1->getIsRightEnd())
+		if(tRight->getIsRightEnd())
 		{
 			cout<<"Error! PositiveInteger does not support number zero."<<endl;
 			return;
 		}
+		tRight = tRight->getRight();
 		d1 = d1->getRight();
-		d2 = d2->getRight();
 	}
-	tRight = d1;
 	
-	//create y1
+	//create left end for y1
 	y1 = new PositiveInteger;
 	b1 = new Byte;
-	//b1->setByte(1);
-	b1->setLeft(nullptr);
-	b1->setIsLeftEnd(true);
 	y1->setLeftEnd(b1);
-	while(true)
-	{
-		if(d1->getIsRightEnd()) break;
-		b2 = new Byte;
-		//b2->setByte(1);
-		b2->setLeft(b1);
-		b1->setRight(b2);
-		b1 = b2;
-		d1 = d1->getRight();
-	}
-	b1->setRight(nullptr);
-	b1->setIsRightEnd(true);
-	y1->setRightEnd(b1);
 	
 	//////////////////
-	b1 = y1->getLeftEnd();
 	b1IsFilledBy1 = false;
 	isEnd = false;
 	divisible = false;
@@ -1055,14 +1040,17 @@ void PositiveInteger::Divide(PositiveInteger* x1,PositiveInteger* x2,PositiveInt
 					b1->setByte(0);
 				}
 				
-				if(b1->getIsRightEnd())
+				if(tRight->getIsRightEnd())
 				{
 					isEnd = true;
 				}
 				else
 				{
-					b1 = b1->getRight();
 					tRight = tRight->getRight();
+					b2 = new Byte;
+					b2->setLeft(b1);
+					b1->setRight(b2);
+					b1 = b2;
 					b1->setByte(1);
 				}
 			}
@@ -1118,14 +1106,17 @@ void PositiveInteger::Divide(PositiveInteger* x1,PositiveInteger* x2,PositiveInt
 								b1->setByte(0);
 							}
 							
-							if(b1->getIsRightEnd())
+							if(tRight->getIsRightEnd())
 							{
 								isEnd = true;
 							}
 							else
 							{
-								b1 = b1->getRight();
 								tRight = tRight->getRight();
+								b2 = new Byte;
+								b2->setLeft(b1);
+								b1->setRight(b2);
+								b1 = b2;
 							}
 						}
 						
@@ -1157,16 +1148,28 @@ void PositiveInteger::Divide(PositiveInteger* x1,PositiveInteger* x2,PositiveInt
 		
 		if(isEnd)
 		{
-			if(!y1->getLeftEnd()->getByte())
+			//right end for y1
+			b1->setRight(nullptr);
+			b1->setIsRightEnd(true);
+			y1->setRightEnd(b1);
+			
+			//left end for y1
+			if(y1->getLeftEnd()->isZero())
 			{
 				//delete the additional 0 at the left end of y1
 				b1 = y1->getLeftEnd()->getRight();
 				delete b1->getLeft();
-				b1->setLeft(nullptr);
-				b1->setIsLeftEnd(true);
 				y1->setLeftEnd(b1);
 			}
+			else
+			{
+				b1 = y1->getLeftEnd();
+	
+			}
+			b1->setLeft(nullptr);
+			b1->setIsLeftEnd(true);
 			
+			//left end for y2
 			if(!divisible)
 			{
 				tLeft->setLeft(nullptr);
