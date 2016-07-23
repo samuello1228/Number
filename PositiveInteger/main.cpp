@@ -12,7 +12,7 @@ using namespace std;
 
 int main()
 {
-	Byte::setBase(2);
+	Byte::setBase(10);
 	
 	PositiveInteger* x1;
 	PositiveInteger* x2;

@@ -422,7 +422,22 @@ void Byte::AddThreeByte(Byte* x1,Byte* x2,bool carry1,bool &carry2,Byte* &y2)
 		}
 	}
 }
-void Byte::MultiplyAux1(Byte* x2,Byte* Multiple,Byte* carry1,Byte* &carry2,Byte* &y2)
+void Byte::MultiplyAux1(Byte* x2,Byte* Multiple,Byte* &carry2,Byte* &y2)
+{
+	unsigned int y;
+	if(base == 2)
+	{
+		y2->bit = x2->bit;
+		carry2->bit = 0;
+	}
+	else
+	{
+		y = x2->byte * Multiple->byte;
+		y2->byte = y%base;
+		carry2->byte = y/base;
+	}
+}
+void Byte::MultiplyAux2(Byte* x2,Byte* Multiple,Byte* carry1,Byte* &carry2,Byte* &y2)
 {
 	unsigned int y;
 	if(base == 2)
@@ -437,7 +452,7 @@ void Byte::MultiplyAux1(Byte* x2,Byte* Multiple,Byte* carry1,Byte* &carry2,Byte*
 		carry2->byte = y/base;
 	}
 }
-void Byte::MultiplyAux2(Byte* x1,Byte* x2,Byte* Multiple,Byte* carry1,Byte* &carry2,Byte* &y2)
+void Byte::MultiplyAux3(Byte* x1,Byte* x2,Byte* Multiple,Byte* carry1,Byte* &carry2,Byte* &y2)
 {
 	unsigned int y;
 	if(base == 2)
