@@ -266,6 +266,7 @@ void PositiveInteger::copyAux(bool& AddIsCarried,Byte*& b1,Byte* c1,Byte* multip
 		b1 = b2;
 	}
 	
+	//carry
 	if(multiple!=nullptr && !carry1->isZero())
 	{
 		AddIsCarried = true;
@@ -421,7 +422,7 @@ PositiveInteger* PositiveInteger::AddAux(Byte* c1, Byte* c2,bool overwrite,bool&
 				
 				if(carry1)
 				{
-					//fill 1 for carry
+					//fill carry
 					b2 = new Byte;
 					b2->setLeft(nullptr);
 					b2->setIsLeftEnd(true);
@@ -436,6 +437,12 @@ PositiveInteger* PositiveInteger::AddAux(Byte* c1, Byte* c2,bool overwrite,bool&
 						b2->setRight(c1);
 						LeftEnd = b2;
 						AddIsCarried = true;
+						
+						if(Multiple!=nullptr)
+						{
+							delete carry3;
+							delete carry4;
+						}
 						return nullptr;
 					}
 					else
@@ -451,6 +458,11 @@ PositiveInteger* PositiveInteger::AddAux(Byte* c1, Byte* c2,bool overwrite,bool&
 					//cout<<"For multiply: the left end of x1 is 0"<<endl;
 					if(overwrite)
 					{
+						if(Multiple!=nullptr)
+						{
+							delete carry3;
+							delete carry4;
+						}
 						return nullptr;
 					}
 					else
@@ -587,6 +599,12 @@ PositiveInteger* PositiveInteger::AddAux(Byte* c1, Byte* c2,bool overwrite,bool&
 					c1->setIsLeftEnd(true);
 					LeftEnd = c1;
 					AddIsCarried = true;
+					
+					if(Multiple!=nullptr)
+					{
+						delete carry3;
+						delete carry4;
+					}
 					return nullptr;
 				}
 				else

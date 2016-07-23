@@ -24,14 +24,14 @@ int main()
 	PositiveInteger* one = new PositiveInteger(true,true);
 	PositiveInteger* i;
 	PositiveInteger* j;
-	//PositiveInteger* iMax = new PositiveInteger(1024);
-	//PositiveInteger* jMax = new PositiveInteger(1024);
-	PositiveInteger* iMax = new PositiveInteger(10);
-	PositiveInteger* jMax = new PositiveInteger(10);
+	PositiveInteger* iMax = new PositiveInteger(1024);
+	PositiveInteger* jMax = new PositiveInteger(1024);
+	//PositiveInteger* iMax = new PositiveInteger(10);
+	//PositiveInteger* jMax = new PositiveInteger(10);
 	
 	i = new PositiveInteger(true,true);
 
-	while(0)
+	while(1)
 	{
 		if(PositiveInteger::compare(i,iMax).isEqual())
 		{
@@ -77,15 +77,15 @@ int main()
 			delete x2;
 			*/
 			
-			/*
-			x1 = i->copy(temp);
-			x2 = j->copy(temp);
+			///*
+			x1 = i->copy();
+			x2 = j->copy();
 			x3 = PositiveInteger::Multiply(x1,x2,temp);
 			//x3->printBinary();
 			delete x3;
 			delete x1;
 			delete x2;
-			*/
+			//*/
 			
 			/*
 			if(PositiveInteger::compare(i,j).isLarger())
@@ -126,7 +126,7 @@ int main()
 	
 			PositiveInteger::Add(j,one,true);
 		}
-		cout<<endl;
+		//cout<<endl;
 		
 		PositiveInteger::Add(i,one,true);
 		delete j;
@@ -136,7 +136,7 @@ int main()
 	delete iMax;
 	delete jMax;
 	
-	///*
+	/*
 	if(!PositiveInteger::VerifyCopy(100)) cout<<"Error"<<endl;
 	if(!PositiveInteger::VerifyCounter(100)) cout<<"Error"<<endl;
 	if(!PositiveInteger::VerifyCompare(100)) cout<<"Error"<<endl;
@@ -148,7 +148,7 @@ int main()
 	//if(!PositiveInteger::VerifyDivide(100,0)) cout<<"Error"<<endl;
 	//if(!PositiveInteger::VerifyDivide(100,1)) cout<<"Error"<<endl;
 	else cout<<"OK"<<endl;
-	//*/
+	*/
 	
 	/*
 	PositiveInteger* max = new PositiveInteger(97);
