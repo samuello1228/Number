@@ -33,13 +33,15 @@ public:
 		Digit* Right=nullptr;
 	};
 	void printDecimal(bool);
-	PositiveInteger* copy();
+	PositiveInteger* copy(Byte* RightEnd1=nullptr,Byte* RightEnd2=nullptr);
 	static CompareCode compare(PositiveInteger*,PositiveInteger*);
 	static PositiveInteger* AddAux(Byte*,Byte*,bool,bool&,Byte*&);
 	static PositiveInteger* Add(PositiveInteger*,PositiveInteger*,bool);
 	static void SubtractAux(Byte*&,Byte*,Byte*,Byte*,bool&,bool,
 							bool,Byte*&,Byte*&,bool,bool&,bool&);
 	static PositiveInteger* Subtract(PositiveInteger*,PositiveInteger*,bool);
+	
+	static void MultiplyAux2(Byte*,Byte*,Byte*,bool&,Byte*&);
 	static void MultiplyAux(Byte*,Byte*,Byte*,Byte*&,bool&);
 	static PositiveInteger* Multiply(PositiveInteger*,PositiveInteger*,bool&);
 	static void Divide(PositiveInteger*,PositiveInteger*,PositiveInteger*&,PositiveInteger*&,bool&,bool);
