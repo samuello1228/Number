@@ -130,7 +130,7 @@ int main()
 	delete iMax;
 	delete jMax;
 	
-	/*
+	///*
 	if(!PositiveInteger::VerifyCopy(100)) cout<<"Error"<<endl;
 	if(!PositiveInteger::VerifyCounter(100)) cout<<"Error"<<endl;
 	if(!PositiveInteger::VerifyCompare(100)) cout<<"Error"<<endl;
@@ -142,7 +142,7 @@ int main()
 	if(!PositiveInteger::VerifyDivide(100,0)) cout<<"Error"<<endl;
 	if(!PositiveInteger::VerifyDivide(100,1)) cout<<"Error"<<endl;
 	else cout<<"OK"<<endl;
-	*/
+	//*/
 	
 	/*
 	PositiveInteger* max = new PositiveInteger(97);

@@ -469,7 +469,8 @@ void Byte::MultiplyAux3(Byte* x1,Byte* x2,Byte* Multiple,Byte* carry1,Byte* &car
 	unsigned int y;
 	if(base == 2)
 	{
-		
+		y2->bit = x2->bit;
+		carry2->bit = 0;
 	}
 	else
 	{

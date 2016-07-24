@@ -13,7 +13,6 @@
 #include "Byte.hpp"
 #include <string>
 
-
 class PositiveInteger
 {
 public:
@@ -35,6 +34,7 @@ public:
 	};
 	PositiveInteger* changeBase(unsigned int base = 10);
 	int getInt();
+	PositiveInteger* getNumberOfByte();
 	
 	static void copyAux(bool&,Byte*&,Byte*,Byte* multiple=nullptr);
 	PositiveInteger* copy();
@@ -46,8 +46,9 @@ public:
 	static PositiveInteger* Subtract(PositiveInteger*,PositiveInteger*,bool);
 	static void MultiplyAux(Byte*,Byte*,Byte*,Byte*&,bool&);
 	static PositiveInteger* Multiply(PositiveInteger*,PositiveInteger*,bool&);
-	static void Divide(PositiveInteger*,PositiveInteger*,PositiveInteger*&,PositiveInteger*&,bool&,bool);
-	PositiveInteger* getNumberOfByte();
+	static void DivideAux(Byte*,Byte*,PositiveInteger*&,Byte*&,bool&,bool&);
+	static void Divide(PositiveInteger*,PositiveInteger*,PositiveInteger*&,PositiveInteger*&,bool&,bool&,bool);
+	
 	
 	struct ListOfPositiveInteger
 	{
@@ -57,7 +58,6 @@ public:
 	static void printList(ListOfPositiveInteger*,bool);
 	static void deleteList(ListOfPositiveInteger*);
 	static ListOfPositiveInteger* findPrime(PositiveInteger*);
-	
 	static PositiveInteger* GCD(PositiveInteger*,PositiveInteger*);
 	
 	//verification
@@ -67,7 +67,6 @@ public:
 	
 	static bool VerifyCopy(unsigned int);
 	static bool VerifyCounter(unsigned int);
-	//static bool VerifyPositiveInteger(unsigned int);
 	static bool VerifyCompare(unsigned int);
 	static bool VerifyAdd(unsigned int,bool);
 	static bool VerifySubtract(unsigned int,bool);
@@ -78,7 +77,5 @@ private:
 	Byte* leftEnd;
 	Byte* rightEnd;
 };
-
-
 
 #endif /* PositiveInteger_hpp */
