@@ -122,9 +122,18 @@ void Byte::setByteChar(char newByte)
 		if(newByte=='0') bit = 0;
 		else if (newByte=='1') bit = 1;
 	}
-	else
+	else if(base<=10)
 	{
-		
+		if(newByte=='0') byte = 0;
+		else if (newByte=='1') byte = 1;
+		else if (newByte=='2') byte = 2;
+		else if (newByte=='3') byte = 3;
+		else if (newByte=='4') byte = 4;
+		else if (newByte=='5') byte = 5;
+		else if (newByte=='6') byte = 6;
+		else if (newByte=='7') byte = 7;
+		else if (newByte=='8') byte = 8;
+		else if (newByte=='9') byte = 9;
 	}
 }
 

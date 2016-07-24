@@ -33,7 +33,7 @@ public:
 		unsigned int digit;
 		Digit* Right=nullptr;
 	};
-	void printDecimal(bool,unsigned int base = 10);
+	PositiveInteger* changeBase(unsigned int base = 10);
 	int getInt();
 	
 	static void copyAux(bool&,Byte*&,Byte*,Byte* multiple=nullptr);

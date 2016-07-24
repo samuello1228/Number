@@ -103,23 +103,18 @@ int PositiveInteger::getInt()
 	return y;
 }
 
-void PositiveInteger::printDecimal(bool overwrite,unsigned int base)
+PositiveInteger* PositiveInteger::changeBase(unsigned int base)
 {
+	PositiveInteger* y;
 	PositiveInteger* Base = new PositiveInteger(base);
 	PositiveInteger* x1;
 	PositiveInteger* x2 = nullptr;
+	Byte* b1;
+	Byte* b2;
 	bool divisible = false;
 	bool isEnd = false;
-	
-	if(overwrite)
-	{
-		x1 = this;
-	}
-	else
-	{
-		x1 = this->copy();
-	}
-	
+
+	x1 = this->copy();
 	Digit* digit1 = new Digit;
 	Digit* digit2;
 	while(true)
@@ -145,19 +140,37 @@ void PositiveInteger::printDecimal(bool overwrite,unsigned int base)
 		
 		if(isEnd)
 		{
-			cout<<digit1->digit;
-			while(digit1->Right!=nullptr)
+			Byte::setBase(base);
+			y = new PositiveInteger;
+			b1 = new Byte;
+			b1->setLeft(nullptr);
+			b1->setIsLeftEnd(true);
+			y->setLeftEnd(b1);
+			
+			b1->setByteInt(digit1->digit);
+			while(true)
 			{
+				if(digit1->Right==nullptr) break;
 				digit2 = digit1->Right;
 				delete digit1;
-				cout<<digit2->digit;
+				
+				b2 = new Byte;
+				b2->setByteInt(digit2->digit);
+				b1->setRight(b2);
+				b2->setLeft(b1);
+				
+				b1 = b2;
 				digit1 = digit2;
 			}
 			delete digit1;
-			cout<<endl;
+			
+			b1->setRight(nullptr);
+			b1->setIsRightEnd(true);
+			y->setRightEnd(b1);
+			
 			delete x1;
 			delete Base;
-			break;
+			return y;
 		}
 		
 		digit2 = new Digit;
