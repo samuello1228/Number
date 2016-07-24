@@ -1306,33 +1306,31 @@ void PositiveInteger::Divide(PositiveInteger* x1,PositiveInteger* x2,PositiveInt
 		}
 	}
 }
-/*
+
 void PositiveInteger::printList(PositiveInteger::ListOfPositiveInteger* list,bool isDecimal)
 {
 	ListOfPositiveInteger* element1;
 	ListOfPositiveInteger* element2;
+	PositiveInteger* x;
+	unsigned int base = Byte::getBase();
 	
-	element1 = list;
-	if(isDecimal)
+	element2 = list;
+	while(true)
 	{
-		element1->Element->printDecimal(false);
-	}
-	else
-	{
-		element1->Element->printByte();
-	}
-	while(element1->Next!=nullptr)
-	{
-		element2 = element1->Next;
 		if(isDecimal)
 		{
-			element1->Element->printDecimal(false);
+			x = element2->Element->changeBase(10);
+			x->printByte();
+			Byte::setBase(base);
+			delete x;
 		}
 		else
 		{
-			element1->Element->printByte();
+			element2->Element->printByte();
 		}
 		element1 = element2;
+		if(element1->Next==nullptr) break;
+		element2 = element1->Next;
 	}
 }
 
@@ -1355,10 +1353,8 @@ void PositiveInteger::deleteList(PositiveInteger::ListOfPositiveInteger* list)
 
 PositiveInteger::ListOfPositiveInteger* PositiveInteger::findPrime(PositiveInteger* max)
 {
-	PositiveInteger* one = new PositiveInteger;
-	PositiveInteger::One(one);
-	PositiveInteger* two = new PositiveInteger;
-	PositiveInteger::Two(two);
+	PositiveInteger* one = new PositiveInteger(true,true);
+	PositiveInteger* two = PositiveInteger::Add(one,one,false);
 	PositiveInteger* i;
 	
 	ListOfPositiveInteger* FirstElement = new ListOfPositiveInteger;
@@ -1373,6 +1369,7 @@ PositiveInteger::ListOfPositiveInteger* PositiveInteger::findPrime(PositiveInteg
 	PositiveInteger* p1;
 	PositiveInteger* p2;
 	bool divisible = false;
+	bool temp;
 	while(true)
 	{
 		if(PositiveInteger::compare(i,max).isLarger())
@@ -1383,7 +1380,7 @@ PositiveInteger::ListOfPositiveInteger* PositiveInteger::findPrime(PositiveInteg
 		element1 = FirstElement;
 		while(true)
 		{
-			p1 = PositiveInteger::Multiply(element1->Element,element1->Element);
+			p1 = PositiveInteger::Multiply(element1->Element,element1->Element,temp);
 			if(PositiveInteger::compare(i,p1).isSmaller())
 			{
 				element2 = new ListOfPositiveInteger;
@@ -1395,7 +1392,7 @@ PositiveInteger::ListOfPositiveInteger* PositiveInteger::findPrime(PositiveInteg
 			}
 			delete p1;
 			
-			PositiveInteger::Divide(i,element1->Element,p1,p2,divisible,false,false);
+			PositiveInteger::Divide(i,element1->Element,p1,p2,divisible,false);
 			delete p1;
 			if(divisible)
 			{
@@ -1416,7 +1413,7 @@ PositiveInteger::ListOfPositiveInteger* PositiveInteger::findPrime(PositiveInteg
 	delete two;
 	return FirstElement;
 }
-
+/*
 PositiveInteger* PositiveInteger::GCD(PositiveInteger* x1,PositiveInteger* x2)
 {
 	PositiveInteger* p1;
