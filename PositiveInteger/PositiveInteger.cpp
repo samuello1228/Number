@@ -1413,7 +1413,7 @@ PositiveInteger::ListOfPositiveInteger* PositiveInteger::findPrime(PositiveInteg
 	delete two;
 	return FirstElement;
 }
-/*
+
 PositiveInteger* PositiveInteger::GCD(PositiveInteger* x1,PositiveInteger* x2)
 {
 	PositiveInteger* p1;
@@ -1435,7 +1435,7 @@ PositiveInteger* PositiveInteger::GCD(PositiveInteger* x1,PositiveInteger* x2)
 	
 	while(true)
 	{
-		PositiveInteger::Divide(p1,p2,p3,p4,divisible,false,false);
+		PositiveInteger::Divide(p1,p2,p3,p4,divisible,false);
 		delete p1;
 		delete p3;
 		if(divisible)
@@ -1446,7 +1446,7 @@ PositiveInteger* PositiveInteger::GCD(PositiveInteger* x1,PositiveInteger* x2)
 		p2 = p4;
 	}
 }
-*/
+
 //verification
 PositiveInteger::PositiveInteger(unsigned int x)
 {

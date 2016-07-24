@@ -24,19 +24,16 @@ int main()
 	PositiveInteger* one = new PositiveInteger(true,true);
 	PositiveInteger* i;
 	PositiveInteger* j;
-	PositiveInteger* iMax = new PositiveInteger(1024);
-	PositiveInteger* jMax = new PositiveInteger(1024);
-	//PositiveInteger* iMax = new PositiveInteger(10);
-	//PositiveInteger* jMax = new PositiveInteger(10);
+	//PositiveInteger* iMax = new PositiveInteger(1024);
+	//PositiveInteger* jMax = new PositiveInteger(1024);
+	PositiveInteger* iMax = new PositiveInteger(1);
+	PositiveInteger* jMax = new PositiveInteger(1);
 	
 	i = new PositiveInteger(true,true);
 
 	while(1)
 	{
-		if(PositiveInteger::compare(i,iMax).isEqual())
-		{
-			break;
-		}
+		if(PositiveInteger::compare(i,iMax).isLarger()) break;
 		
 		//x1 = i->copy();
 		//x1->printByte();
@@ -46,10 +43,7 @@ int main()
 		j = new PositiveInteger(true,true);
 		while(true)
 		{
-			if(PositiveInteger::compare(j,jMax).isEqual())
-			{
-				break;
-			}
+			if(PositiveInteger::compare(j,jMax).isLarger()) break;
 			
 			/*
 			x1 = i->copy();
@@ -113,15 +107,15 @@ int main()
 			*/
 			
 			/*
-			x3 = i->copy();
-			x4 = j->copy();
-			//x3 = new PositiveInteger(60);
-			//x4 = new PositiveInteger(72);
-			x1 = PositiveInteger::GCD(x3,x4);
-			x1->printByte();
+			//x1 = i->copy();
+			//x2 = j->copy();
+			x1 = new PositiveInteger(60);
+			x2 = new PositiveInteger(72);
+			x3 = PositiveInteger::GCD(x1,x2);
+			x3->printByte();
 			delete x1;
+			delete x2;
 			delete x3;
-			delete x4;
 			*/
 	
 			PositiveInteger::Add(j,one,true);
@@ -150,14 +144,14 @@ int main()
 	else cout<<"OK"<<endl;
 	*/
 	
-	///*
+	/*
 	PositiveInteger* max = new PositiveInteger(97);
 	PositiveInteger::ListOfPositiveInteger* list;
 	list = PositiveInteger::findPrime(max);
 	PositiveInteger::printList(list,1);
 	PositiveInteger::deleteList(list);
 	delete max;
-	//*/
+	*/
 	
 	/*
 	Byte::setBase(2);
