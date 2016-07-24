@@ -51,7 +51,7 @@ public:
 	static void MultiplyAux1(Byte*,Byte*,Byte*&,Byte*&);
 	static void MultiplyAux2(Byte*,Byte*,Byte*,Byte*&,Byte*&);
 	static void MultiplyAux3(Byte*,Byte*,Byte*,Byte*,Byte*&,Byte*&);
-	static void DivideAux1(Byte*,Byte*,Byte*,Byte*&);
+	static void DivideAux(Byte*,Byte*,Byte*,Byte*,Byte*,Byte*&);
 	
 private:
 	static unsigned int base;

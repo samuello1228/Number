@@ -469,7 +469,7 @@ void Byte::MultiplyAux3(Byte* x1,Byte* x2,Byte* Multiple,Byte* carry1,Byte* &car
 		carry2->byte = y/base;
 	}
 }
-void Byte::DivideAux1(Byte* a1,Byte* a2,Byte* b1,Byte* &y)
+void Byte::DivideAux(Byte* a1,Byte* a2,Byte* a3,Byte* b1,Byte* b2,Byte* &y)
 {
 	if(base == 2)
 	{
@@ -479,11 +479,25 @@ void Byte::DivideAux1(Byte* a1,Byte* a2,Byte* b1,Byte* &y)
 	{
 		if(a1==nullptr)
 		{
-			y->byte = a2->byte /b1->byte;
+			if(a2==nullptr)
+			{
+				y->byte = a3->byte /b2->byte;
+			}
+			else
+			{
+				if(b1==nullptr)
+				{
+					y->byte = (a2->byte * base + a3->byte) /b2->byte;
+				}
+				else
+				{
+					y->byte = (a2->byte * base + a3->byte) /(b1->byte * base + b2->byte);
+				}
+			}
 		}
 		else
 		{
-			y->byte = (a1->byte * base + a2->byte) /b1->byte;
+			y->byte = (a1->byte * base * base + a2->byte * base + a3->byte) /(b1->byte * base + b2->byte);
 		}
 	}
 }
