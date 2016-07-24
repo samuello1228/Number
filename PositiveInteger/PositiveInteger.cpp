@@ -61,13 +61,53 @@ PositiveInteger::PositiveInteger(bool x,bool temp)
 		
 	}
 }
-/*
-void PositiveInteger::printDecimal(bool overwrite)
+
+PositiveInteger::PositiveInteger(std::string x)
 {
-	PositiveInteger* ten = new PositiveInteger("1010");
+	std::string::iterator i=x.begin();
+	Byte* b1;
+	Byte* b2 = new Byte;
+	b2->setLeft(nullptr);
+	b2->setIsLeftEnd(true);
+	setLeftEnd(b2);
+	
+	while(true)
+	{
+		b2->setByteChar(*i);
+		b1 = b2;
+		i++;
+		
+		if(i==x.end()) break;
+		b2 = new Byte;
+		b1->setRight(b2);
+		b2->setLeft(b1);
+	}
+	b1->setRight(nullptr);
+	b1->setIsRightEnd(true);
+	setRightEnd(b1);
+}
+
+int PositiveInteger::getInt()
+{
+	unsigned int y = 0;
+	unsigned int add = 1;
+	Byte* d1;
+	d1 = getRightEnd();
+	while(true)
+	{
+		y += d1->getByteInt() * add;
+		if(d1->getIsLeftEnd()) break;
+		d1 = d1->getLeft();
+		add *= Byte::getBase();
+	}
+	return y;
+}
+
+void PositiveInteger::printDecimal(bool overwrite,unsigned int base)
+{
+	PositiveInteger* Base = new PositiveInteger(base);
 	PositiveInteger* x1;
 	PositiveInteger* x2 = nullptr;
-	Byte* b1;
 	bool divisible = false;
 	bool isEnd = false;
 	
@@ -84,100 +124,23 @@ void PositiveInteger::printDecimal(bool overwrite)
 	Digit* digit2;
 	while(true)
 	{
-		if(PositiveInteger::compare(x1,ten).isSmaller())
+		if(PositiveInteger::compare(x1,Base).isSmaller())
 		{
 			divisible = false;
 			isEnd = true;
 		}
 		else
 		{
-			PositiveInteger::Divide(x1,ten,x2,x1,divisible,true);
+			PositiveInteger::Divide(x1,Base,x2,x1,divisible,true);
 		}
 		
 		if(divisible)
 		{
-			digit1->digit = '0';
+			digit1->digit = 0;
 		}
 		else
 		{
-			b1 = x1->getRightEnd();
-			if(b1->getByte())
-			{
-				//x3 = *1 (binary)
-				if(b1->getIsLeftEnd())
-				{
-					//x3 = 1 (binary)
-					digit1->digit = '1';
-				}
-				else
-				{
-					b1 = b1->getLeft();
-					if(b1->getByte())
-					{
-						//x3 = *11 (binary)
-						if(b1->getIsLeftEnd())
-						{
-							//x3 = 11 (binary)
-							digit1->digit = '3';
-						}
-						else
-						{
-							//x3 = 111 (binary)
-							digit1->digit = '7';
-						}
-					}
-					else
-					{
-						//x3 = *01 (binary)
-						b1 = b1->getLeft();
-						if(b1->getByte())
-						{
-							//x3 = 101 (binary)
-							digit1->digit = '5';
-						}
-						else
-						{
-							//x3 = 1001 (binary)
-							digit1->digit = '9';
-							
-						}
-					}
-				}
-			}
-			else
-			{
-				//x3 = *0 (binary)
-				b1 = b1->getLeft();
-				if(b1->getByte())
-				{
-					//x3 = *10 (binary)
-					if(b1->getIsLeftEnd())
-					{
-						//x3 = 10 (binary)
-						digit1->digit = '2';
-					}
-					else
-					{
-						//x3 = 110 (binary)
-						digit1->digit = '6';
-					}
-				}
-				else
-				{
-					//x3 = *00 (binary)
-					b1 = b1->getLeft();
-					if(b1->getIsLeftEnd())
-					{
-						//x3 = 100 (binary)
-						digit1->digit = '4';
-					}
-					else
-					{
-						//x3 = 1000 (binary)
-						digit1->digit = '8';
-					}
-				}
-			}
+			digit1->digit = x1->getInt();
 		}
 		
 		if(isEnd)
@@ -193,7 +156,7 @@ void PositiveInteger::printDecimal(bool overwrite)
 			delete digit1;
 			cout<<endl;
 			delete x1;
-			delete ten;
+			delete Base;
 			break;
 		}
 		
@@ -207,8 +170,8 @@ void PositiveInteger::printDecimal(bool overwrite)
 		x1 = x2;
 	}
 }
-*/
-void PositiveInteger::printBinary()
+
+void PositiveInteger::printByte()
 {
 	Byte* b1 = getLeftEnd();
 	while(true)
@@ -1343,7 +1306,7 @@ void PositiveInteger::printList(PositiveInteger::ListOfPositiveInteger* list,boo
 	}
 	else
 	{
-		element1->Element->printBinary();
+		element1->Element->printByte();
 	}
 	while(element1->Next!=nullptr)
 	{
@@ -1354,7 +1317,7 @@ void PositiveInteger::printList(PositiveInteger::ListOfPositiveInteger* list,boo
 		}
 		else
 		{
-			element1->Element->printBinary();
+			element1->Element->printByte();
 		}
 		element1 = element2;
 	}
@@ -1558,7 +1521,9 @@ bool PositiveInteger::VerifyCopy(unsigned int max)
 	{
 		p1 = new PositiveInteger(i);
 		//if(!p1->isComplete()) return false;
-		//p1->printBinary();
+		//p1->printByte();
+		//cout<<p1->getInt()<<endl;
+		//p1->printDecimal(0);
 		
 		p2 = p1->copy();
 		if(!p1->isSame(i)) return false;
@@ -1654,10 +1619,10 @@ bool PositiveInteger::VerifyAdd(unsigned int max,bool overwrite)
 		{
 			p1 = new PositiveInteger(i);
 			p2 = new PositiveInteger(j);
-			//p1->printBinary();
-			//p2->printBinary();
+			//p1->printByte();
+			//p2->printByte();
 			p3 = PositiveInteger::Add(p1,p2,overwrite);
-			//p3->printBinary();
+			//p3->printByte();
 			if(overwrite)
 			{
 				if(!p1->isSame(i+j)) return false;
@@ -1689,10 +1654,10 @@ bool PositiveInteger::VerifySubtract(unsigned int max,bool overwrite)
 		{
 			p1 = new PositiveInteger(i);
 			p2 = new PositiveInteger(j);
-			//p1->printBinary();
-			//p2->printBinary();
+			//p1->printByte();
+			//p2->printByte();
 			p3 = PositiveInteger::Subtract(p1,p2,overwrite);
-			//p3->printBinary();
+			//p3->printByte();
 			if(overwrite)
 			{
 				if(!p1->isSame(i-j)) return false;
@@ -1731,10 +1696,10 @@ bool PositiveInteger::VerifyMultiply(unsigned int max)
 		{
 			p1 = new PositiveInteger(i);
 			p2 = new PositiveInteger(j);
-			//p1->printBinary();
-			//p2->printBinary();
+			//p1->printByte();
+			//p2->printByte();
 			p3 = PositiveInteger::Multiply(p1,p2,MultiplyIsCarried);
-			//p3->printBinary();
+			//p3->printByte();
 			
 			if(!p1->isSame(i)) return false;
 			if(!p2->isSame(j)) return false;
@@ -1784,10 +1749,10 @@ bool PositiveInteger::VerifyDivide(unsigned int max,bool overwrite)
 		{
 			p1 = new PositiveInteger(i);
 			p2 = new PositiveInteger(j);
-			//p1->printBinary();
-			//p2->printBinary();
+			//p1->printByte();
+			//p2->printByte();
 			PositiveInteger::Divide(p1,p2,p3,p4,divisible,overwrite);
-			//p3->printBinary();
+			//p3->printByte();
 			if(!overwrite)
 			{
 				if(!p1->isSame(i)) {cout<<"Error Code: 16"<<endl; return false;}
@@ -1800,7 +1765,7 @@ bool PositiveInteger::VerifyDivide(unsigned int max,bool overwrite)
 			}
 			else
 			{
-				//p4->printBinary();
+				//p4->printByte();
 				if(divisible) {cout<<"Error Code: 20"<<endl; return false;}
 				if(!p4->isSame(i%j)) {cout<<"Error Code: 21"<<endl; return false;}
 				delete p4;

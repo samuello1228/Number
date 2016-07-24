@@ -18,6 +18,7 @@ class PositiveInteger
 {
 public:
 	PositiveInteger();
+	PositiveInteger(std::string);
     PositiveInteger(bool,bool);
 	~PositiveInteger();
 	
@@ -26,13 +27,14 @@ public:
 	Byte* getRightEnd();
 	void setRightEnd(Byte*);
 	
-	void printBinary();
+	void printByte();
 	struct Digit
 	{
-		char digit;
+		unsigned int digit;
 		Digit* Right=nullptr;
 	};
-	void printDecimal(bool);
+	void printDecimal(bool,unsigned int base = 10);
+	int getInt();
 	
 	static void copyAux(bool&,Byte*&,Byte*,Byte* multiple=nullptr);
 	PositiveInteger* copy();

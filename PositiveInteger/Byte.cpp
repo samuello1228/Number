@@ -114,7 +114,7 @@ void Byte::setByteInt(unsigned int x)
 		byte = x;
 	}
 }
-/*
+
 void Byte::setByteChar(char newByte)
 {
 	if(base == 2)
@@ -127,7 +127,7 @@ void Byte::setByteChar(char newByte)
 		
 	}
 }
-*/
+
 void Byte::setBytePointer(Byte* newByte)
 {
 	if(base == 2)
