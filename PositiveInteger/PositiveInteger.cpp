@@ -239,6 +239,7 @@ void PositiveInteger::copyAux(bool& AddIsCarried,Byte*& b1,Byte* c1,Byte* multip
 	Byte* b2;
 	Byte* carry1 = nullptr;
 	Byte* carry2 = nullptr;
+	AddIsCarried = false;
 	
 	if(multiple!=nullptr)
 	{
@@ -551,17 +552,6 @@ PositiveInteger* PositiveInteger::AddAux(Byte* c1, Byte* c2,bool overwrite,bool&
 				{
 					while(true)
 					{
-						if(carry3->isZero()) break;
-						
-						if(c2->getIsLeftEnd())
-						{
-							b2 = new Byte;
-							b2->setBytePointer(carry3);
-							c1->setLeft(b2);
-							b2->setRight(c1);
-							c1 = b2;
-							break;
-						}
 						c2 = c2->getLeft();
 						
 						b2 = new Byte;
@@ -570,6 +560,18 @@ PositiveInteger* PositiveInteger::AddAux(Byte* c1, Byte* c2,bool overwrite,bool&
 						c1 = b2;
 						Byte::MultiplyAux2(c2,Multiple,carry3,carry4,c1);
 						carry3->setBytePointer(carry4);
+						
+						if(c2->getIsLeftEnd()) break;
+					}
+					
+					//carry
+					if(!carry3->isZero())
+					{
+						b2 = new Byte;
+						b2->setBytePointer(carry3);
+						c1->setLeft(b2);
+						b2->setRight(c1);
+						c1 = b2;
 					}
 				}
 
@@ -747,12 +749,27 @@ PositiveInteger* PositiveInteger::Add(PositiveInteger* x1,PositiveInteger* x2,bo
 	}
 }
 
-void PositiveInteger::SubtractAux(Byte*& LeftEnd1,Byte* c1,Byte* LeftEnd2,Byte* c2,bool& isShorten,bool overwrite,
-									bool Divide,Byte*& b1,Byte*& tRight,bool isSmall,bool& b1IsFilledBy1,bool& isEnd)
+void PositiveInteger::SubtractAux(Byte*& LeftEnd1,Byte* c1,Byte* c2,bool& isShorten,bool overwrite,
+									bool Divide,Byte*& b1,Byte*& tRight,bool isSmall,bool& b1IsFilled,bool& isZero,bool& isEnd,Byte* multiple)
 {
 	Byte* b2;
 	Byte* d1;
 	bool isDelay;
+	PositiveInteger* product=nullptr;
+	bool MultiplyIsCarried;
+	if(multiple!=nullptr)
+	{
+		product = new PositiveInteger;
+		b2 = new Byte;
+		b2->setRight(nullptr);
+		b2->setIsRightEnd(true);
+		product->setRightEnd(b2);
+		copyAux(MultiplyIsCarried,b2,c2,multiple);
+		b2->setLeft(nullptr);
+		b2->setIsLeftEnd(true);
+		product->setLeftEnd(b2);
+		c2 = product->getRightEnd();
+	}
 	
 	while(true)
 	{
@@ -784,6 +801,7 @@ void PositiveInteger::SubtractAux(Byte*& LeftEnd1,Byte* c1,Byte* LeftEnd2,Byte* 
 			c2 = c2->getLeft();
 		}
 	}
+	delete product;
 	
 	//delete 0 at the left
 	isShorten = false;
@@ -809,13 +827,13 @@ void PositiveInteger::SubtractAux(Byte*& LeftEnd1,Byte* c1,Byte* LeftEnd2,Byte* 
 					if(!isEnd)
 					{
 						//fill b1 with 0
-						if(b1IsFilledBy1)
+						if(b1IsFilled)
 						{
-							b1IsFilledBy1 = false;
+							b1IsFilled = false;
 						}
 						else
 						{
-							b1->setByte(0);
+							b1->setByteZero();
 						}
 						
 						if(tRight->getIsRightEnd())
@@ -861,8 +879,8 @@ PositiveInteger* PositiveInteger::Subtract(PositiveInteger* x1,PositiveInteger* 
 		y = x1->copy();
 	}
 	d1 = y->getLeftEnd();
-	PositiveInteger::SubtractAux(d1,y->getRightEnd(),x2->getLeftEnd(),x2->getRightEnd(),isShorten,
-									overwrite,false,temp1,temp1,temp2,temp2,temp2);
+	PositiveInteger::SubtractAux(d1,y->getRightEnd(),x2->getRightEnd(),isShorten,
+									overwrite,false,temp1,temp1,temp2,temp2,temp2,temp2);
 	d1->setLeft(nullptr);
 	if(isShorten) y->setLeftEnd(d1);
 	return y;
@@ -1005,7 +1023,6 @@ PositiveInteger* PositiveInteger::Multiply(PositiveInteger* x1,PositiveInteger* 
 	tRight = b1;
 	
 	////////////////copy x1 without zero
-	MultiplyIsCarried = false;
 	copyAux(MultiplyIsCarried,b1,c1,c2);
 	b1->setIsLeftEnd(true);
 
@@ -1024,11 +1041,17 @@ void PositiveInteger::Divide(PositiveInteger* x1,PositiveInteger* x2,PositiveInt
 	Byte* tRight;
 	Byte* d1;
 	Byte* d2;
-	CompareCode compare;
+	Byte* Multiple;
+	CompareCode compareByte;
+	CompareCode compareInteger;
 	bool isEnd;
+	bool isZero;
 	bool isSubtract;
-	bool b1IsFilledBy1;
+	bool b1IsFilled;
 	bool temp;
+	bool MultiplyIsCarried;
+	bool isDelay = false;
+	PositiveInteger* product;
 	
 	if(overwrite)
 	{
@@ -1064,9 +1087,17 @@ void PositiveInteger::Divide(PositiveInteger* x1,PositiveInteger* x2,PositiveInt
 	y1->setLeftEnd(b1);
 	
 	//////////////////
-	b1IsFilledBy1 = false;
+	b1IsFilled = false;
 	isEnd = false;
 	divisible = false;
+	if(Byte::getBase() == 2)
+	{
+		Multiple = nullptr;
+	}
+	else
+	{
+		Multiple = new Byte;
+	}
 	while(true)
 	{
 		if(!isEnd)
@@ -1076,10 +1107,24 @@ void PositiveInteger::Divide(PositiveInteger* x1,PositiveInteger* x2,PositiveInt
 			d2 = x2->getLeftEnd();
 			while(true)
 			{
+				compareByte = Byte::compare(d1,d2);
+				if(compareByte.isLarger())
+				{
+					//y1(tLeft to tRight) is larger than x2
+					compareInteger = CompareCode(false,true);
+					break;
+				}
+				else if(compareByte.isSmaller())
+				{
+					//y1(tLeft to tRight) is smaller than x2
+					compareInteger = CompareCode(false,false);
+					break;
+				}
+				
 				if(d2->getIsRightEnd())
 				{
 					//y1(tLeft to tRight) and x2 are equal
-					compare = CompareCode(true);
+					compareInteger = CompareCode(true);
 					break;
 				}
 				if(d1->getIsRightEnd())
@@ -1091,28 +1136,15 @@ void PositiveInteger::Divide(PositiveInteger* x1,PositiveInteger* x2,PositiveInt
 				
 				d1 = d1->getRight();
 				d2 = d2->getRight();
-				if(d1->getByte() && !d2->getByte())
-				{
-					//y1(tLeft to tRight) is larger than x2
-					//c1 = 1, c2 = 0
-					compare = CompareCode(false,true);
-					break;
-				}
-				if(!d1->getByte() && d2->getByte())
-				{
-					//y1(tLeft to tRight) is smaller than x2
-					//c1 = 0, c2 = 1
-					compare = CompareCode(false,false);
-					break;
-				}
 			}
 			
-			//fill y1
-			if(compare.isSmaller())
+			//fill y1 with 0
+			if(compareInteger.isSmaller())
 			{
-				if(!b1IsFilledBy1)
+				isDelay = true;
+				if(!b1IsFilled)
 				{
-					b1->setByte(0);
+					b1->setByteZero();
 				}
 				
 				if(tRight->getIsRightEnd())
@@ -1126,22 +1158,139 @@ void PositiveInteger::Divide(PositiveInteger* x1,PositiveInteger* x2,PositiveInt
 					b2->setLeft(b1);
 					b1->setRight(b2);
 					b1 = b2;
-					b1->setByte(1);
 				}
 			}
 			else
 			{
-				b1->setByte(1);
+				isDelay = false;
 			}
 		}
 		
 		//do subtraction
 		if(!isEnd)
 		{
-			b1IsFilledBy1 = true;
-			if(compare.isEqual())
+	
+			if(compareInteger.isEqual())
 			{
 				//Equal
+				//fill y1 with 1
+				b1->setByteOne();
+			}
+			else
+			{
+				//is larger or is smaller
+				//fill y1
+				if(Byte::getBase() == 2)
+				{
+					b1->setByteOne();
+				}
+				else
+				{
+					if(compareInteger.isLarger())
+					{
+						Byte::DivideAux1(nullptr,tLeft,x2->getLeftEnd(),Multiple);
+					}
+					else
+					{
+						Byte::DivideAux1(tLeft,tLeft->getRight(),x2->getLeftEnd(),Multiple);
+					}
+					
+					if(Multiple->isOne())
+					{
+						b1->setByteOne();
+					}
+					else
+					{
+						d1 = x2->getRightEnd();
+						while(true)
+						{
+							if(!d1->isZero()) break;
+							d1 = d1->getLeft();
+						}
+						
+						product = new PositiveInteger;
+						b2 = new Byte;
+						b2->setRight(nullptr);
+						b2->setIsRightEnd(true);
+						product->setRightEnd(b2);
+						copyAux(MultiplyIsCarried,b2,d1,Multiple);
+						b2->setLeft(nullptr);
+						b2->setIsLeftEnd(true);
+						product->setLeftEnd(b2);
+						
+						//compare y1(tLeft to tRight) and product
+						if(compareInteger.isLarger() && MultiplyIsCarried)
+						{
+							Multiple->setByteSubtractOne();
+							b1->setBytePointer(Multiple);
+						}
+						else if(compareInteger.isSmaller() && !MultiplyIsCarried)
+						{
+							b1->setBytePointer(Multiple);
+						}
+						
+						else
+						{
+							d1 = tLeft;
+							d2 = b2;
+							
+							while(true)
+							{
+								compareByte = Byte::compare(d1,d2);
+								if(compareByte.isLarger())
+								{
+									//y1(tLeft to tRight) is larger than product
+									b1->setBytePointer(Multiple);
+									break;
+								}
+								else if(compareByte.isSmaller())
+								{
+									//y1(tLeft to tRight) is smaller than product
+									Multiple->setByteSubtractOne();
+									b1->setBytePointer(Multiple);
+									break;
+								}
+								
+								if(d2->getIsRightEnd())
+								{
+									while(true)
+									{
+										if(d1->getIsRightEnd())
+										{
+											//y1(tLeft to tRight) and product are equal
+											compareInteger = CompareCode(true);
+											b1->setBytePointer(Multiple);
+											break;
+										}
+										d1 = d1->getRight();
+										
+										if(!d1->isZero())
+										{
+											//y1(tLeft to tRight) is larger than product
+											b1->setBytePointer(Multiple);
+											break;
+										}
+									}
+									break;
+								}
+								
+								d1 = d1->getRight();
+								d2 = d2->getRight();
+							}
+							
+
+						}
+						delete product;
+					}
+				}
+			}
+			
+			if(compareInteger.isEqual())
+			{
+				//Equal
+				b1IsFilled = true;
+				
+				//subtraction
 				isSubtract = true;
 				d1 = x2->getLeftEnd();
 				while(true)
@@ -1149,19 +1298,26 @@ void PositiveInteger::Divide(PositiveInteger* x1,PositiveInteger* x2,PositiveInt
 					//do subtraction
 					if(isSubtract)
 					{
-						tLeft->setByte(0);
-						if(d1->getIsRightEnd())
+						tLeft->setByteZero();
+						if(isDelay)
 						{
-							isSubtract = false;
+							isDelay = false;
 						}
 						else
 						{
-							d1 = d1->getRight();
+							if(d1->getIsRightEnd())
+							{
+								isSubtract = false;
+							}
+							else
+							{
+								d1 = d1->getRight();
+							}
 						}
 					}
 					
-					//find tLeft = 1
-					if(tLeft->getByte())
+					//find tLeft != 0
+					if(!tLeft->isZero())
 					{
 						divisible = false;
 						tLeft->setIsLeftEnd(true);
@@ -1169,29 +1325,41 @@ void PositiveInteger::Divide(PositiveInteger* x1,PositiveInteger* x2,PositiveInt
 					}
 					else
 					{
-						if(!isEnd)
+						if(isDelay)
 						{
-							//fill y1 with 0
-							if(b1IsFilledBy1)
-							{
-								b1IsFilledBy1 = false;
-							}
-							else
-							{
-								b1->setByte(0);
-							}
-							
+							//b1 is delay for isSamll
 							if(tRight->getIsRightEnd())
 							{
 								isEnd = true;
 							}
-							else
+							isDelay = false;
+						}
+						else
+						{
+							if(!isEnd)
 							{
-								tRight = tRight->getRight();
-								b2 = new Byte;
-								b2->setLeft(b1);
-								b1->setRight(b2);
-								b1 = b2;
+								//fill y1 with 0
+								if(b1IsFilled)
+								{
+									b1IsFilled = false;
+								}
+								else
+								{
+									b1->setByteZero();
+								}
+								
+								if(tRight->getIsRightEnd())
+								{
+									isEnd = true;
+								}
+								else
+								{
+									tRight = tRight->getRight();
+									b2 = new Byte;
+									b2->setLeft(b1);
+									b1->setRight(b2);
+									b1 = b2;
+								}
 							}
 						}
 						
@@ -1215,9 +1383,11 @@ void PositiveInteger::Divide(PositiveInteger* x1,PositiveInteger* x2,PositiveInt
 			}
 			else
 			{
-				//is larger or is smaller
-				PositiveInteger::SubtractAux(tLeft,tRight,x2->getLeftEnd(),x2->getRightEnd(),temp,true,
-											 true,b1,tRight,compare.isSmaller(),b1IsFilledBy1,isEnd);
+				isZero = false;
+				b1IsFilled = true;
+				//Subtract
+				PositiveInteger::SubtractAux(tLeft,tRight,x2->getRightEnd(),temp,true,
+											 true,b1,tRight,compareInteger.isSmaller(),b1IsFilled,isZero,isEnd,Multiple);
 			}
 		}
 		
@@ -1248,6 +1418,11 @@ void PositiveInteger::Divide(PositiveInteger* x1,PositiveInteger* x2,PositiveInt
 			{
 				tLeft->setLeft(nullptr);
 				y2->setLeftEnd(tLeft);
+			}
+			
+			if(Byte::getBase() != 2)
+			{
+				delete Multiple;
 			}
 			return;
 		}
@@ -1700,17 +1875,17 @@ bool PositiveInteger::VerifyDivide(unsigned int max,bool overwrite)
 	PositiveInteger* p4;
 	bool divisible=0;
 	for(unsigned int i=1;i<=max;i++)
-	//for(unsigned int i=4;i<=4;i++)
+	//for(unsigned int i=30;i<=30;i++)
 	{
 		for(unsigned int j=1;j<=i;j++)
-		//for(unsigned int j=3;j<=3;j++)
+		//for(unsigned int j=15;j<=15;j++)
 		{
 			p1 = new PositiveInteger(i);
 			p2 = new PositiveInteger(j);
-			//p1->printBinary();
-			//p2->printBinary();
+			p1->printBinary();
+			p2->printBinary();
 			PositiveInteger::Divide(p1,p2,p3,p4,divisible,overwrite);
-			//p3->printBinary();
+			p3->printBinary();
 			if(!overwrite)
 			{
 				if(!p1->isSame(i)) {cout<<"Error Code: 16"<<endl; return false;}
@@ -1732,7 +1907,7 @@ bool PositiveInteger::VerifyDivide(unsigned int max,bool overwrite)
 			if(!overwrite) delete p1;
 			delete p2;
 			delete p3;
-			//cout<<endl;
+			cout<<endl;
 		}
 	}
 	return true;

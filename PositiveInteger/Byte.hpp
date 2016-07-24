@@ -19,11 +19,9 @@ public:
 	static unsigned int getBase();
 	static void setBase(unsigned int);
 	
-	bool getByte();
 	unsigned int getByteInt();
 	char getByteChar();
 	
-	void setByte(bool);
 	void setByteInt(unsigned int);
 	void setBytePointer(Byte*);
 	//void setByteChar(char);
@@ -46,12 +44,14 @@ public:
 	void setIsRightEnd(bool);
 	
 	bool isZero();
+	bool isOne();
 	bool isMax();
 	static CompareCode compare(Byte*,Byte*);
 	static void AddThreeByte(Byte*,Byte*,bool,bool&,Byte*&);
 	static void MultiplyAux1(Byte*,Byte*,Byte*&,Byte*&);
 	static void MultiplyAux2(Byte*,Byte*,Byte*,Byte*&,Byte*&);
 	static void MultiplyAux3(Byte*,Byte*,Byte*,Byte*,Byte*&,Byte*&);
+	static void DivideAux1(Byte*,Byte*,Byte*,Byte*&);
 	
 private:
 	static unsigned int base;

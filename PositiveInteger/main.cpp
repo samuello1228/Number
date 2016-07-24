@@ -12,7 +12,7 @@ using namespace std;
 
 int main()
 {
-	Byte::setBase(10);
+	Byte::setBase(2);
 	
 	PositiveInteger* x1;
 	PositiveInteger* x2;
@@ -77,7 +77,7 @@ int main()
 			delete x2;
 			*/
 			
-			///*
+			/*
 			x1 = i->copy();
 			x2 = j->copy();
 			x3 = PositiveInteger::Multiply(x1,x2,temp);
@@ -85,7 +85,7 @@ int main()
 			delete x3;
 			delete x1;
 			delete x2;
-			//*/
+			*/
 			
 			/*
 			if(PositiveInteger::compare(i,j).isLarger())
@@ -136,7 +136,7 @@ int main()
 	delete iMax;
 	delete jMax;
 	
-	/*
+	///*
 	if(!PositiveInteger::VerifyCopy(100)) cout<<"Error"<<endl;
 	if(!PositiveInteger::VerifyCounter(100)) cout<<"Error"<<endl;
 	if(!PositiveInteger::VerifyCompare(100)) cout<<"Error"<<endl;
@@ -145,10 +145,10 @@ int main()
 	if(!PositiveInteger::VerifySubtract(100,0)) cout<<"Error"<<endl;
 	if(!PositiveInteger::VerifySubtract(100,1)) cout<<"Error"<<endl;
 	if(!PositiveInteger::VerifyMultiply(100)) cout<<"Error"<<endl;
-	//if(!PositiveInteger::VerifyDivide(100,0)) cout<<"Error"<<endl;
-	//if(!PositiveInteger::VerifyDivide(100,1)) cout<<"Error"<<endl;
+	if(!PositiveInteger::VerifyDivide(100,0)) cout<<"Error"<<endl;
+	if(!PositiveInteger::VerifyDivide(100,1)) cout<<"Error"<<endl;
 	else cout<<"OK"<<endl;
-	*/
+	//*/
 	
 	/*
 	PositiveInteger* max = new PositiveInteger(97);

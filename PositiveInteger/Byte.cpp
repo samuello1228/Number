@@ -31,10 +31,6 @@ void Byte::setBase(unsigned int newBase)
 }
 
 //getByte
-bool Byte::getByte()
-{
-	return bit;
-}
 char Byte::getByteChar()
 {
 	if(base == 2)
@@ -100,10 +96,6 @@ unsigned int Byte::getByteInt()
 	}
 }
 //setByte
-void Byte::setByte(bool newBit)
-{
-	bit = newBit;
-}
 void Byte::setByteInt(unsigned int x)
 {
 	if(base == 2)
@@ -288,6 +280,17 @@ bool Byte::isZero()
 		return byte == 0;
 	}
 }
+bool Byte::isOne()
+{
+	if(base == 2)
+	{
+		return bit;
+	}
+	else
+	{
+		return byte == 1;
+	}
+}
 bool Byte::isMax()
 {
 	if(base == 2)
@@ -464,5 +467,23 @@ void Byte::MultiplyAux3(Byte* x1,Byte* x2,Byte* Multiple,Byte* carry1,Byte* &car
 		y = x1->byte + x2->byte * Multiple->byte + carry1->byte;
 		y2->byte = y%base;
 		carry2->byte = y/base;
+	}
+}
+void Byte::DivideAux1(Byte* a1,Byte* a2,Byte* b1,Byte* &y)
+{
+	if(base == 2)
+	{
+		y->bit = 1;
+	}
+	else
+	{
+		if(a1==nullptr)
+		{
+			y->byte = a2->byte /b1->byte;
+		}
+		else
+		{
+			y->byte = (a1->byte * base + a2->byte) /b1->byte;
+		}
 	}
 }
