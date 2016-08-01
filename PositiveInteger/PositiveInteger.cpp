@@ -1803,10 +1803,10 @@ bool PositiveInteger::VerifyDivide(unsigned int max,bool overwrite)
 	bool DivideIsCarried;
 	
 	for(unsigned int i=1;i<=max;i++)
-	//for(unsigned int i=2;i<=2;i++)
+	//for(unsigned int i=112;i<=112;i++)
 	{
 		for(unsigned int j=1;j<=i;j++)
-		//for(unsigned int j=1;j<=1;j++)
+		//for(unsigned int j=19;j<=19;j++)
 		{
 			p1 = new PositiveInteger(i);
 			p2 = new PositiveInteger(j);

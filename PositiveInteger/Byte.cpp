@@ -7,6 +7,9 @@
 //
 
 #include "Byte.hpp"
+#include <iostream>
+#include <bitset>
+using namespace std;
 
 unsigned int Byte::base = 2;
 
@@ -507,7 +510,111 @@ void Byte::DivideAux(Byte* a1,Byte* a2,Byte* a3,Byte* b1,Byte* b2,Byte* &y)
 		}
 		else
 		{
-			y->byte = (a1->byte * base * base + a2->byte * base + a3->byte) /(b1->byte * base + b2->byte);
+			if(base == 1<<2 || base == 1<<3 || base == 1<<4)
+			{
+				unsigned int p = 0;
+				unsigned int q = 0;
+				
+				//find log(base)
+				int size = 2;
+				while(true)
+				{
+					if(base & (1<<size)) break;
+					size++;
+				}
+				
+				//find s3
+				int s3 = size -1;
+				while(true)
+				{
+					if(b1->byte & (1<<s3)) break;
+					s3--;
+				}
+				
+				//p for a2
+				int s1 = s3;
+				int s2 = size+1;
+				while(true)
+				{
+					if(s1 == size-1) break;
+					s1++;
+					if(a2->byte & (1<<s1))
+					{
+						p |= (1<<s2);
+					}
+					s2++;
+				}
+				
+				//p for a1
+				s1 = 0;
+				while(true)
+				{
+					if(a1->byte & (1<<s1))
+					{
+						p |= (1<<s2);
+					}
+					if(s2 == 2*size) break;
+					s1++;
+					s2++;
+				}
+				
+				//p for a2
+				//q for b1
+				s1 = s3;
+				s2 = size;
+				while(true)
+				{
+					if(b1->byte & (1<<s1))
+					{
+						q |= (1<<s2);
+					}
+					if(a2->byte & (1<<s1))
+					{
+						p |= (1<<s2);
+					}
+					if(s1==0) break;
+					s1--;
+					s2--;
+				}
+				
+				//p for a3
+				//q for b2
+				s1 = size -1;
+				while(true)
+				{
+					s2--;
+					if(b2->byte & (1<<s1))
+					{
+						q |= (1<<s2);
+					}
+					if(a3->byte & (1<<s1))
+					{
+						p |= (1<<s2);
+					}
+					s1--;
+					if(s2==0) break;
+				}
+				
+				y->byte = p /q;
+				/*
+				if(y->byte != (a1->byte * base * base + a2->byte * base + a3->byte) /(b1->byte * base + b2->byte) &&
+				   y->byte -1 != (a1->byte * base * base + a2->byte * base + a3->byte) /(b1->byte * base + b2->byte))
+				{
+					const int size2 = 3;
+					cout<<std::bitset<size2*3>(a1->byte * base * base + a2->byte * base + a3->byte)<<" "
+						<<std::bitset<size2*2>(b1->byte * base + b2->byte)<<" ";
+					cout<<(a1->byte * base * base + a2->byte * base + a3->byte) /(b1->byte * base + b2->byte)<<endl;
+					cout<<std::bitset<size2*2+1>(p)<<" "
+						<<std::bitset<size2+1>(q)<<" "<<y->byte<<endl;
+					cout<<endl;
+					
+				}
+				*/
+			}
+			else
+			{
+				y->byte = (a1->byte * base * base + a2->byte * base + a3->byte) /(b1->byte * base + b2->byte);
+			}
 		}
 	}
 }
