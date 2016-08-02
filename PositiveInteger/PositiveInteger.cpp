@@ -29,24 +29,7 @@ PositiveInteger::~PositiveInteger()
 	delete b1;
 }
 
-Byte* PositiveInteger::getLeftEnd()
-{
-	return leftEnd;
-}
-void PositiveInteger::setLeftEnd(Byte* newLeftEnd)
-{
-	leftEnd = newLeftEnd;
-}
-Byte* PositiveInteger::getRightEnd()
-{
-	return rightEnd;
-}
-void PositiveInteger::setRightEnd(Byte* newRightEnd)
-{
-	rightEnd = newRightEnd;
-}
-
-PositiveInteger::PositiveInteger(bool x,bool temp)
+PositiveInteger::PositiveInteger(const bool x,const bool temp)
 {
 	if(x)
 	{
@@ -58,11 +41,10 @@ PositiveInteger::PositiveInteger(bool x,bool temp)
 		b1->setRight(nullptr);
 		b1->setIsRightEnd(true);
 		setRightEnd(b1);
-		
 	}
 }
 
-PositiveInteger::PositiveInteger(std::string x)
+PositiveInteger::PositiveInteger(std::string& x)
 {
 	std::string::iterator i=x.begin();
 	Byte* b1;
@@ -87,6 +69,23 @@ PositiveInteger::PositiveInteger(std::string x)
 	setRightEnd(b1);
 }
 
+Byte* PositiveInteger::getLeftEnd()
+{
+	return leftEnd;
+}
+void PositiveInteger::setLeftEnd(Byte* const newLeftEnd)
+{
+	leftEnd = newLeftEnd;
+}
+Byte* PositiveInteger::getRightEnd()
+{
+	return rightEnd;
+}
+void PositiveInteger::setRightEnd(Byte* const newRightEnd)
+{
+	rightEnd = newRightEnd;
+}
+
 int PositiveInteger::getInt()
 {
 	unsigned int y = 0;
@@ -103,7 +102,7 @@ int PositiveInteger::getInt()
 	return y;
 }
 
-PositiveInteger* PositiveInteger::changeBase(unsigned int base)
+PositiveInteger* PositiveInteger::changeBase(const unsigned int base)
 {
 	PositiveInteger* y;
 	PositiveInteger* Base = new PositiveInteger(base);
@@ -229,12 +228,12 @@ void PositiveInteger::copyAux(bool& AddIsCarried,Byte*& b1,Byte* c1,Byte* Multip
 	{
 		if(Multiple==nullptr)
 		{
-			b1->setBytePointer(c1);
+			b1->setBytePointer(*c1);
 		}
 		else
 		{
 			Byte::MultiplyAux2(c1,Multiple,carry1,carry2,b1);
-			carry1->setBytePointer(carry2);
+			carry1->setBytePointer(*carry2);
 		}
 		if(c1->getIsLeftEnd()) break;
 		c1 = c1->getLeft();
@@ -252,7 +251,7 @@ void PositiveInteger::copyAux(bool& AddIsCarried,Byte*& b1,Byte* c1,Byte* Multip
 		b1->setLeft(b2);
 		b2->setRight(b1);
 		b1 = b2;
-		b1->setBytePointer(carry1);
+		b1->setBytePointer(*carry1);
 	}
 	
 	if(Multiple!=nullptr)
@@ -321,7 +320,7 @@ CompareCode PositiveInteger::compare(PositiveInteger* x1, PositiveInteger* x2)
 	
 	while(true)
 	{
-		code = Byte::compare(b1,b2);
+		code = Byte::compare(*b1,*b2);
 		if(!code.isEqual())
 		{
 			return code;
@@ -383,7 +382,7 @@ PositiveInteger* PositiveInteger::AddAux(Byte* c1, Byte* c2,bool overwrite,bool&
 		else
 		{
 			Byte::MultiplyAux3(c1,c2,Multiple,carry3,carry4,c1);
-			carry3->setBytePointer(carry4);
+			carry3->setBytePointer(*carry4);
 		}
 		
 		//find left end
@@ -406,7 +405,7 @@ PositiveInteger* PositiveInteger::AddAux(Byte* c1, Byte* c2,bool overwrite,bool&
 					b2->setIsLeftEnd(true);
 					
 					if(Multiple==nullptr) b2->setByteOne();
-					else b2->setBytePointer(carry3);
+					else b2->setBytePointer(*carry3);
 					
 					if(overwrite)
 					{
@@ -507,7 +506,7 @@ PositiveInteger* PositiveInteger::AddAux(Byte* c1, Byte* c2,bool overwrite,bool&
 							else
 							{
 								b2 = new Byte;
-								b2->setByteAddOne(c2);
+								b2->setByteAddOne(*c2);
 								if(overwrite)
 								{
 									c1->setLeft(b2);
@@ -536,7 +535,7 @@ PositiveInteger* PositiveInteger::AddAux(Byte* c1, Byte* c2,bool overwrite,bool&
 						b2->setRight(c1);
 						c1 = b2;
 						Byte::MultiplyAux2(c2,Multiple,carry3,carry4,c1);
-						carry3->setBytePointer(carry4);
+						carry3->setBytePointer(*carry4);
 						
 						if(c2->getIsLeftEnd()) break;
 					}
@@ -545,7 +544,7 @@ PositiveInteger* PositiveInteger::AddAux(Byte* c1, Byte* c2,bool overwrite,bool&
 					if(!carry3->isZero())
 					{
 						b2 = new Byte;
-						b2->setBytePointer(carry3);
+						b2->setBytePointer(*carry3);
 						c1->setLeft(b2);
 						b2->setRight(c1);
 						c1 = b2;
@@ -650,12 +649,12 @@ PositiveInteger* PositiveInteger::AddAux(Byte* c1, Byte* c2,bool overwrite,bool&
 						{
 							if(overwrite)
 							{
-								c1->setByteAddOne(c1);
+								c1->setByteAddOne(*c1);
 							}
 							else
 							{
 								b2 = new Byte;
-								b2->setByteAddOne(c1);
+								b2->setByteAddOne(*c1);
 								b1->setLeft(b2);
 								b2->setRight(b1);
 								b1 = b2;
@@ -749,9 +748,9 @@ void PositiveInteger::SubtractAux(Byte*& LeftEnd1,Byte* RightEnd1,Byte* RightEnd
 	
 	while(true)
 	{
-		if(Byte::compare(RightEnd1,RightEnd2).isSmaller())
+		if(Byte::compare(*RightEnd1,*RightEnd2).isSmaller())
 		{
-			RightEnd1->setByteSubtractBorrow(RightEnd2);
+			RightEnd1->setByteSubtractBorrow(*RightEnd2);
 			
 			d1 = RightEnd1;
 			while(true)
@@ -764,7 +763,7 @@ void PositiveInteger::SubtractAux(Byte*& LeftEnd1,Byte* RightEnd1,Byte* RightEnd
 		}
 		else
 		{
-			RightEnd1->setByteSubtract(RightEnd2);
+			RightEnd1->setByteSubtract(*RightEnd2);
 		}
 		
 		if(RightEnd2->getIsLeftEnd())
@@ -902,7 +901,7 @@ void PositiveInteger::MultiplyAux(Byte* c1,Byte* c2,Byte* tRight,Byte*& b1,bool&
 				
 				if(Byte::getBase()==2)
 				{
-					b1->setBytePointer(c2);
+					b1->setBytePointer(*c2);
 				}
 				else
 				{
@@ -915,7 +914,7 @@ void PositiveInteger::MultiplyAux(Byte* c1,Byte* c2,Byte* tRight,Byte*& b1,bool&
 						b1->setLeft(b2);
 						b2->setRight(b1);
 						b1 = b2;
-						b1->setBytePointer(carry);
+						b1->setBytePointer(*carry);
 					}
 				}
 				
@@ -1084,7 +1083,7 @@ void PositiveInteger::DivideAux(Byte* x2LeftEnd,Byte* x2RightEnd,PositiveInteger
 			d2 = x2LeftEnd;
 			while(true)
 			{
-				compareByte = Byte::compare(d1,d2);
+				compareByte = Byte::compare(*d1,*d2);
 				if(compareByte.isLarger())
 				{
 					//y1(tLeft to tRight) is larger than x2
@@ -1218,7 +1217,7 @@ void PositiveInteger::DivideAux(Byte* x2LeftEnd,Byte* x2RightEnd,PositiveInteger
 								d2 = b2;
 								while(true)
 								{
-									compareByte = Byte::compare(d1,d2);
+									compareByte = Byte::compare(*d1,*d2);
 									if(compareByte.isLarger())
 									{
 										//y1(tLeft to tRight) is larger than product
@@ -1243,7 +1242,7 @@ void PositiveInteger::DivideAux(Byte* x2LeftEnd,Byte* x2RightEnd,PositiveInteger
 							delete product;
 						}
 					}
-					b1->setBytePointer(Multiple);
+					b1->setBytePointer(*Multiple);
 				}
 			}
 			b1IsFilled = true;
@@ -1553,7 +1552,7 @@ bool PositiveInteger::isSame(unsigned int x)
 	b2 = p1->getRightEnd();
 	while(true)
 	{
-		if(!Byte::compare(b1,b2).isEqual()) {cout<<"Error Code: 13"<<endl; return false;}
+		if(!Byte::compare(*b1,*b2).isEqual()) {cout<<"Error Code: 13"<<endl; return false;}
 		if(b1->getIsLeftEnd()) break;
 		if(b2->getIsLeftEnd()) {cout<<"Error Code: 14"<<endl; return false;}
 		b1 = b1->getLeft();

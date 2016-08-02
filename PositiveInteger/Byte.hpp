@@ -17,36 +17,36 @@ public:
 	~Byte();
 	
 	static unsigned int getBase();
-	static void setBase(unsigned int);
+	static void setBase(const unsigned int);
 	
 	unsigned int getByteInt();
 	char getByteChar();
 	
-	void setByteInt(unsigned int);
-	void setBytePointer(Byte*);
-	void setByteChar(char);
+	void setByteInt(const unsigned int);
+	void setBytePointer(const Byte&);
+	void setByteChar(const char);
 	void setByteZero();
 	void setByteOne();
 	void setByteMax();
-	void setByteAddOne(Byte*);
+	void setByteAddOne(const Byte&);
 	void setByteSubtractOne();
-	void setByteSubtract(Byte*);
-	void setByteSubtractBorrow(Byte*);
+	void setByteSubtract(const Byte&);
+	void setByteSubtractBorrow(const Byte&);
 	
 	Byte* getLeft();
-	void setLeft(Byte*);
+	void setLeft(Byte* const);
 	Byte* getRight();
-	void setRight(Byte*);
+	void setRight(Byte* const);
 	
 	bool getIsLeftEnd();
-	void setIsLeftEnd(bool);
+	void setIsLeftEnd(const bool);
 	bool getIsRightEnd();
-	void setIsRightEnd(bool);
+	void setIsRightEnd(const bool);
 	
 	bool isZero();
 	bool isOne();
 	bool isMax();
-	static CompareCode compare(Byte*,Byte*);
+	static CompareCode compare(const Byte&,const Byte&);
 	static void AddThreeByte(Byte*,Byte*,bool,bool&,Byte*&);
 	static void MultiplyAux1(Byte*,Byte*,Byte*&,Byte*&);
 	static void MultiplyAux2(Byte*,Byte*,Byte*,Byte*&,Byte*&);

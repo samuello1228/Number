@@ -17,14 +17,14 @@ class PositiveInteger
 {
 public:
 	PositiveInteger();
-	PositiveInteger(std::string);
-    PositiveInteger(bool,bool);
+	PositiveInteger(std::string&);
+    PositiveInteger(const bool,const bool);
 	~PositiveInteger();
 	
 	Byte* getLeftEnd();
-	void setLeftEnd(Byte*);
+	void setLeftEnd(Byte* const);
 	Byte* getRightEnd();
-	void setRightEnd(Byte*);
+	void setRightEnd(Byte* const);
 	
 	void printByte();
 	struct Digit
@@ -32,7 +32,7 @@ public:
 		unsigned int digit;
 		Digit* Right=nullptr;
 	};
-	PositiveInteger* changeBase(unsigned int base = 10);
+	PositiveInteger* changeBase(const unsigned int base = 10);
 	int getInt();
 	PositiveInteger* getNumberOfByte();
 	

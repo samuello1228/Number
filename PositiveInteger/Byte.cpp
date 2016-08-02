@@ -28,7 +28,7 @@ unsigned int Byte::getBase()
 	return base;
 }
 
-void Byte::setBase(unsigned int newBase)
+void Byte::setBase(const unsigned int newBase)
 {
 	base = newBase;
 }
@@ -99,7 +99,7 @@ unsigned int Byte::getByteInt()
 	}
 }
 //setByte
-void Byte::setByteInt(unsigned int x)
+void Byte::setByteInt(const unsigned int x)
 {
 	if(base == 2)
 	{
@@ -118,7 +118,7 @@ void Byte::setByteInt(unsigned int x)
 	}
 }
 
-void Byte::setByteChar(char newByte)
+void Byte::setByteChar(const char newByte)
 {
 	if(base == 2)
 	{
@@ -140,15 +140,15 @@ void Byte::setByteChar(char newByte)
 	}
 }
 
-void Byte::setBytePointer(Byte* newByte)
+void Byte::setBytePointer(const Byte& newByte)
 {
 	if(base == 2)
 	{
-		bit = newByte->bit;
+		bit = newByte.bit;
 	}
 	else
 	{
-		byte = newByte->byte;
+		byte = newByte.byte;
 	}
 }
 
@@ -187,7 +187,7 @@ void Byte::setByteMax()
 	}
 }
 
-void Byte::setByteAddOne(Byte* x)
+void Byte::setByteAddOne(const Byte& x)
 {
 	//for x->byte <= base -2
 	if(base == 2)
@@ -196,7 +196,7 @@ void Byte::setByteAddOne(Byte* x)
 	}
 	else
 	{
-		byte = x->byte + 1;
+		byte = x.byte + 1;
 	}
 }
 
@@ -214,11 +214,11 @@ void Byte::setByteSubtractOne()
 	}
 }
 
-void Byte::setByteSubtract(Byte* x)
+void Byte::setByteSubtract(const Byte& x)
 {
 	if(base == 2)
 	{
-		if(bit && !x->bit)
+		if(bit && !x.bit)
 		{
 			bit = 1;
 		}
@@ -229,11 +229,11 @@ void Byte::setByteSubtract(Byte* x)
 	}
 	else
 	{
-		byte = byte - x->byte;
+		byte = byte - x.byte;
 	}
 }
 
-void Byte::setByteSubtractBorrow(Byte* x)
+void Byte::setByteSubtractBorrow(const Byte& x)
 {
 	if(base == 2)
 	{
@@ -241,14 +241,14 @@ void Byte::setByteSubtractBorrow(Byte* x)
 	}
 	else
 	{
-		byte = byte + base - x->byte;
+		byte = byte + base - x.byte;
 	}
 }
 Byte* Byte::getLeft()
 {
 	return left;
 }
-void Byte::setLeft(Byte* newLeft)
+void Byte::setLeft(Byte* const newLeft)
 {
 	left = newLeft;
 }
@@ -257,7 +257,7 @@ Byte* Byte::getRight()
 {
 	return right;
 }
-void Byte::setRight(Byte* newRight)
+void Byte::setRight(Byte* const newRight)
 {
 	right = newRight;
 }
@@ -267,7 +267,7 @@ bool Byte::getIsLeftEnd()
 	return leftEnd;
 }
 
-void Byte::setIsLeftEnd(bool newIsLeftEnd)
+void Byte::setIsLeftEnd(const bool newIsLeftEnd)
 {
 	leftEnd = newIsLeftEnd;
 }
@@ -276,7 +276,7 @@ bool Byte::getIsRightEnd()
 {
 	return rightEnd;
 }
-void Byte::setIsRightEnd(bool newIsRightEnd)
+void Byte::setIsRightEnd(const bool newIsRightEnd)
 {
 	rightEnd = newIsRightEnd;
 }
@@ -314,15 +314,15 @@ bool Byte::isMax()
 		return byte == base-1;
 	}
 }
-CompareCode Byte::compare(Byte* b1, Byte* b2)
+CompareCode Byte::compare(const Byte& b1,const Byte& b2)
 {
 	if(base == 2)
 	{
-		if(b1->bit == b2->bit)
+		if(b1.bit == b2.bit)
 		{
 			return CompareCode(true);
 		}
-		else if(b1->bit)
+		else if(b1.bit)
 		{
 			return CompareCode(false,true);
 		}
@@ -333,11 +333,11 @@ CompareCode Byte::compare(Byte* b1, Byte* b2)
 	}
 	else
 	{
-		if(b1->byte == b2->byte)
+		if(b1.byte == b2.byte)
 		{
 			return CompareCode(true);
 		}
-		else if(b1->byte > b2->byte)
+		else if(b1.byte > b2.byte)
 		{
 			return CompareCode(false,true);
 		}
