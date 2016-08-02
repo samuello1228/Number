@@ -512,6 +512,9 @@ void Byte::DivideAux(Byte* a1,Byte* a2,Byte* a3,Byte* b1,Byte* b2,Byte* &y)
 		{
 			if(base == 1<<2 || base == 1<<3 || base == 1<<4)
 			{
+				//2*size <= 31
+				//size <= 15
+				//base <= 2^15
 				unsigned int p = 0;
 				unsigned int q = 0;
 				
