@@ -42,7 +42,7 @@ public:
 	static PositiveInteger* AddAux(Byte*,Byte*,bool,bool&,Byte*&,Byte* multiple=nullptr);
 	static PositiveInteger* Add(PositiveInteger*,PositiveInteger*,bool);
 	static void SubtractAux(Byte*&,Byte*,Byte*,bool&,bool,
-							bool,Byte*&,Byte*&,bool,bool&,bool&,bool&,Byte* multiple=nullptr);
+							bool,Byte*&,Byte*&,bool,bool&,bool&,bool&);
 	static PositiveInteger* Subtract(PositiveInteger*,PositiveInteger*,bool);
 	static void MultiplyAux(Byte*,Byte*,Byte*,Byte*&,bool&);
 	static PositiveInteger* Multiply(PositiveInteger*,PositiveInteger*,bool&);

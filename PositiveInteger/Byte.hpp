@@ -59,8 +59,8 @@ private:
 	unsigned int byte;
 	Byte* left;
 	Byte* right;
-	bool leftEnd;
-	bool rightEnd;
+	bool isLeftEnd;
+	bool isRightEnd;
 };
 
 class CompareCode

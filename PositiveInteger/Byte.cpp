@@ -264,21 +264,21 @@ void Byte::setRight(Byte* const newRight)
 
 bool Byte::getIsLeftEnd()
 {
-	return leftEnd;
+	return isLeftEnd;
 }
 
 void Byte::setIsLeftEnd(const bool newIsLeftEnd)
 {
-	leftEnd = newIsLeftEnd;
+	isLeftEnd = newIsLeftEnd;
 }
 
 bool Byte::getIsRightEnd()
 {
-	return rightEnd;
+	return isRightEnd;
 }
 void Byte::setIsRightEnd(const bool newIsRightEnd)
 {
-	rightEnd = newIsRightEnd;
+	isRightEnd = newIsRightEnd;
 }
 
 bool Byte::isZero()
