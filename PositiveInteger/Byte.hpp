@@ -19,8 +19,8 @@ public:
 	static unsigned int getBase();
 	static void setBase(const unsigned int);
 	
-	unsigned int getByteInt();
-	char getByteChar();
+	unsigned int getByteInt() const;
+	char getByteChar() const;
 	
 	void setByteInt(const unsigned int);
 	void setBytePointer(const Byte&);
@@ -33,19 +33,19 @@ public:
 	void setByteSubtract(const Byte&);
 	void setByteSubtractBorrow(const Byte&);
 	
-	Byte* getLeft();
+	Byte* getLeft() const;
 	void setLeft(Byte* const);
-	Byte* getRight();
+	Byte* getRight() const;
 	void setRight(Byte* const);
 	
-	bool getIsLeftEnd();
+	bool getIsLeftEnd() const;
 	void setIsLeftEnd(const bool);
-	bool getIsRightEnd();
+	bool getIsRightEnd() const;
 	void setIsRightEnd(const bool);
 	
-	bool isZero();
-	bool isOne();
-	bool isMax();
+	bool isZero() const;
+	bool isOne() const;
+	bool isMax() const;
 	static CompareCode compare(const Byte&,const Byte&);
 	static void AddThreeByte(const Byte&,const Byte&,const bool,bool&,Byte&);
 	static void MultiplyAux1(const Byte&,const Byte&,Byte&,Byte&);
@@ -68,9 +68,9 @@ class CompareCode
 public:
 	CompareCode(){Equal=false;Larger=false;}
 	CompareCode(const bool newEqual,const bool newLarger=false){Equal=newEqual;Larger=newLarger;}
-	bool isEqual(){return Equal;}
-	bool isLarger(){return !Equal && Larger;}
-	bool isSmaller(){return !Equal && !Larger;}
+	bool isEqual() const {return Equal;}
+	bool isLarger() const {return !Equal && Larger;}
+	bool isSmaller() const {return !Equal && !Larger;}
 private:
 	bool Equal;
 	bool Larger;

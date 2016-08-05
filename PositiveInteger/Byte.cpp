@@ -34,7 +34,7 @@ void Byte::setBase(const unsigned int newBase)
 }
 
 //getByte
-char Byte::getByteChar()
+char Byte::getByteChar() const
 {
 	if(base == 2)
 	{
@@ -87,7 +87,7 @@ char Byte::getByteChar()
 	
 	return '0';
 }
-unsigned int Byte::getByteInt()
+unsigned int Byte::getByteInt() const
 {
 	if(base == 2)
 	{
@@ -244,7 +244,7 @@ void Byte::setByteSubtractBorrow(const Byte& x)
 		byte = byte + base - x.byte;
 	}
 }
-Byte* Byte::getLeft()
+Byte* Byte::getLeft() const
 {
 	return left;
 }
@@ -253,7 +253,7 @@ void Byte::setLeft(Byte* const newLeft)
 	left = newLeft;
 }
 
-Byte* Byte::getRight()
+Byte* Byte::getRight() const
 {
 	return right;
 }
@@ -262,7 +262,7 @@ void Byte::setRight(Byte* const newRight)
 	right = newRight;
 }
 
-bool Byte::getIsLeftEnd()
+bool Byte::getIsLeftEnd() const
 {
 	return isLeftEnd;
 }
@@ -272,7 +272,7 @@ void Byte::setIsLeftEnd(const bool newIsLeftEnd)
 	isLeftEnd = newIsLeftEnd;
 }
 
-bool Byte::getIsRightEnd()
+bool Byte::getIsRightEnd() const
 {
 	return isRightEnd;
 }
@@ -281,7 +281,7 @@ void Byte::setIsRightEnd(const bool newIsRightEnd)
 	isRightEnd = newIsRightEnd;
 }
 
-bool Byte::isZero()
+bool Byte::isZero() const
 {
 	if(base == 2)
 	{
@@ -292,7 +292,7 @@ bool Byte::isZero()
 		return byte == 0;
 	}
 }
-bool Byte::isOne()
+bool Byte::isOne() const
 {
 	if(base == 2)
 	{
@@ -303,7 +303,7 @@ bool Byte::isOne()
 		return byte == 1;
 	}
 }
-bool Byte::isMax()
+bool Byte::isMax() const
 {
 	if(base == 2)
 	{

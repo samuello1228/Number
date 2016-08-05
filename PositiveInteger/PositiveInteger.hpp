@@ -21,23 +21,23 @@ public:
     PositiveInteger(const bool,const bool);
 	~PositiveInteger();
 	
-	Byte* getLeftEnd();
+	Byte* getLeftEnd() const;
 	void setLeftEnd(Byte* const);
-	Byte* getRightEnd();
+	Byte* getRightEnd() const;
 	void setRightEnd(Byte* const);
 	
-	void printByte();
+	void printByte() const;
 	struct Digit
 	{
 		unsigned int digit;
 		Digit* Right=nullptr;
 	};
-	PositiveInteger* changeBase(const unsigned int base = 10);
-	int getInt();
-	PositiveInteger* getNumberOfByte();
+	PositiveInteger* changeBase(const unsigned int base = 10) const;
+	int getInt() const;
+	PositiveInteger* getNumberOfByte() const;
 	
-	static void copyAux(bool&,Byte*&,Byte*,Byte* multiple=nullptr);
-	PositiveInteger* copy();
+	static void copyAux(Byte*&,const Byte* const,Byte* multiple=nullptr,bool* AddIsCarried=nullptr);
+	PositiveInteger* copy() const;
 	static CompareCode compare(PositiveInteger*,PositiveInteger*);
 	static PositiveInteger* AddAux(Byte*,Byte*,bool,bool&,Byte*&,Byte* multiple=nullptr);
 	static PositiveInteger* Add(PositiveInteger*,PositiveInteger*,bool);

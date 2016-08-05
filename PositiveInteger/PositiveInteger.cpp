@@ -69,7 +69,7 @@ PositiveInteger::PositiveInteger(std::string& x)
 	setRightEnd(b1);
 }
 
-Byte* PositiveInteger::getLeftEnd()
+Byte* PositiveInteger::getLeftEnd() const
 {
 	return leftEnd;
 }
@@ -77,7 +77,7 @@ void PositiveInteger::setLeftEnd(Byte* const newLeftEnd)
 {
 	leftEnd = newLeftEnd;
 }
-Byte* PositiveInteger::getRightEnd()
+Byte* PositiveInteger::getRightEnd() const
 {
 	return rightEnd;
 }
@@ -86,7 +86,7 @@ void PositiveInteger::setRightEnd(Byte* const newRightEnd)
 	rightEnd = newRightEnd;
 }
 
-int PositiveInteger::getInt()
+int PositiveInteger::getInt() const
 {
 	unsigned int y = 0;
 	unsigned int add = 1;
@@ -102,7 +102,7 @@ int PositiveInteger::getInt()
 	return y;
 }
 
-PositiveInteger* PositiveInteger::changeBase(const unsigned int base)
+PositiveInteger* PositiveInteger::changeBase(const unsigned int base) const
 {
 	PositiveInteger* y;
 	PositiveInteger* Base = new PositiveInteger(base);
@@ -184,7 +184,7 @@ PositiveInteger* PositiveInteger::changeBase(const unsigned int base)
 	}
 }
 
-void PositiveInteger::printByte()
+void PositiveInteger::printByte() const
 {
 	Byte* b1 = getLeftEnd();
 	while(true)
@@ -196,7 +196,7 @@ void PositiveInteger::printByte()
 	cout<<endl;
 }
 
-PositiveInteger* PositiveInteger::getNumberOfByte()
+PositiveInteger* PositiveInteger::getNumberOfByte() const
 {
 	PositiveInteger* one = new PositiveInteger(true,true);
 	PositiveInteger* y = new PositiveInteger(true,true);
@@ -210,12 +210,12 @@ PositiveInteger* PositiveInteger::getNumberOfByte()
 	delete one;
 	return y;
 }
-void PositiveInteger::copyAux(bool& AddIsCarried,Byte*& b1,Byte* c1,Byte* Multiple)
+void PositiveInteger::copyAux(Byte*& b1,const Byte* const c1,Byte* Multiple,bool* AddIsCarried)
 {
 	Byte* b2;
 	Byte* carry1 = nullptr;
 	Byte* carry2 = nullptr;
-	AddIsCarried = false;
+	if(AddIsCarried!=nullptr) *AddIsCarried = false;
 	
 	if(Multiple!=nullptr)
 	{
@@ -224,19 +224,20 @@ void PositiveInteger::copyAux(bool& AddIsCarried,Byte*& b1,Byte* c1,Byte* Multip
 		carry1->setByteZero();
 	}
 	
+	const Byte* d1 = c1;
 	while(true)
 	{
 		if(Multiple==nullptr)
 		{
-			b1->setBytePointer(*c1);
+			b1->setBytePointer(*d1);
 		}
 		else
 		{
-			Byte::MultiplyAux2(*c1,*Multiple,*carry1,*carry2,*b1);
+			Byte::MultiplyAux2(*d1,*Multiple,*carry1,*carry2,*b1);
 			carry1->setBytePointer(*carry2);
 		}
-		if(c1->getIsLeftEnd()) break;
-		c1 = c1->getLeft();
+		if(d1->getIsLeftEnd()) break;
+		d1 = d1->getLeft();
 		b2 = new Byte;
 		b1->setLeft(b2);
 		b2->setRight(b1);
@@ -246,7 +247,7 @@ void PositiveInteger::copyAux(bool& AddIsCarried,Byte*& b1,Byte* c1,Byte* Multip
 	//carry
 	if(Multiple!=nullptr && !carry1->isZero())
 	{
-		AddIsCarried = true;
+		if(AddIsCarried!=nullptr) *AddIsCarried = true;
 		b2 = new Byte;
 		b1->setLeft(b2);
 		b2->setRight(b1);
@@ -260,12 +261,11 @@ void PositiveInteger::copyAux(bool& AddIsCarried,Byte*& b1,Byte* c1,Byte* Multip
 		delete carry2;
 	}
 }
-PositiveInteger* PositiveInteger::copy()
+PositiveInteger* PositiveInteger::copy() const
 {
 	PositiveInteger* y;
 	Byte* b1;
 	Byte* c1;
-	bool AddIsCarried;
 	
 	y = new PositiveInteger;
 	b1 = new Byte;
@@ -274,7 +274,7 @@ PositiveInteger* PositiveInteger::copy()
 	y->setRightEnd(b1);
 	
 	c1 = getRightEnd();
-	PositiveInteger::copyAux(AddIsCarried,b1,c1);
+	PositiveInteger::copyAux(b1,c1);
 
 	b1->setLeft(nullptr);
 	b1->setIsLeftEnd(true);
@@ -560,14 +560,14 @@ PositiveInteger* PositiveInteger::AddAux(Byte* c1, Byte* c2,bool overwrite,bool&
 						c1->setLeft(b2);
 						b2->setRight(c1);
 						c1 = b2;
-						copyAux(AddIsCarried,c1,c2,Multiple);
+						PositiveInteger::copyAux(c1,c2,Multiple,&AddIsCarried);
 					}
 					else
 					{
 						b1->setLeft(b2);
 						b2->setRight(b1);
 						b1 = b2;
-						copyAux(AddIsCarried,b1,c2,Multiple);
+						PositiveInteger::copyAux(b1,c2,Multiple,&AddIsCarried);
 					}
 				}
 				
@@ -677,7 +677,7 @@ PositiveInteger* PositiveInteger::AddAux(Byte* c1, Byte* c2,bool overwrite,bool&
 						b1->setLeft(b2);
 						b2->setRight(b1);
 						b1 = b2;
-						copyAux(AddIsCarried,b1,c1);
+						PositiveInteger::copyAux(b1,c1);
 					}
 					b1->setLeft(nullptr);
 					b1->setIsLeftEnd(true);
@@ -993,7 +993,7 @@ PositiveInteger* PositiveInteger::Multiply(PositiveInteger* x1,PositiveInteger* 
 	tRight = b1;
 	
 	////////////////copy x1 without zero
-	copyAux(MultiplyIsCarried,b1,c1,c2);
+	PositiveInteger::copyAux(b1,c1,c2,&MultiplyIsCarried);
 	b1->setIsLeftEnd(true);
 
 	////////////////
@@ -1169,7 +1169,7 @@ void PositiveInteger::DivideAux(Byte* x2LeftEnd,Byte* x2RightEnd,PositiveInteger
 							b2 = new Byte;
 							b2->setIsRightEnd(true);
 							product->setRightEnd(b2);
-							copyAux(MultiplyIsCarried,b2,d2,Multiple);
+							PositiveInteger::copyAux(b2,d2,Multiple);
 							b2->setIsLeftEnd(true);
 							product->setLeftEnd(b2);
 							
@@ -1198,7 +1198,7 @@ void PositiveInteger::DivideAux(Byte* x2LeftEnd,Byte* x2RightEnd,PositiveInteger
 							b2 = new Byte;
 							b2->setIsRightEnd(true);
 							product->setRightEnd(b2);
-							copyAux(MultiplyIsCarried,b2,d2,Multiple);
+							PositiveInteger::copyAux(b2,d2,Multiple,&MultiplyIsCarried);
 							b2->setIsLeftEnd(true);
 							product->setLeftEnd(b2);
 							
@@ -1252,7 +1252,7 @@ void PositiveInteger::DivideAux(Byte* x2LeftEnd,Byte* x2RightEnd,PositiveInteger
 								b2 = new Byte;
 								b2->setIsRightEnd(true);
 								product->setRightEnd(b2);
-								copyAux(MultiplyIsCarried,b2,d2,Multiple);
+								PositiveInteger::copyAux(b2,d2,Multiple);
 								b2->setIsLeftEnd(true);
 								product->setLeftEnd(b2);
 							}
