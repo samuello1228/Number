@@ -232,7 +232,7 @@ void PositiveInteger::copyAux(bool& AddIsCarried,Byte*& b1,Byte* c1,Byte* Multip
 		}
 		else
 		{
-			Byte::MultiplyAux2(c1,Multiple,carry1,carry2,b1);
+			Byte::MultiplyAux2(*c1,*Multiple,*carry1,*carry2,*b1);
 			carry1->setBytePointer(*carry2);
 		}
 		if(c1->getIsLeftEnd()) break;
@@ -370,18 +370,18 @@ PositiveInteger* PositiveInteger::AddAux(Byte* c1, Byte* c2,bool overwrite,bool&
 		{
 			if(overwrite)
 			{
-				Byte::AddThreeByte(c1,c2,carry1,carry2,c1);
+				Byte::AddThreeByte(*c1,*c2,carry1,carry2,*c1);
 			}
 			else
 			{
-				Byte::AddThreeByte(c1,c2,carry1,carry2,b2);
+				Byte::AddThreeByte(*c1,*c2,carry1,carry2,*b2);
 				b1 = b2;
 			}
 			carry1 = carry2;
 		}
 		else
 		{
-			Byte::MultiplyAux3(c1,c2,Multiple,carry3,carry4,c1);
+			Byte::MultiplyAux3(*c1,*c2,*Multiple,*carry3,*carry4,*c1);
 			carry3->setBytePointer(*carry4);
 		}
 		
@@ -534,7 +534,7 @@ PositiveInteger* PositiveInteger::AddAux(Byte* c1, Byte* c2,bool overwrite,bool&
 						c1->setLeft(b2);
 						b2->setRight(c1);
 						c1 = b2;
-						Byte::MultiplyAux2(c2,Multiple,carry3,carry4,c1);
+						Byte::MultiplyAux2(*c2,*Multiple,*carry3,*carry4,*c1);
 						carry3->setBytePointer(*carry4);
 						
 						if(c2->getIsLeftEnd()) break;
@@ -891,7 +891,7 @@ void PositiveInteger::MultiplyAux(Byte* c1,Byte* c2,Byte* tRight,Byte*& b1,bool&
 				else
 				{
 					//c1 must be only one byte
-					Byte::MultiplyAux1(c1,c2,carry,b1);
+					Byte::MultiplyAux1(*c1,*c2,*carry,*b1);
 					if(!carry->isZero())
 					{
 						MultiplyIsCarried = true;
@@ -1155,11 +1155,11 @@ void PositiveInteger::DivideAux(Byte* x2LeftEnd,Byte* x2RightEnd,PositiveInteger
 						//calculate correct Multiple
 						if(compareInteger.isLarger())
 						{
-							Byte::DivideAux(nullptr,nullptr,tLeft,nullptr,x2LeftEnd,Multiple);
+							Byte::DivideAux(nullptr,nullptr,*tLeft,nullptr,*x2LeftEnd,*Multiple);
 						}
 						else
 						{
-							Byte::DivideAux(nullptr,tLeft,tLeft->getRight(),nullptr,x2LeftEnd,Multiple);
+							Byte::DivideAux(nullptr,tLeft,*(tLeft->getRight()),nullptr,*x2LeftEnd,*Multiple);
 						}
 		
 						if(!Multiple->isOne())
@@ -1181,12 +1181,12 @@ void PositiveInteger::DivideAux(Byte* x2LeftEnd,Byte* x2RightEnd,PositiveInteger
 						//calculate estimated Multiple
 						if(compareInteger.isLarger())
 						{
-							Byte::DivideAux(nullptr,tLeft,tLeft->getRight(),x2LeftEnd,x2LeftEnd->getRight(),Multiple);
+							Byte::DivideAux(nullptr,tLeft,*(tLeft->getRight()),x2LeftEnd,*(x2LeftEnd->getRight()),*Multiple);
 						}
 						else
 						{
-							Byte::DivideAux(tLeft,tLeft->getRight(),tLeft->getRight()->getRight(),
-											x2LeftEnd,x2LeftEnd->getRight(),Multiple);
+							Byte::DivideAux(tLeft,tLeft->getRight(),*(tLeft->getRight()->getRight()),
+											x2LeftEnd,*(x2LeftEnd->getRight()),*Multiple);
 						}
 						
 						//calculate correct Multiple

@@ -47,11 +47,11 @@ public:
 	bool isOne();
 	bool isMax();
 	static CompareCode compare(const Byte&,const Byte&);
-	static void AddThreeByte(Byte*,Byte*,bool,bool&,Byte*&);
-	static void MultiplyAux1(Byte*,Byte*,Byte*&,Byte*&);
-	static void MultiplyAux2(Byte*,Byte*,Byte*,Byte*&,Byte*&);
-	static void MultiplyAux3(Byte*,Byte*,Byte*,Byte*,Byte*&,Byte*&);
-	static void DivideAux(Byte*,Byte*,Byte*,Byte*,Byte*,Byte*&);
+	static void AddThreeByte(const Byte&,const Byte&,const bool,bool&,Byte&);
+	static void MultiplyAux1(const Byte&,const Byte&,Byte&,Byte&);
+	static void MultiplyAux2(const Byte&,const Byte&,const Byte&,Byte&,Byte&);
+	static void MultiplyAux3(const Byte&,const Byte&,const Byte&,const Byte&,Byte&,Byte&);
+	static void DivideAux(Byte*,Byte*,const Byte&,Byte*,const Byte&,Byte&);
 	
 private:
 	static unsigned int base;
@@ -67,7 +67,7 @@ class CompareCode
 {
 public:
 	CompareCode(){Equal=false;Larger=false;}
-	CompareCode(bool newEqual, bool newLarger=false){Equal=newEqual;Larger=newLarger;}
+	CompareCode(const bool newEqual,const bool newLarger=false){Equal=newEqual;Larger=newLarger;}
 	bool isEqual(){return Equal;}
 	bool isLarger(){return !Equal && Larger;}
 	bool isSmaller(){return !Equal && !Larger;}

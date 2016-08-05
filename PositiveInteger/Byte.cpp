@@ -348,26 +348,26 @@ CompareCode Byte::compare(const Byte& b1,const Byte& b2)
 	}
 }
 
-void Byte::AddThreeByte(Byte* x1,Byte* x2,bool carry1,bool &carry2,Byte* &y2)
+void Byte::AddThreeByte(const Byte& x1,const Byte& x2,const bool carry1,bool& carry2,Byte& y2)
 {
 	unsigned int y;
 	if(base == 2)
 	{
-		if(!x1->bit)
+		if(!x1.bit)
 		{
-			if(!x2->bit)
+			if(!x2.bit)
 			{
 				if(!carry1)
 				{
 					//000
 					carry2=0;
-					y2->bit = 0;
+					y2.bit = 0;
 				}
 				else
 				{
 					//001
 					carry2=0;
-					y2->bit = 1;
+					y2.bit = 1;
 				}
 			}
 			else
@@ -376,31 +376,31 @@ void Byte::AddThreeByte(Byte* x1,Byte* x2,bool carry1,bool &carry2,Byte* &y2)
 				{
 					//010
 					carry2=0;
-					y2->bit = 1;
+					y2.bit = 1;
 				}
 				else
 				{
 					//011
 					carry2=1;
-					y2->bit = 0;
+					y2.bit = 0;
 				}
 			}
 		}
 		else
 		{
-			if(!x2->bit)
+			if(!x2.bit)
 			{
 				if(!carry1)
 				{
 					//100
 					carry2=0;
-					y2->bit = 1;
+					y2.bit = 1;
 				}
 				else
 				{
 					//101
 					carry2=1;
-					y2->bit = 0;
+					y2.bit = 0;
 				}
 			}
 			else
@@ -409,24 +409,24 @@ void Byte::AddThreeByte(Byte* x1,Byte* x2,bool carry1,bool &carry2,Byte* &y2)
 				{
 					//110
 					carry2=1;
-					y2->bit = 0;
+					y2.bit = 0;
 				}
 				else
 				{
 					//111
 					carry2=1;
-					y2->bit = 1;
+					y2.bit = 1;
 				}
 			}
 		}
 	}
 	else
 	{
-		y = x1->byte + x2->byte;
+		y = x1.byte + x2.byte;
 		if(carry1) y = y+1;
 		
-		y2->byte = y%base;
-		y = y - y2->byte;
+		y2.byte = y%base;
+		y = y - y2.byte;
 		if(y==0)
 		{
 			carry2 = false;
@@ -437,56 +437,56 @@ void Byte::AddThreeByte(Byte* x1,Byte* x2,bool carry1,bool &carry2,Byte* &y2)
 		}
 	}
 }
-void Byte::MultiplyAux1(Byte* x2,Byte* Multiple,Byte* &carry2,Byte* &y2)
+void Byte::MultiplyAux1(const Byte& x2,const Byte& Multiple,Byte& carry2,Byte& y2)
 {
 	unsigned int y;
 	if(base == 2)
 	{
-		y2->bit = x2->bit;
-		carry2->bit = 0;
+		y2.bit = x2.bit;
+		carry2.bit = 0;
 	}
 	else
 	{
-		y = x2->byte * Multiple->byte;
-		y2->byte = y%base;
-		carry2->byte = y/base;
+		y = x2.byte * Multiple.byte;
+		y2.byte = y%base;
+		carry2.byte = y/base;
 	}
 }
-void Byte::MultiplyAux2(Byte* x2,Byte* Multiple,Byte* carry1,Byte* &carry2,Byte* &y2)
+void Byte::MultiplyAux2(const Byte& x2,const Byte& Multiple,const Byte& carry1,Byte& carry2,Byte& y2)
 {
 	unsigned int y;
 	if(base == 2)
 	{
-		y2->bit = x2->bit;
-		carry2->bit = 0;
+		y2.bit = x2.bit;
+		carry2.bit = 0;
 	}
 	else
 	{
-		y = x2->byte * Multiple->byte + carry1->byte;
-		y2->byte = y%base;
-		carry2->byte = y/base;
+		y = x2.byte * Multiple.byte + carry1.byte;
+		y2.byte = y%base;
+		carry2.byte = y/base;
 	}
 }
-void Byte::MultiplyAux3(Byte* x1,Byte* x2,Byte* Multiple,Byte* carry1,Byte* &carry2,Byte* &y2)
+void Byte::MultiplyAux3(const Byte& x1,const Byte& x2,const Byte& Multiple,const Byte& carry1,Byte& carry2,Byte& y2)
 {
 	unsigned int y;
 	if(base == 2)
 	{
-		y2->bit = x2->bit;
-		carry2->bit = 0;
+		y2.bit = x2.bit;
+		carry2.bit = 0;
 	}
 	else
 	{
-		y = x1->byte + x2->byte * Multiple->byte + carry1->byte;
-		y2->byte = y%base;
-		carry2->byte = y/base;
+		y = x1.byte + x2.byte * Multiple.byte + carry1.byte;
+		y2.byte = y%base;
+		carry2.byte = y/base;
 	}
 }
-void Byte::DivideAux(Byte* a1,Byte* a2,Byte* a3,Byte* b1,Byte* b2,Byte* &y)
+void Byte::DivideAux(Byte* a1,Byte* a2,const Byte& a3,Byte* b1,const Byte& b2,Byte& y)
 {
 	if(base == 2)
 	{
-		y->bit = 1;
+		y.bit = 1;
 	}
 	else
 	{
@@ -494,17 +494,17 @@ void Byte::DivideAux(Byte* a1,Byte* a2,Byte* a3,Byte* b1,Byte* b2,Byte* &y)
 		{
 			if(a2==nullptr)
 			{
-				y->byte = a3->byte /b2->byte;
+				y.byte = a3.byte /b2.byte;
 			}
 			else
 			{
 				if(b1==nullptr)
 				{
-					y->byte = (a2->byte * base + a3->byte) /b2->byte;
+					y.byte = (a2->byte * base + a3.byte) /b2.byte;
 				}
 				else
 				{
-					y->byte = (a2->byte * base + a3->byte) /(b1->byte * base + b2->byte);
+					y.byte = (a2->byte * base + a3.byte) /(b1->byte * base + b2.byte);
 				}
 			}
 		}
@@ -586,11 +586,11 @@ void Byte::DivideAux(Byte* a1,Byte* a2,Byte* a3,Byte* b1,Byte* b2,Byte* &y)
 				while(true)
 				{
 					s2--;
-					if(b2->byte & (1<<s1))
+					if(b2.byte & (1<<s1))
 					{
 						q |= (1<<s2);
 					}
-					if(a3->byte & (1<<s1))
+					if(a3.byte & (1<<s1))
 					{
 						p |= (1<<s2);
 					}
@@ -598,17 +598,17 @@ void Byte::DivideAux(Byte* a1,Byte* a2,Byte* a3,Byte* b1,Byte* b2,Byte* &y)
 					if(s2==0) break;
 				}
 				
-				y->byte = p /q;
+				y.byte = p /q;
 				/*
-				if(y->byte != (a1->byte * base * base + a2->byte * base + a3->byte) /(b1->byte * base + b2->byte) &&
-				   y->byte -1 != (a1->byte * base * base + a2->byte * base + a3->byte) /(b1->byte * base + b2->byte))
+				if(y.byte != (a1->byte * base * base + a2->byte * base + a3.byte) /(b1->byte * base + b2.byte) &&
+				   y.byte -1 != (a1->byte * base * base + a2->byte * base + a3.byte) /(b1->byte * base + b2.byte))
 				{
 					const int size2 = 3;
-					cout<<std::bitset<size2*3>(a1->byte * base * base + a2->byte * base + a3->byte)<<" "
-						<<std::bitset<size2*2>(b1->byte * base + b2->byte)<<" ";
-					cout<<(a1->byte * base * base + a2->byte * base + a3->byte) /(b1->byte * base + b2->byte)<<endl;
+					cout<<std::bitset<size2*3>(a1->byte * base * base + a2->byte * base + a3.byte)<<" "
+						<<std::bitset<size2*2>(b1->byte * base + b2.byte)<<" ";
+					cout<<(a1->byte * base * base + a2->byte * base + a3.byte) /(b1->byte * base + b2.byte)<<endl;
 					cout<<std::bitset<size2*2+1>(p)<<" "
-						<<std::bitset<size2+1>(q)<<" "<<y->byte<<endl;
+						<<std::bitset<size2+1>(q)<<" "<<y.byte<<endl;
 					cout<<endl;
 					
 				}
@@ -616,7 +616,7 @@ void Byte::DivideAux(Byte* a1,Byte* a2,Byte* a3,Byte* b1,Byte* b2,Byte* &y)
 			}
 			else
 			{
-				y->byte = (a1->byte * base * base + a2->byte * base + a3->byte) /(b1->byte * base + b2->byte);
+				y.byte = (a1->byte * base * base + a2->byte * base + a3.byte) /(b1->byte * base + b2.byte);
 			}
 		}
 	}
