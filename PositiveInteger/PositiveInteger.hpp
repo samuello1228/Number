@@ -36,7 +36,7 @@ public:
 	int getInt() const;
 	PositiveInteger* getNumberOfByte() const;
 	
-	static void copyAux(Byte*&,const Byte* const,Byte* multiple=nullptr,bool* AddIsCarried=nullptr);
+	static void copyAux(Byte*&,Byte const&,Byte const * const multiple=nullptr,bool* AddIsCarried=nullptr);
 	PositiveInteger* copy() const;
 	static CompareCode compare(PositiveInteger*,PositiveInteger*);
 	static PositiveInteger* AddAux(Byte*,Byte*,bool,bool&,Byte*&,Byte* multiple=nullptr);
