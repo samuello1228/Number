@@ -34,9 +34,9 @@ public:
 	void setByteSubtractBorrow(Byte const&);
 	
 	Byte* getLeft() const;
-	void setLeft(Byte* const);
+	void setLeft(Byte* const&);
 	Byte* getRight() const;
-	void setRight(Byte* const);
+	void setRight(Byte* const&);
 	
 	bool getIsLeftEnd() const;
 	void setIsLeftEnd(bool const);

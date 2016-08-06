@@ -22,9 +22,9 @@ public:
 	~PositiveInteger();
 	
 	Byte* getLeftEnd() const;
-	void setLeftEnd(Byte* const);
+	void setLeftEnd(Byte* const&);
 	Byte* getRightEnd() const;
-	void setRightEnd(Byte* const);
+	void setRightEnd(Byte* const&);
 	
 	void printByte() const;
 	struct Digit
@@ -62,16 +62,16 @@ public:
 	
 	//verification
 	PositiveInteger(unsigned int);
-	bool isComplete();
-	bool isSame(unsigned int);
+	bool isComplete() const;
+	bool isSame(unsigned int const) const;
 	
-	static bool VerifyCopy(unsigned int);
-	static bool VerifyCounter(unsigned int);
-	static bool VerifyCompare(unsigned int);
-	static bool VerifyAdd(unsigned int,bool);
-	static bool VerifySubtract(unsigned int,bool);
-	static bool VerifyMultiply(unsigned int);
-	static bool VerifyDivide(unsigned int,bool);
+	static bool VerifyCopy(unsigned int const);
+	static bool VerifyCounter(unsigned int const);
+	static bool VerifyCompare(unsigned int const);
+	static bool VerifyAdd(unsigned int const,bool);
+	static bool VerifySubtract(unsigned int const,bool);
+	static bool VerifyMultiply(unsigned int const);
+	static bool VerifyDivide(unsigned int const,bool);
 	
 private:
 	Byte* leftEnd;

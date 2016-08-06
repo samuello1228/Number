@@ -249,7 +249,7 @@ Byte* Byte::getLeft() const
 {
 	return left;
 }
-void Byte::setLeft(Byte* const newLeft)
+void Byte::setLeft(Byte* const& newLeft)
 {
 	left = newLeft;
 }
@@ -258,7 +258,7 @@ Byte* Byte::getRight() const
 {
 	return right;
 }
-void Byte::setRight(Byte* const newRight)
+void Byte::setRight(Byte* const& newRight)
 {
 	right = newRight;
 }

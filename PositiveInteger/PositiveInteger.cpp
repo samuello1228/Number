@@ -18,11 +18,10 @@ PositiveInteger::PositiveInteger()
 
 PositiveInteger::~PositiveInteger()
 {
-	Byte* b1 = getLeftEnd();
-	Byte* b2;
+	Byte const * b1 = getLeftEnd();
 	while(!b1->getIsRightEnd())
 	{
-		b2 = b1->getRight();
+		Byte const * b2 = b1->getRight();
 		delete b1;
 		b1 = b2;
 	}
@@ -31,17 +30,15 @@ PositiveInteger::~PositiveInteger()
 
 PositiveInteger::PositiveInteger(const bool x,const bool temp)
 {
-	if(x)
-	{
-		Byte* b1 = new Byte;
-		b1->setByteOne();
-		b1->setLeft(nullptr);
-		b1->setIsLeftEnd(true);
-		setLeftEnd(b1);
-		b1->setRight(nullptr);
-		b1->setIsRightEnd(true);
-		setRightEnd(b1);
-	}
+	//one
+	Byte* const b1 = new Byte;
+	b1->setByteOne();
+	b1->setLeft(nullptr);
+	b1->setIsLeftEnd(true);
+	setLeftEnd(b1);
+	b1->setRight(nullptr);
+	b1->setIsRightEnd(true);
+	setRightEnd(b1);
 }
 
 PositiveInteger::PositiveInteger(std::string& x)
@@ -73,7 +70,7 @@ Byte* PositiveInteger::getLeftEnd() const
 {
 	return leftEnd;
 }
-void PositiveInteger::setLeftEnd(Byte* const newLeftEnd)
+void PositiveInteger::setLeftEnd(Byte* const& newLeftEnd)
 {
 	leftEnd = newLeftEnd;
 }
@@ -81,7 +78,7 @@ Byte* PositiveInteger::getRightEnd() const
 {
 	return rightEnd;
 }
-void PositiveInteger::setRightEnd(Byte* const newRightEnd)
+void PositiveInteger::setRightEnd(Byte* const& newRightEnd)
 {
 	rightEnd = newRightEnd;
 }
@@ -90,8 +87,7 @@ int PositiveInteger::getInt() const
 {
 	unsigned int y = 0;
 	unsigned int add = 1;
-	Byte* d1;
-	d1 = getRightEnd();
+	Byte const * d1 = getRightEnd();
 	while(true)
 	{
 		y += d1->getByteInt() * add;
@@ -101,12 +97,11 @@ int PositiveInteger::getInt() const
 	}
 	return y;
 }
-
+//not optimize
 PositiveInteger* PositiveInteger::changeBase(const unsigned int base) const
 {
-	PositiveInteger* y;
-	PositiveInteger* Base = new PositiveInteger(base);
-	PositiveInteger* x1;
+	
+	PositiveInteger* const Base = new PositiveInteger(base);
 	PositiveInteger* x2 = nullptr;
 	Byte* b1;
 	Byte* b2;
@@ -114,7 +109,7 @@ PositiveInteger* PositiveInteger::changeBase(const unsigned int base) const
 	bool isEnd = false;
 	bool temp;
 
-	x1 = this->copy();
+	PositiveInteger* x1 = this->copy();
 	Digit* digit1 = new Digit;
 	Digit* digit2;
 	while(true)
@@ -141,7 +136,7 @@ PositiveInteger* PositiveInteger::changeBase(const unsigned int base) const
 		if(isEnd)
 		{
 			Byte::setBase(base);
-			y = new PositiveInteger;
+			PositiveInteger* y = new PositiveInteger;
 			b1 = new Byte;
 			b1->setLeft(nullptr);
 			b1->setIsLeftEnd(true);
@@ -186,7 +181,7 @@ PositiveInteger* PositiveInteger::changeBase(const unsigned int base) const
 
 void PositiveInteger::printByte() const
 {
-	Byte* b1 = getLeftEnd();
+	Byte const * b1 = getLeftEnd();
 	while(true)
 	{
 		cout<<b1->getByteChar();
@@ -195,10 +190,10 @@ void PositiveInteger::printByte() const
 	}
 	cout<<endl;
 }
-
+//not optimize
 PositiveInteger* PositiveInteger::getNumberOfByte() const
 {
-	PositiveInteger* one = new PositiveInteger(true,true);
+	PositiveInteger * const one = new PositiveInteger(true,true);
 	PositiveInteger* y = new PositiveInteger(true,true);
 	Byte* c1 = getRightEnd();
 	while(true)
@@ -1514,8 +1509,8 @@ PositiveInteger* PositiveInteger::GCD(PositiveInteger* x1,PositiveInteger* x2)
 //verification
 PositiveInteger::PositiveInteger(unsigned int x)
 {
-	unsigned int base = Byte::getBase();
-	Byte* b1 = nullptr;
+	unsigned int const base = Byte::getBase();
+	Byte* b1;
 	Byte* b2 = new Byte;
 	b2->setRight(nullptr);
 	b2->setIsRightEnd(true);
@@ -1537,15 +1532,13 @@ PositiveInteger::PositiveInteger(unsigned int x)
 	setLeftEnd(b1);
 }
 
-bool PositiveInteger::isComplete()
+bool PositiveInteger::isComplete() const
 {
-	Byte* b1;
-	Byte* b2;
-	
 	if(getRightEnd()==nullptr) {cout<<"Error Code: 1"<<endl; return false;}
-	b1 = getRightEnd();
+	Byte const * b1 = getRightEnd();
 	if(b1->getRight()!=nullptr) {cout<<"Error Code: 2"<<endl; return false;}
 	if(!b1->getIsRightEnd()) {cout<<"Error Code: 3"<<endl; return false;}
+	Byte const * b2;
 	while(true)
 	{
 		if(b1->getLeft()==nullptr) break;
@@ -1564,15 +1557,13 @@ bool PositiveInteger::isComplete()
 	
 	return true;
 }
-bool PositiveInteger::isSame(unsigned int x)
+bool PositiveInteger::isSame(unsigned int const x) const
 {
 	if(!isComplete()) {cout<<"Error Code: 12"<<endl; return false;}
-	PositiveInteger* p1 = new PositiveInteger(x);
-	Byte* b1;
-	Byte* b2;
-	
-	b1 = getRightEnd();
-	b2 = p1->getRightEnd();
+	PositiveInteger const * const p1 = new PositiveInteger(x);
+	Byte const * b1 = getRightEnd();
+	Byte const * b2 = p1->getRightEnd();
+
 	while(true)
 	{
 		if(!Byte::compare(*b1,*b2).isEqual()) {cout<<"Error Code: 13"<<endl; return false;}
@@ -1587,19 +1578,17 @@ bool PositiveInteger::isSame(unsigned int x)
 	return true;
 }
 
-bool PositiveInteger::VerifyCopy(unsigned int max)
+bool PositiveInteger::VerifyCopy(unsigned int const max)
 {
-	PositiveInteger* p1;
-	PositiveInteger* p2;
 	for(unsigned int i=1;i<=max;i++)
 	{
-		p1 = new PositiveInteger(i);
+		PositiveInteger const * const p1 = new PositiveInteger(i);
 		//if(!p1->isComplete()) return false;
 		//p1->printByte();
 		//cout<<p1->getInt()<<endl;
 		//p1->printDecimal(0);
 		
-		p2 = p1->copy();
+		PositiveInteger const * const p2 = p1->copy();
 		if(!p1->isSame(i)) return false;
 		if(!p2->isSame(i)) return false;
 		
@@ -1608,8 +1597,8 @@ bool PositiveInteger::VerifyCopy(unsigned int max)
 	}
 	return true;
 }
-
-bool PositiveInteger::VerifyCounter(unsigned int max)
+//not optimize
+bool PositiveInteger::VerifyCounter(unsigned int const max)
 {
 	PositiveInteger* one = new PositiveInteger(true,true);
 	PositiveInteger* count = new PositiveInteger(true,true);
@@ -1623,7 +1612,7 @@ bool PositiveInteger::VerifyCounter(unsigned int max)
 	return true;
 }
 /*
-bool PositiveInteger::VerifyPositiveInteger(unsigned int max)
+bool PositiveInteger::VerifyPositiveInteger(unsigned int const max)
 {
 	PositiveInteger* p1;
 	PositiveInteger* p2;
@@ -1657,7 +1646,7 @@ bool PositiveInteger::VerifyPositiveInteger(unsigned int max)
 	return true;
 }
 */
-bool PositiveInteger::VerifyCompare(unsigned int max)
+bool PositiveInteger::VerifyCompare(unsigned int const max)
 {
 	PositiveInteger* p1;
 	PositiveInteger* p2;
@@ -1682,7 +1671,7 @@ bool PositiveInteger::VerifyCompare(unsigned int max)
 	return true;
 }
 
-bool PositiveInteger::VerifyAdd(unsigned int max,bool overwrite)
+bool PositiveInteger::VerifyAdd(unsigned int const max,bool overwrite)
 {
 	PositiveInteger* p1;
 	PositiveInteger* p2;
@@ -1717,7 +1706,7 @@ bool PositiveInteger::VerifyAdd(unsigned int max,bool overwrite)
 	return true;
 }
 
-bool PositiveInteger::VerifySubtract(unsigned int max,bool overwrite)
+bool PositiveInteger::VerifySubtract(unsigned int const max,bool overwrite)
 {
 	PositiveInteger* p1;
 	PositiveInteger* p2;
@@ -1752,7 +1741,7 @@ bool PositiveInteger::VerifySubtract(unsigned int max,bool overwrite)
 	return true;
 }
 
-bool PositiveInteger::VerifyMultiply(unsigned int max)
+bool PositiveInteger::VerifyMultiply(unsigned int const max)
 {
 	PositiveInteger* one = new PositiveInteger(true,true);
 	PositiveInteger* p1;
@@ -1808,7 +1797,7 @@ bool PositiveInteger::VerifyMultiply(unsigned int max)
 	return true;
 }
 
-bool PositiveInteger::VerifyDivide(unsigned int max,bool overwrite)
+bool PositiveInteger::VerifyDivide(unsigned int const max,bool overwrite)
 {
 	PositiveInteger* one = new PositiveInteger(true,true);
 	PositiveInteger* p1;
