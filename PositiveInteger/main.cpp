@@ -118,11 +118,11 @@ int main()
 			delete x3;
 			*/
 	
-			PositiveInteger::Add(j,one,true);
+			PositiveInteger::Add(*j,*one,true);
 		}
 		//cout<<endl;
 		
-		PositiveInteger::Add(i,one,true);
+		PositiveInteger::Add(*i,*one,true);
 		delete j;
 	}
 	delete i;

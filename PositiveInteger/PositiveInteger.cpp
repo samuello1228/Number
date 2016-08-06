@@ -199,7 +199,7 @@ PositiveInteger* PositiveInteger::getNumberOfByte() const
 	while(true)
 	{
 		if(c1->getIsLeftEnd()) break;
-		PositiveInteger::Add(y,one,true);
+		PositiveInteger::Add(*y,*one,true);
 		c1 = c1->getLeft();
 	}
 	delete one;
@@ -320,7 +320,7 @@ CompareCode PositiveInteger::compare(PositiveInteger const& x1, PositiveInteger 
 }
 
 
-PositiveInteger* PositiveInteger::AddAux(Byte* c1, Byte* c2,bool overwrite,bool& AddIsCarried,Byte*& LeftEnd,Byte* Multiple)
+PositiveInteger* PositiveInteger::AddAux(Byte*& RightEnd1, Byte const& RightEnd2,bool const overwrite,bool& AddIsCarried,Byte*& LeftEnd1,Byte* Multiple)
 {
 	PositiveInteger* y = nullptr;
 	Byte* b1 = nullptr;
@@ -348,6 +348,8 @@ PositiveInteger* PositiveInteger::AddAux(Byte* c1, Byte* c2,bool overwrite,bool&
 		y->setRightEnd(b2);
 	}
 	
+	Byte* c1 = RightEnd1;
+	Byte const* c2 = &RightEnd2;
 	while(true)
 	{
 		//Add
@@ -392,13 +394,13 @@ PositiveInteger* PositiveInteger::AddAux(Byte* c1, Byte* c2,bool overwrite,bool&
 					if(Multiple==nullptr) b2->setByteOne();
 					else b2->setBytePointer(*carry3);
 					
+					AddIsCarried = true;
 					if(overwrite)
 					{
 						c1->setIsLeftEnd(false);
 						c1->setLeft(b2);
 						b2->setRight(c1);
-						LeftEnd = b2;
-						AddIsCarried = true;
+						LeftEnd1 = b2;
 						
 						if(Multiple!=nullptr)
 						{
@@ -484,6 +486,7 @@ PositiveInteger* PositiveInteger::AddAux(Byte* c1, Byte* c2,bool overwrite,bool&
 										b1->setLeft(b2);
 										b2->setRight(b1);
 										b1 = b2;
+										AddIsCarried = true;
 									}
 									break;
 								}
@@ -560,7 +563,7 @@ PositiveInteger* PositiveInteger::AddAux(Byte* c1, Byte* c2,bool overwrite,bool&
 				{
 					c1->setLeft(nullptr);
 					c1->setIsLeftEnd(true);
-					LeftEnd = c1;
+					LeftEnd1 = c1;
 					AddIsCarried = true;
 					
 					if(Multiple!=nullptr)
@@ -612,13 +615,13 @@ PositiveInteger* PositiveInteger::AddAux(Byte* c1, Byte* c2,bool overwrite,bool&
 								b2->setLeft(nullptr);
 								b2->setIsLeftEnd(true);
 								b2->setByteOne();
+								AddIsCarried = true;
 								if(overwrite)
 								{
 									c1->setIsLeftEnd(false);
 									c1->setLeft(b2);
 									b2->setRight(c1);
-									LeftEnd = b2;
-									AddIsCarried = true;
+									LeftEnd1 = b2;
 									return nullptr;
 								}
 								else
@@ -626,6 +629,7 @@ PositiveInteger* PositiveInteger::AddAux(Byte* c1, Byte* c2,bool overwrite,bool&
 									b1->setLeft(b2);
 									b2->setRight(b1);
 									y->setLeftEnd(b2);
+									
 									return y;
 								}
 							}
@@ -687,22 +691,29 @@ PositiveInteger* PositiveInteger::AddAux(Byte* c1, Byte* c2,bool overwrite,bool&
 		}
 	}
 }
-PositiveInteger* PositiveInteger::Add(PositiveInteger* x1,PositiveInteger* x2,bool overwrite)
+PositiveInteger* PositiveInteger::Add(PositiveInteger& x1,PositiveInteger const& x2,bool const overwrite,bool* AddIsCarried)
 {
-	PositiveInteger* y = nullptr;
-	Byte* c1 = x1->getRightEnd();
-	Byte* c2 = x2->getRightEnd();
 	Byte* LeftEnd = nullptr;
-	bool AddIsCarried = false;
 	
-	y = PositiveInteger::AddAux(c1,c2,overwrite,AddIsCarried,LeftEnd);
+	if(AddIsCarried==nullptr)
+	{
+		bool temp = false;
+		AddIsCarried = &temp;
+	}
+	else
+	{
+		*AddIsCarried = false;
+	}
+	
+	Byte* c1 = x1.getRightEnd();
+	PositiveInteger* y = PositiveInteger::AddAux(c1,*(x2.getRightEnd()),overwrite,*AddIsCarried,LeftEnd);
 	if(overwrite)
 	{
-		if(AddIsCarried)
+		if(*AddIsCarried)
 		{
-			x1->setLeftEnd(LeftEnd);
+			x1.setLeftEnd(LeftEnd);
 		}
-		return x1;
+		return &x1;
 	}
 	else
 	{
@@ -898,7 +909,7 @@ void PositiveInteger::MultiplyAux(Byte* c1,Byte* c2,Byte* tRight,Byte*& b1,bool&
 				{
 					//Add y(tRight) and x1(c1)
 					if(Byte::getBase() != 2) Multiple = c2;
-					PositiveInteger::AddAux(tRight,c1,true,AddIsCarried,LeftEnd,Multiple);
+					PositiveInteger::AddAux(tRight,*c1,true,AddIsCarried,LeftEnd,Multiple);
 					if(AddIsCarried)
 					{
 						if(!b1->getLeft()->getIsLeftEnd())
@@ -1402,7 +1413,7 @@ void PositiveInteger::deleteList(PositiveInteger::ListOfPositiveInteger* list)
 PositiveInteger::ListOfPositiveInteger* PositiveInteger::findPrime(PositiveInteger* max)
 {
 	PositiveInteger* one = new PositiveInteger(true,true);
-	PositiveInteger* two = PositiveInteger::Add(one,one,false);
+	PositiveInteger* two = PositiveInteger::Add(*one,*one,false);
 	PositiveInteger* i;
 	
 	ListOfPositiveInteger* FirstElement = new ListOfPositiveInteger;
@@ -1413,7 +1424,7 @@ PositiveInteger::ListOfPositiveInteger* PositiveInteger::findPrime(PositiveInteg
 	FirstElement->Element = two->copy();
 	FinalElement = FirstElement;
 	
-	i = PositiveInteger::Add(two,one,false);
+	i = PositiveInteger::Add(*two,*one,false);
 	PositiveInteger* p1;
 	PositiveInteger* p2;
 	bool divisible = false;
@@ -1454,7 +1465,7 @@ PositiveInteger::ListOfPositiveInteger* PositiveInteger::findPrime(PositiveInteg
 			element1 = element1->Next;
 			
 		}
-		PositiveInteger::Add(i,one,true);
+		PositiveInteger::Add(*i,*one,true);
 	}
 	delete i;
 	delete one;
@@ -1595,7 +1606,7 @@ bool PositiveInteger::VerifyCounter(unsigned int const max)
 	for(unsigned int i=1;i<=max;i++)
 	{
 		if(!count->isSame(i)) return false;
-		count = PositiveInteger::Add(count,one,true);
+		count = PositiveInteger::Add(*count,*one,true);
 	}
 	delete one;
 	delete count;
@@ -1659,20 +1670,20 @@ bool PositiveInteger::VerifyCompare(unsigned int const max)
 	return true;
 }
 
-bool PositiveInteger::VerifyAdd(unsigned int const max,bool overwrite)
+bool PositiveInteger::VerifyAdd(unsigned int const max,bool const overwrite)
 {
-	PositiveInteger* p1;
-	PositiveInteger* p2;
-	PositiveInteger* p3;
+	PositiveInteger* one = new PositiveInteger(true,true);
 	for(unsigned int i=1;i<=max;i++)
 	{
 		for(unsigned int j=1;j<=max;j++)
 		{
-			p1 = new PositiveInteger(i);
-			p2 = new PositiveInteger(j);
+			bool AddIsCarried;
+			PositiveInteger* const p1 = new PositiveInteger(i);
+			PositiveInteger* const n1 = p1->getNumberOfByte();
+			PositiveInteger const * const p2 = new PositiveInteger(j);
 			//p1->printByte();
 			//p2->printByte();
-			p3 = PositiveInteger::Add(p1,p2,overwrite);
+			PositiveInteger const * const p3 = PositiveInteger::Add(*p1,*p2,overwrite,&AddIsCarried);
 			//p3->printByte();
 			if(overwrite)
 			{
@@ -1681,20 +1692,52 @@ bool PositiveInteger::VerifyAdd(unsigned int const max,bool overwrite)
 			else
 			{
 				if(!p1->isSame(i)) return false;
-				if(!p2->isSame(j)) return false;
 			}
+			if(!p2->isSame(j)) return false;
 			if(!p3->isSame(i+j)) return false;
+			
+			
+			PositiveInteger* const n2 = p2->getNumberOfByte();
+			PositiveInteger const * const n3 = p3->getNumberOfByte();
+			if(overwrite)
+			{
+				if(AddIsCarried)
+				{
+					if(!PositiveInteger::compare(*n3,*n1).isLarger()) return false;
+				}
+				else
+				{
+					if(!PositiveInteger::compare(*n3,*n1).isEqual()) return false;
+				}
+			}
+			else
+			{
+				if(PositiveInteger::compare(*n1,*n2).isLarger())
+				{
+					if(AddIsCarried) PositiveInteger::Add(*n1,*one,true);
+					if(!PositiveInteger::compare(*n3,*n1).isEqual()) return false;
+				}
+				else
+				{
+					if(AddIsCarried) PositiveInteger::Add(*n2,*one,true);
+					if(!PositiveInteger::compare(*n3,*n2).isEqual()) return false;
+				}
+			}
 			
 			delete p1;
 			delete p2;
 			if(!overwrite) delete p3;
+			delete n1;
+			delete n2;
+			delete n3;
 			//cout<<endl;
 		}
 	}
+	delete one;
 	return true;
 }
 
-bool PositiveInteger::VerifySubtract(unsigned int const max,bool overwrite)
+bool PositiveInteger::VerifySubtract(unsigned int const max,bool const overwrite)
 {
 	PositiveInteger* p1;
 	PositiveInteger* p2;
@@ -1716,8 +1759,8 @@ bool PositiveInteger::VerifySubtract(unsigned int const max,bool overwrite)
 			else
 			{
 				if(!p1->isSame(i)) return false;
-				if(!p2->isSame(j)) return false;
 			}
+			if(!p2->isSame(j)) return false;
 			if(!p3->isSame(i-j)) return false;
 			
 			delete p1;
@@ -1762,12 +1805,12 @@ bool PositiveInteger::VerifyMultiply(unsigned int const max)
 			
 			if(MultiplyIsCarried)
 			{
-				PositiveInteger::Add(n1,n2,true);
+				PositiveInteger::Add(*n1,*n2,true);
 				if(!PositiveInteger::compare(*n1,*n3).isEqual()) return false;
 			}
 			else
 			{
-				PositiveInteger::Add(n1,n2,true);
+				PositiveInteger::Add(*n1,*n2,true);
 				PositiveInteger::Subtract(n1,one,true);
 				if(!PositiveInteger::compare(*n1,*n3).isEqual()) return false;
 			}
@@ -1785,7 +1828,7 @@ bool PositiveInteger::VerifyMultiply(unsigned int const max)
 	return true;
 }
 
-bool PositiveInteger::VerifyDivide(unsigned int const max,bool overwrite)
+bool PositiveInteger::VerifyDivide(unsigned int const max,bool const overwrite)
 {
 	PositiveInteger* one = new PositiveInteger(true,true);
 	PositiveInteger* p1;
@@ -1834,7 +1877,7 @@ bool PositiveInteger::VerifyDivide(unsigned int const max,bool overwrite)
 			
 			if(DivideIsCarried)
 			{
-				PositiveInteger::Add(n1,one,true);
+				PositiveInteger::Add(*n1,*one,true);
 				PositiveInteger::Subtract(n1,n2,true);
 				if(!PositiveInteger::compare(*n1,*n3).isEqual()) {cout<<"Error Code: 22"<<endl; return false;}
 			}

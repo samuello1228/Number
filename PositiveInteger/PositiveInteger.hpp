@@ -39,8 +39,8 @@ public:
 	static void copyAux(Byte*&,Byte const&,Byte const * const multiple=nullptr,bool* AddIsCarried=nullptr);
 	PositiveInteger* copy() const;
 	static CompareCode compare(PositiveInteger const&,PositiveInteger const&);
-	static PositiveInteger* AddAux(Byte*,Byte*,bool,bool&,Byte*&,Byte* multiple=nullptr);
-	static PositiveInteger* Add(PositiveInteger*,PositiveInteger*,bool);
+	static PositiveInteger* AddAux(Byte*&,Byte const&,bool const,bool&,Byte*&,Byte* multiple=nullptr);
+	static PositiveInteger* Add(PositiveInteger&,PositiveInteger const&,bool const,bool* AddIsCarried=nullptr);
 	static void SubtractAux(Byte*&,Byte*,Byte*,bool&,bool,
 							bool,Byte*&,Byte*&,bool,bool&,bool&,bool&);
 	static PositiveInteger* Subtract(PositiveInteger*,PositiveInteger*,bool);
@@ -68,10 +68,10 @@ public:
 	static bool VerifyCopy(unsigned int const);
 	static bool VerifyCounter(unsigned int const);
 	static bool VerifyCompare(unsigned int const);
-	static bool VerifyAdd(unsigned int const,bool);
-	static bool VerifySubtract(unsigned int const,bool);
+	static bool VerifyAdd(unsigned int const,bool const);
+	static bool VerifySubtract(unsigned int const,bool const);
 	static bool VerifyMultiply(unsigned int const);
-	static bool VerifyDivide(unsigned int const,bool);
+	static bool VerifyDivide(unsigned int const,bool const);
 	
 private:
 	Byte* leftEnd;
