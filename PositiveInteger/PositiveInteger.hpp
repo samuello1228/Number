@@ -38,7 +38,7 @@ public:
 	
 	static void copyAux(Byte*&,Byte const&,Byte const * const multiple=nullptr,bool* AddIsCarried=nullptr);
 	PositiveInteger* copy() const;
-	static CompareCode compare(PositiveInteger*,PositiveInteger*);
+	static CompareCode compare(PositiveInteger const&,PositiveInteger const&);
 	static PositiveInteger* AddAux(Byte*,Byte*,bool,bool&,Byte*&,Byte* multiple=nullptr);
 	static PositiveInteger* Add(PositiveInteger*,PositiveInteger*,bool);
 	static void SubtractAux(Byte*&,Byte*,Byte*,bool&,bool,

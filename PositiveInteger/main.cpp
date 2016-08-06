@@ -33,7 +33,7 @@ int main()
 
 	while(1)
 	{
-		if(PositiveInteger::compare(i,iMax).isLarger()) break;
+		if(PositiveInteger::compare(*i,*iMax).isLarger()) break;
 		
 		//x1 = i->copy();
 		//x1->printByte();
@@ -43,7 +43,7 @@ int main()
 		j = new PositiveInteger(true,true);
 		while(true)
 		{
-			if(PositiveInteger::compare(j,jMax).isLarger()) break;
+			if(PositiveInteger::compare(*j,*jMax).isLarger()) break;
 			
 			/*
 			x1 = i->copy();

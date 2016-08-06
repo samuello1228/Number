@@ -114,7 +114,7 @@ PositiveInteger* PositiveInteger::changeBase(const unsigned int base) const
 	Digit* digit2;
 	while(true)
 	{
-		if(PositiveInteger::compare(x1,Base).isSmaller())
+		if(PositiveInteger::compare(*x1,*Base).isSmaller())
 		{
 			divisible = false;
 			isEnd = true;
@@ -272,15 +272,10 @@ PositiveInteger* PositiveInteger::copy() const
 	return y;
 }
 
-CompareCode PositiveInteger::compare(PositiveInteger* x1, PositiveInteger* x2)
+CompareCode PositiveInteger::compare(PositiveInteger const& x1, PositiveInteger const& x2)
 {
-	Byte* b1;
-	Byte* b2;
-	CompareCode code;
-	
-	b1 = x1->getRightEnd();
-	b2 = x2->getRightEnd();
-
+	Byte const * b1 = x1.getRightEnd();
+	Byte const * b2 = x2.getRightEnd();
 	while(true)
 	{
 		if(b1->getIsLeftEnd())
@@ -310,7 +305,7 @@ CompareCode PositiveInteger::compare(PositiveInteger* x1, PositiveInteger* x2)
 	
 	while(true)
 	{
-		code = Byte::compare(*b1,*b2);
+		CompareCode const code = Byte::compare(*b1,*b2);
 		if(!code.isEqual())
 		{
 			return code;
@@ -1425,7 +1420,7 @@ PositiveInteger::ListOfPositiveInteger* PositiveInteger::findPrime(PositiveInteg
 	bool temp;
 	while(true)
 	{
-		if(PositiveInteger::compare(i,max).isLarger())
+		if(PositiveInteger::compare(*i,*max).isLarger())
 		{
 			break;
 		}
@@ -1434,7 +1429,7 @@ PositiveInteger::ListOfPositiveInteger* PositiveInteger::findPrime(PositiveInteg
 		while(true)
 		{
 			p1 = PositiveInteger::Multiply(element1->Element,element1->Element,temp);
-			if(PositiveInteger::compare(i,p1).isSmaller())
+			if(PositiveInteger::compare(*i,*p1).isSmaller())
 			{
 				element2 = new ListOfPositiveInteger;
 				FinalElement->Next = element2;
@@ -1476,7 +1471,7 @@ PositiveInteger* PositiveInteger::GCD(PositiveInteger* x1,PositiveInteger* x2)
 	bool divisible = false;
 	bool temp;
 	
-	if(PositiveInteger::compare(x1,x2).isSmaller())
+	if(PositiveInteger::compare(*x1,*x2).isSmaller())
 	{
 		p1 = x2->copy();
 		p2 = x1->copy();
@@ -1641,18 +1636,16 @@ bool PositiveInteger::VerifyPositiveInteger(unsigned int const max)
 	return true;
 }
 */
+
 bool PositiveInteger::VerifyCompare(unsigned int const max)
 {
-	PositiveInteger* p1;
-	PositiveInteger* p2;
-	CompareCode code;
 	for(unsigned int i=1;i<=max;i++)
 	{
 		for(unsigned int j=1;j<=max;j++)
 		{
-			p1 = new PositiveInteger(i);
-			p2 = new PositiveInteger(j);
-			code = PositiveInteger::compare(p1,p2);
+			PositiveInteger const * const p1 = new PositiveInteger(i);
+			PositiveInteger const * const p2 = new PositiveInteger(j);
+			CompareCode const code = PositiveInteger::compare(*p1,*p2);
 			if(!p1->isSame(i)) return false;
 			if(!p2->isSame(j)) return false;
 			if(i==j && !code.isEqual())  return false;
@@ -1770,13 +1763,13 @@ bool PositiveInteger::VerifyMultiply(unsigned int const max)
 			if(MultiplyIsCarried)
 			{
 				PositiveInteger::Add(n1,n2,true);
-				if(!PositiveInteger::compare(n1,n3).isEqual()) return false;
+				if(!PositiveInteger::compare(*n1,*n3).isEqual()) return false;
 			}
 			else
 			{
 				PositiveInteger::Add(n1,n2,true);
 				PositiveInteger::Subtract(n1,one,true);
-				if(!PositiveInteger::compare(n1,n3).isEqual()) return false;
+				if(!PositiveInteger::compare(*n1,*n3).isEqual()) return false;
 			}
 		
 			delete p1;
@@ -1843,12 +1836,12 @@ bool PositiveInteger::VerifyDivide(unsigned int const max,bool overwrite)
 			{
 				PositiveInteger::Add(n1,one,true);
 				PositiveInteger::Subtract(n1,n2,true);
-				if(!PositiveInteger::compare(n1,n3).isEqual()) {cout<<"Error Code: 22"<<endl; return false;}
+				if(!PositiveInteger::compare(*n1,*n3).isEqual()) {cout<<"Error Code: 22"<<endl; return false;}
 			}
 			else
 			{
 				PositiveInteger::Subtract(n1,n2,true);
-				if(!PositiveInteger::compare(n1,n3).isEqual()) {cout<<"Error Code: 23"<<endl; return false;}
+				if(!PositiveInteger::compare(*n1,*n3).isEqual()) {cout<<"Error Code: 23"<<endl; return false;}
 			}
 			
 			if(!overwrite) delete p1;
