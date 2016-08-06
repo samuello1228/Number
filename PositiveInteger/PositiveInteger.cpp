@@ -320,7 +320,7 @@ CompareCode PositiveInteger::compare(PositiveInteger const& x1, PositiveInteger 
 }
 
 
-PositiveInteger* PositiveInteger::AddAux(Byte*& RightEnd1, Byte const& RightEnd2,bool const overwrite,bool& AddIsCarried,Byte*& LeftEnd1,Byte* Multiple)
+PositiveInteger* PositiveInteger::AddAux(Byte& RightEnd1, Byte const& RightEnd2,bool const overwrite,bool& AddIsCarried,Byte*& LeftEnd1,Byte const * const Multiple)
 {
 	PositiveInteger* y = nullptr;
 	Byte* b1 = nullptr;
@@ -348,7 +348,7 @@ PositiveInteger* PositiveInteger::AddAux(Byte*& RightEnd1, Byte const& RightEnd2
 		y->setRightEnd(b2);
 	}
 	
-	Byte* c1 = RightEnd1;
+	Byte* c1 = &RightEnd1;
 	Byte const* c2 = &RightEnd2;
 	while(true)
 	{
@@ -691,25 +691,19 @@ PositiveInteger* PositiveInteger::AddAux(Byte*& RightEnd1, Byte const& RightEnd2
 		}
 	}
 }
-PositiveInteger* PositiveInteger::Add(PositiveInteger& x1,PositiveInteger const& x2,bool const overwrite,bool* AddIsCarried)
+PositiveInteger* PositiveInteger::Add(PositiveInteger& x1,PositiveInteger const& x2,bool const overwrite,bool* const AddIsCarried)
 {
-	Byte* LeftEnd = nullptr;
-	
-	if(AddIsCarried==nullptr)
+	bool AddIsCarriedAux;
+	Byte* LeftEnd;
+	PositiveInteger* y = PositiveInteger::AddAux(*(x1.getRightEnd()),*(x2.getRightEnd()),overwrite,AddIsCarriedAux,LeftEnd);
+	if(AddIsCarried!=nullptr)
 	{
-		bool temp = false;
-		AddIsCarried = &temp;
-	}
-	else
-	{
-		*AddIsCarried = false;
+		*AddIsCarried = AddIsCarriedAux;
 	}
 	
-	Byte* c1 = x1.getRightEnd();
-	PositiveInteger* y = PositiveInteger::AddAux(c1,*(x2.getRightEnd()),overwrite,*AddIsCarried,LeftEnd);
 	if(overwrite)
 	{
-		if(*AddIsCarried)
+		if(AddIsCarriedAux)
 		{
 			x1.setLeftEnd(LeftEnd);
 		}
@@ -909,7 +903,7 @@ void PositiveInteger::MultiplyAux(Byte* c1,Byte* c2,Byte* tRight,Byte*& b1,bool&
 				{
 					//Add y(tRight) and x1(c1)
 					if(Byte::getBase() != 2) Multiple = c2;
-					PositiveInteger::AddAux(tRight,*c1,true,AddIsCarried,LeftEnd,Multiple);
+					PositiveInteger::AddAux(*tRight,*c1,true,AddIsCarried,LeftEnd,Multiple);
 					if(AddIsCarried)
 					{
 						if(!b1->getLeft()->getIsLeftEnd())
