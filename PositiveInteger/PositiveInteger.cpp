@@ -258,18 +258,13 @@ void PositiveInteger::copyAux(Byte*& b1,Byte const& c1,Byte const * const Multip
 
 PositiveInteger* PositiveInteger::copy() const
 {
-	PositiveInteger* y;
-	Byte* b1;
-	Byte* c1;
-	
-	y = new PositiveInteger;
-	b1 = new Byte;
+	PositiveInteger * const y = new PositiveInteger;
+	Byte* b1 = new Byte;
 	b1->setRight(nullptr);
 	b1->setIsRightEnd(true);
 	y->setRightEnd(b1);
 	
-	c1 = getRightEnd();
-	PositiveInteger::copyAux(b1,*c1);
+	PositiveInteger::copyAux(b1,*(getRightEnd()));
 
 	b1->setLeft(nullptr);
 	b1->setIsLeftEnd(true);
