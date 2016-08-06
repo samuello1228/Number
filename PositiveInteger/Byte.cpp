@@ -18,17 +18,17 @@ Byte::Byte()
 	setIsLeftEnd(false);
 	setIsRightEnd(false);
 }
-
+/*
 Byte::~Byte()
 {
 }
-
+*/
 unsigned int Byte::getBase()
 {
 	return base;
 }
 
-void Byte::setBase(const unsigned int newBase)
+void Byte::setBase(unsigned int const newBase)
 {
 	base = newBase;
 }
@@ -99,7 +99,7 @@ unsigned int Byte::getByteInt() const
 	}
 }
 //setByte
-void Byte::setByteInt(const unsigned int x)
+void Byte::setByteInt(unsigned int const x)
 {
 	if(base == 2)
 	{
@@ -118,7 +118,7 @@ void Byte::setByteInt(const unsigned int x)
 	}
 }
 
-void Byte::setByteChar(const char newByte)
+void Byte::setByteChar(char const newByte)
 {
 	if(base == 2)
 	{
@@ -140,7 +140,7 @@ void Byte::setByteChar(const char newByte)
 	}
 }
 
-void Byte::setBytePointer(const Byte& newByte)
+void Byte::setBytePointer(Byte const& newByte)
 {
 	if(base == 2)
 	{
@@ -187,7 +187,7 @@ void Byte::setByteMax()
 	}
 }
 
-void Byte::setByteAddOne(const Byte& x)
+void Byte::setByteAddOne(Byte const& x)
 {
 	//for x->byte <= base -2
 	if(base == 2)
@@ -214,7 +214,7 @@ void Byte::setByteSubtractOne()
 	}
 }
 
-void Byte::setByteSubtract(const Byte& x)
+void Byte::setByteSubtract(Byte const& x)
 {
 	if(base == 2)
 	{
@@ -233,7 +233,7 @@ void Byte::setByteSubtract(const Byte& x)
 	}
 }
 
-void Byte::setByteSubtractBorrow(const Byte& x)
+void Byte::setByteSubtractBorrow(Byte const& x)
 {
 	if(base == 2)
 	{
@@ -244,6 +244,7 @@ void Byte::setByteSubtractBorrow(const Byte& x)
 		byte = byte + base - x.byte;
 	}
 }
+
 Byte* Byte::getLeft() const
 {
 	return left;
@@ -267,7 +268,7 @@ bool Byte::getIsLeftEnd() const
 	return isLeftEnd;
 }
 
-void Byte::setIsLeftEnd(const bool newIsLeftEnd)
+void Byte::setIsLeftEnd(bool const newIsLeftEnd)
 {
 	isLeftEnd = newIsLeftEnd;
 }
@@ -276,7 +277,7 @@ bool Byte::getIsRightEnd() const
 {
 	return isRightEnd;
 }
-void Byte::setIsRightEnd(const bool newIsRightEnd)
+void Byte::setIsRightEnd(bool const newIsRightEnd)
 {
 	isRightEnd = newIsRightEnd;
 }
@@ -314,7 +315,7 @@ bool Byte::isMax() const
 		return byte == base-1;
 	}
 }
-CompareCode Byte::compare(const Byte& b1,const Byte& b2)
+CompareCode Byte::compare(Byte const& b1,Byte const& b2)
 {
 	if(base == 2)
 	{
@@ -348,9 +349,8 @@ CompareCode Byte::compare(const Byte& b1,const Byte& b2)
 	}
 }
 
-void Byte::AddThreeByte(const Byte& x1,const Byte& x2,const bool carry1,bool& carry2,Byte& y2)
+void Byte::AddThreeByte(Byte const& x1,Byte const& x2,bool const carry1,bool& carry2,Byte& y2)
 {
-	unsigned int y;
 	if(base == 2)
 	{
 		if(!x1.bit)
@@ -422,7 +422,7 @@ void Byte::AddThreeByte(const Byte& x1,const Byte& x2,const bool carry1,bool& ca
 	}
 	else
 	{
-		y = x1.byte + x2.byte;
+		unsigned int y = x1.byte + x2.byte;
 		if(carry1) y = y+1;
 		
 		y2.byte = y%base;
@@ -437,9 +437,8 @@ void Byte::AddThreeByte(const Byte& x1,const Byte& x2,const bool carry1,bool& ca
 		}
 	}
 }
-void Byte::MultiplyAux1(const Byte& x2,const Byte& Multiple,Byte& carry2,Byte& y2)
+void Byte::MultiplyAux1(Byte const& x2,Byte const& Multiple,Byte& carry2,Byte& y2)
 {
-	unsigned int y;
 	if(base == 2)
 	{
 		y2.bit = x2.bit;
@@ -447,14 +446,13 @@ void Byte::MultiplyAux1(const Byte& x2,const Byte& Multiple,Byte& carry2,Byte& y
 	}
 	else
 	{
-		y = x2.byte * Multiple.byte;
+		unsigned int const y = x2.byte * Multiple.byte;
 		y2.byte = y%base;
 		carry2.byte = y/base;
 	}
 }
-void Byte::MultiplyAux2(const Byte& x2,const Byte& Multiple,const Byte& carry1,Byte& carry2,Byte& y2)
+void Byte::MultiplyAux2(Byte const& x2,Byte const& Multiple,Byte const& carry1,Byte& carry2,Byte& y2)
 {
-	unsigned int y;
 	if(base == 2)
 	{
 		y2.bit = x2.bit;
@@ -462,14 +460,13 @@ void Byte::MultiplyAux2(const Byte& x2,const Byte& Multiple,const Byte& carry1,B
 	}
 	else
 	{
-		y = x2.byte * Multiple.byte + carry1.byte;
+		unsigned int const y = x2.byte * Multiple.byte + carry1.byte;
 		y2.byte = y%base;
 		carry2.byte = y/base;
 	}
 }
-void Byte::MultiplyAux3(const Byte& x1,const Byte& x2,const Byte& Multiple,const Byte& carry1,Byte& carry2,Byte& y2)
+void Byte::MultiplyAux3(Byte const& x1,Byte const& x2,Byte const& Multiple,Byte const& carry1,Byte& carry2,Byte& y2)
 {
-	unsigned int y;
 	if(base == 2)
 	{
 		y2.bit = x2.bit;
@@ -477,12 +474,12 @@ void Byte::MultiplyAux3(const Byte& x1,const Byte& x2,const Byte& Multiple,const
 	}
 	else
 	{
-		y = x1.byte + x2.byte * Multiple.byte + carry1.byte;
+		unsigned int const y = x1.byte + x2.byte * Multiple.byte + carry1.byte;
 		y2.byte = y%base;
 		carry2.byte = y/base;
 	}
 }
-void Byte::DivideAux(Byte* a1,Byte* a2,const Byte& a3,Byte* b1,const Byte& b2,Byte& y)
+void Byte::DivideAux(Byte* a1,Byte* a2,Byte const& a3,Byte* b1,Byte const& b2,Byte& y)
 {
 	if(base == 2)
 	{
@@ -515,9 +512,7 @@ void Byte::DivideAux(Byte* a1,Byte* a2,const Byte& a3,Byte* b1,const Byte& b2,By
 				//2*size <= 31
 				//size <= 15
 				//base <= 2^15
-				unsigned int p = 0;
-				unsigned int q = 0;
-				
+
 				//find log(base)
 				int size = 2;
 				while(true)
@@ -534,6 +529,8 @@ void Byte::DivideAux(Byte* a1,Byte* a2,const Byte& a3,Byte* b1,const Byte& b2,By
 					s3--;
 				}
 				
+				unsigned int p = 0;
+				unsigned int q = 0;
 				//p for a2
 				int s1 = s3;
 				int s2 = size+1;

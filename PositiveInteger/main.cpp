@@ -178,7 +178,7 @@ int main()
 	delete x2;
 	delete x3;
 	*/
-	
+
 	/*
 	Integer* a1;
 	Integer* a2;
