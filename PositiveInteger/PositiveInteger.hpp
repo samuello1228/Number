@@ -44,7 +44,7 @@ public:
 	static void SubtractAux(Byte*&,Byte&,Byte const&,bool*,bool const,
 							bool const,Byte*&,Byte*&,bool const,bool&,bool&,bool&);
 	static PositiveInteger* Subtract(PositiveInteger*,PositiveInteger*,bool);
-	static void MultiplyAux(Byte*,Byte*,Byte*,Byte*&,bool&);
+	static void MultiplyAux(Byte const&,Byte const&,Byte&,Byte*&,bool&);
 	static PositiveInteger* Multiply(PositiveInteger*,PositiveInteger*,bool&);
 	static void DivideAux(Byte*,Byte*,PositiveInteger*&,Byte*&,bool&,bool&);
 	static void Divide(PositiveInteger*,PositiveInteger*,PositiveInteger*&,PositiveInteger*&,bool&,bool&,bool);
