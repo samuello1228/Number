@@ -722,20 +722,18 @@ PositiveInteger* PositiveInteger::Add(PositiveInteger& x1,PositiveInteger const&
 	}
 }
 
-void PositiveInteger::SubtractAux(Byte*& LeftEnd1,Byte* RightEnd1,Byte* RightEnd2,bool& isShorten,bool overwrite,
-									bool Divide,Byte*& b1,Byte*& tRight,bool isSmall,bool& b1IsFilled,bool& isZero,bool& isEnd)
+void PositiveInteger::SubtractAux(Byte*& LeftEnd1,Byte& RightEnd1,Byte const& RightEnd2,bool* isShorten,bool const overwrite,
+									bool const Divide,Byte*& b1,Byte*& tRight,bool const isSmall,bool& b1IsFilled,bool& isZero,bool& isEnd)
 {
-	Byte* b2;
-	Byte* d1;
-	bool isDelay;
-	
+	Byte* c1 = &RightEnd1;
+	Byte const * c2 = &RightEnd2;
 	while(true)
 	{
-		if(Byte::compare(*RightEnd1,*RightEnd2).isSmaller())
+		if(Byte::compare(*c1,*c2).isSmaller())
 		{
-			RightEnd1->setByteSubtractBorrow(*RightEnd2);
+			c1->setByteSubtractBorrow(*c2);
 			
-			d1 = RightEnd1;
+			Byte* d1 = c1;
 			while(true)
 			{
 				d1 = d1->getLeft();
@@ -746,27 +744,27 @@ void PositiveInteger::SubtractAux(Byte*& LeftEnd1,Byte* RightEnd1,Byte* RightEnd
 		}
 		else
 		{
-			RightEnd1->setByteSubtract(*RightEnd2);
+			c1->setByteSubtract(*c2);
 		}
 		
-		if(RightEnd2->getIsLeftEnd())
+		if(c2->getIsLeftEnd())
 		{
 			break;
 		}
 		else
 		{
-			RightEnd1 = RightEnd1->getLeft();
-			RightEnd2 = RightEnd2->getLeft();
+			c1 = c1->getLeft();
+			c2 = c2->getLeft();
 		}
 	}
 	
 	//delete 0 at the left
-	isShorten = false;
-	isDelay = isSmall;
+	if(isShorten!=nullptr) *isShorten = false;
+	bool isDelay = isSmall;
 	isZero = false;
 	if(LeftEnd1->isZero())
 	{
-		isShorten = true;
+		if(isShorten!=nullptr) *isShorten = true;
 		while(true)
 		{
 			if(Divide)
@@ -801,7 +799,7 @@ void PositiveInteger::SubtractAux(Byte*& LeftEnd1,Byte* RightEnd1,Byte* RightEnd
 						else
 						{
 							tRight = tRight->getRight();
-							b2 = new Byte;
+							Byte* const b2 = new Byte;
 							b2->setLeft(b1);
 							b1->setRight(b2);
 							b1 = b2;
@@ -832,11 +830,6 @@ void PositiveInteger::SubtractAux(Byte*& LeftEnd1,Byte* RightEnd1,Byte* RightEnd
 PositiveInteger* PositiveInteger::Subtract(PositiveInteger* x1,PositiveInteger* x2,bool overwrite)
 {
 	PositiveInteger* y;
-	Byte* d1;
-	Byte* temp1;
-	bool temp2;
-	bool isShorten;
-	
 	if(overwrite)
 	{
 		y = x1;
@@ -845,8 +838,12 @@ PositiveInteger* PositiveInteger::Subtract(PositiveInteger* x1,PositiveInteger* 
 	{
 		y = x1->copy();
 	}
-	d1 = y->getLeftEnd();
-	PositiveInteger::SubtractAux(d1,y->getRightEnd(),x2->getRightEnd(),isShorten,
+	
+	Byte* d1 = y->getLeftEnd();
+	bool isShorten;
+	Byte* temp1;
+	bool temp2;
+	PositiveInteger::SubtractAux(d1,*(y->getRightEnd()),*(x2->getRightEnd()),&isShorten,
 									overwrite,false,temp1,temp1,temp2,temp2,temp2,temp2);
 	d1->setLeft(nullptr);
 	if(isShorten) y->setLeftEnd(d1);
@@ -1013,7 +1010,6 @@ void PositiveInteger::DivideAux(Byte* x2LeftEnd,Byte* x2RightEnd,PositiveInteger
 	bool isEnd;
 	bool isZero;
 	bool b1IsFilled;
-	bool temp;
 	bool MultiplyIsCarried;
 	PositiveInteger* product = nullptr;
 
@@ -1262,7 +1258,7 @@ void PositiveInteger::DivideAux(Byte* x2LeftEnd,Byte* x2RightEnd,PositiveInteger
 			b1IsFilled = true;
 			
 			//Subtract
-			PositiveInteger::SubtractAux(tLeft,d1,d2,temp,true,
+			PositiveInteger::SubtractAux(tLeft,*d1,*d2,nullptr,true,
 											true,b1,tRight,compareInteger.isSmaller(),b1IsFilled,isZero,isEnd);
 			if(product!=nullptr)
 			{

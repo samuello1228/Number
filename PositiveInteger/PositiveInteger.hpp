@@ -41,8 +41,8 @@ public:
 	static CompareCode compare(PositiveInteger const&,PositiveInteger const&);
 	static PositiveInteger* AddAux(Byte&,Byte const&,bool const,bool&,Byte*&,Byte const * const multiple=nullptr);
 	static PositiveInteger* Add(PositiveInteger&,PositiveInteger const&,bool const,bool* const AddIsCarried=nullptr);
-	static void SubtractAux(Byte*&,Byte*,Byte*,bool&,bool,
-							bool,Byte*&,Byte*&,bool,bool&,bool&,bool&);
+	static void SubtractAux(Byte*&,Byte&,Byte const&,bool*,bool const,
+							bool const,Byte*&,Byte*&,bool const,bool&,bool&,bool&);
 	static PositiveInteger* Subtract(PositiveInteger*,PositiveInteger*,bool);
 	static void MultiplyAux(Byte*,Byte*,Byte*,Byte*&,bool&);
 	static PositiveInteger* Multiply(PositiveInteger*,PositiveInteger*,bool&);
