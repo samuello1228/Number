@@ -14,41 +14,33 @@ int main()
 {
 	Byte::setBase(8);
 	
-	PositiveInteger* x1;
-	PositiveInteger* x2;
-	PositiveInteger* x3;
-	PositiveInteger* x4;
-	bool divisible=0;
-	bool temp;
-	
 	PositiveInteger* one = new PositiveInteger(true,true);
-	PositiveInteger* i;
-	PositiveInteger* j;
-	//PositiveInteger* iMax = new PositiveInteger(1024);
-	//PositiveInteger* jMax = new PositiveInteger(1024);
-	PositiveInteger* iMax = new PositiveInteger(1);
-	PositiveInteger* jMax = new PositiveInteger(1);
+	PositiveInteger* i = new PositiveInteger(true,true);
+	PositiveInteger* iMax = new PositiveInteger(1024);
+	PositiveInteger* jMax = new PositiveInteger(1024);
+	//PositiveInteger* iMax = new PositiveInteger(1);
+	//PositiveInteger* jMax = new PositiveInteger(1);
 	
-	i = new PositiveInteger(true,true);
-
 	while(1)
 	{
 		if(PositiveInteger::compare(*i,*iMax).isLarger()) break;
 		
-		//x1 = i->copy();
-		//x1->printByte();
+		/*
+		PositiveInteger* x1 = i->copy();
+		x1->printByte();
 		//x1->printDecimal(0);
-		//delete x1;
+		delete x1;
+		*/
 		
-		j = new PositiveInteger(true,true);
+		PositiveInteger* j = new PositiveInteger(true,true);
 		while(true)
 		{
 			if(PositiveInteger::compare(*j,*jMax).isLarger()) break;
 			
 			/*
-			x1 = i->copy();
-			x2 = j->copy();
-			x3 = PositiveInteger::Add(x1,x2,0);
+			PositiveInteger* x1 = i->copy();
+			PositiveInteger* x2 = j->copy();
+			PositiveInteger* x3 = PositiveInteger::Add(*x1,*x2,0);
 			//x3->printByte();
 			delete x3;
 			delete x1;
@@ -56,14 +48,14 @@ int main()
 			*/
 			
 			/*
-			if(!PositiveInteger::compare(i,j).isLarger())
+			if(!PositiveInteger::compare(*i,*j).isLarger())
 			{
-				PositiveInteger::Add(j,one,true);
+				PositiveInteger::Add(*j,*one,true);
 				continue;
 			}
-			x1 = i->copy();
-			x2 = j->copy();
-			x3 = PositiveInteger::Subtract(x1,x2,1);
+			PositiveInteger* x1 = i->copy();
+			PositiveInteger* x2 = j->copy();
+			PositiveInteger* x3 = PositiveInteger::Subtract(x1,x2,1);
 			//x3->printByte();
 			//delete x3;
 			//x1->printByte();
@@ -72,9 +64,10 @@ int main()
 			*/
 			
 			/*
-			x1 = i->copy();
-			x2 = j->copy();
-			x3 = PositiveInteger::Multiply(x1,x2,temp);
+			bool temp;
+			PositiveInteger* x1 = i->copy();
+			PositiveInteger* x2 = j->copy();
+			PositiveInteger* x3 = PositiveInteger::Multiply(x1,x2,temp);
 			//x3->printByte();
 			delete x3;
 			delete x1;
@@ -82,14 +75,18 @@ int main()
 			*/
 			
 			/*
-			if(PositiveInteger::compare(i,j).isLarger())
+			if(PositiveInteger::compare(*i,*j).isLarger())
 			{
-				PositiveInteger::Add(j,one,true);
+				PositiveInteger::Add(*j,*one,true);
 				continue;
 			}
-			x1 = j->copy();
-			x2 = i->copy();
-			PositiveInteger::Divide(x1,x2,x3,x4,divisible,1);
+			PositiveInteger* x1 = j->copy();
+			PositiveInteger* x2 = i->copy();
+			PositiveInteger* x3;
+			PositiveInteger* x4;
+			bool divisible;
+			bool temp;
+			PositiveInteger::Divide(x1,x2,x3,x4,divisible,temp,1);
 			//x3->printByte();
 			if(!divisible)
 			{
@@ -107,11 +104,11 @@ int main()
 			*/
 			
 			/*
-			//x1 = i->copy();
-			//x2 = j->copy();
-			x1 = new PositiveInteger(60);
-			x2 = new PositiveInteger(72);
-			x3 = PositiveInteger::GCD(x1,x2);
+			//PositiveInteger* x1 = i->copy();
+			//PositiveInteger* x2 = j->copy();
+			PositiveInteger* x1 = new PositiveInteger(60);
+			PositiveInteger* x2 = new PositiveInteger(72);
+			PositiveInteger* x3 = PositiveInteger::GCD(x1,x2);
 			x3->printByte();
 			delete x1;
 			delete x2;
@@ -125,8 +122,8 @@ int main()
 		PositiveInteger::Add(*i,*one,true);
 		delete j;
 	}
-	delete i;
 	delete one;
+	delete i;
 	delete iMax;
 	delete jMax;
 	
