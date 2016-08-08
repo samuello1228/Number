@@ -1599,15 +1599,15 @@ bool PositiveInteger::VerifyCopy(unsigned int const max)
 	}
 	return true;
 }
-//not optimize
+
 bool PositiveInteger::VerifyCounter(unsigned int const max)
 {
-	PositiveInteger* one = new PositiveInteger(true,true);
-	PositiveInteger* count = new PositiveInteger(true,true);
+	PositiveInteger const * const one = new PositiveInteger(true,true);
+	PositiveInteger* const count = new PositiveInteger(true,true);
 	for(unsigned int i=1;i<=max;i++)
 	{
 		if(!count->isSame(i)) return false;
-		count = PositiveInteger::Add(*count,*one,true);
+		PositiveInteger::Add(*count,*one,true);
 	}
 	delete one;
 	delete count;
