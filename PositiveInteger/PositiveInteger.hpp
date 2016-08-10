@@ -43,7 +43,7 @@ public:
 	static PositiveInteger* Add(PositiveInteger&,PositiveInteger const&,bool const,bool* const AddIsCarried=nullptr);
 	static void SubtractAux(Byte*&,Byte&,Byte const&,bool*,bool const,
 							bool const,Byte*&,Byte*&,bool const,bool&,bool&,bool&);
-	static PositiveInteger* Subtract(PositiveInteger*,PositiveInteger*,bool);
+	static PositiveInteger* Subtract(PositiveInteger&,PositiveInteger const&,bool const);
 	static void MultiplyAux(Byte const&,Byte const&,Byte&,Byte*&,bool&);
 	static PositiveInteger* Multiply(PositiveInteger*,PositiveInteger*,bool&);
 	static void DivideAux(Byte*,Byte*,PositiveInteger*&,Byte*&,bool&,bool&);

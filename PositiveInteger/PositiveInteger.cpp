@@ -796,24 +796,23 @@ void PositiveInteger::SubtractAux(Byte*& LeftEnd1,Byte& RightEnd1,Byte const& Ri
 	LeftEnd1->setIsLeftEnd(true);
 }
 
-
-PositiveInteger* PositiveInteger::Subtract(PositiveInteger* x1,PositiveInteger* x2,bool overwrite)
+PositiveInteger* PositiveInteger::Subtract(PositiveInteger& x1,PositiveInteger const &x2,bool const overwrite)
 {
 	PositiveInteger* y;
 	if(overwrite)
 	{
-		y = x1;
+		y = &x1;
 	}
 	else
 	{
-		y = x1->copy();
+		y = x1.copy();
 	}
 	
 	Byte* d1 = y->getLeftEnd();
 	bool isShorten;
 	Byte* temp1;
 	bool temp2;
-	PositiveInteger::SubtractAux(d1,*(y->getRightEnd()),*(x2->getRightEnd()),&isShorten,
+	PositiveInteger::SubtractAux(d1,*(y->getRightEnd()),*(x2.getRightEnd()),&isShorten,
 									overwrite,false,temp1,temp1,temp2,temp2,temp2,temp2);
 	d1->setLeft(nullptr);
 	if(isShorten) y->setLeftEnd(d1);
@@ -1476,22 +1475,21 @@ PositiveInteger* PositiveInteger::GCD(PositiveInteger* x1,PositiveInteger* x2)
 PositiveInteger::PositiveInteger(unsigned int x)
 {
 	unsigned int const base = Byte::getBase();
-	Byte* b1;
-	Byte* b2 = new Byte;
-	b2->setRight(nullptr);
-	b2->setIsRightEnd(true);
-	setRightEnd(b2);
+	Byte* b1 = new Byte;
+	b1->setRight(nullptr);
+	b1->setIsRightEnd(true);
+	setRightEnd(b1);
 	
 	while(true)
 	{
-		b2->setByteInt(x%base);
-		x = (x - b2->getByteInt())/base;
-		b1 = b2;
+		b1->setByteInt(x%base);
+		x = (x - b1->getByteInt())/base;
 		
 		if(x==0) break;
-		b2 = new Byte;
+		Byte* const b2 = new Byte;
 		b1->setLeft(b2);
 		b2->setRight(b1);
+		b1 = b2;
 	}
 	b1->setLeft(nullptr);
 	b1->setIsLeftEnd(true);
@@ -1526,9 +1524,9 @@ bool PositiveInteger::isComplete() const
 bool PositiveInteger::isSame(unsigned int const x) const
 {
 	if(!isComplete()) {cout<<"Error Code: 12"<<endl; return false;}
-	PositiveInteger const * const p1 = new PositiveInteger(x);
+	PositiveInteger const p1 = PositiveInteger(x);
 	Byte const * b1 = getRightEnd();
-	Byte const * b2 = p1->getRightEnd();
+	Byte const * b2 = p1.getRightEnd();
 
 	while(true)
 	{
@@ -1540,7 +1538,6 @@ bool PositiveInteger::isSame(unsigned int const x) const
 	}
 	if(!b2->getIsLeftEnd()) {cout<<"Error Code: 15"<<endl; return false;}
 	
-	delete p1;
 	return true;
 }
 
@@ -1548,17 +1545,16 @@ bool PositiveInteger::VerifyCopy(unsigned int const max)
 {
 	for(unsigned int i=1;i<=max;i++)
 	{
-		PositiveInteger const * const p1 = new PositiveInteger(i);
-		//if(!p1->isComplete()) return false;
-		//p1->printByte();
-		//cout<<p1->getInt()<<endl;
-		//p1->printDecimal(0);
+		PositiveInteger const p1 = PositiveInteger(i);
+		//if(!p1.isComplete()) return false;
+		//p1.printByte();
+		//cout<<p1.getInt()<<endl;
+		//p1.printDecimal(0);
 		
-		PositiveInteger const * const p2 = p1->copy();
-		if(!p1->isSame(i)) return false;
+		PositiveInteger const * const p2 = p1.copy();
+		if(!p1.isSame(i)) return false;
 		if(!p2->isSame(i)) return false;
 		
-		delete p1;
 		delete p2;
 	}
 	return true;
@@ -1566,15 +1562,13 @@ bool PositiveInteger::VerifyCopy(unsigned int const max)
 
 bool PositiveInteger::VerifyCounter(unsigned int const max)
 {
-	PositiveInteger const * const one = new PositiveInteger(true,true);
-	PositiveInteger* const count = new PositiveInteger(true,true);
+	PositiveInteger const one = PositiveInteger(true,true);
+	PositiveInteger count = PositiveInteger(true,true);
 	for(unsigned int i=1;i<=max;i++)
 	{
-		if(!count->isSame(i)) return false;
-		PositiveInteger::Add(*count,*one,true);
+		if(!count.isSame(i)) return false;
+		PositiveInteger::Add(count,one,true);
 	}
-	delete one;
-	delete count;
 	return true;
 }
 /*
@@ -1619,17 +1613,14 @@ bool PositiveInteger::VerifyCompare(unsigned int const max)
 	{
 		for(unsigned int j=1;j<=max;j++)
 		{
-			PositiveInteger const * const p1 = new PositiveInteger(i);
-			PositiveInteger const * const p2 = new PositiveInteger(j);
-			CompareCode const code = PositiveInteger::compare(*p1,*p2);
-			if(!p1->isSame(i)) return false;
-			if(!p2->isSame(j)) return false;
+			PositiveInteger const p1 = PositiveInteger(i);
+			PositiveInteger const p2 = PositiveInteger(j);
+			CompareCode const code = PositiveInteger::compare(p1,p2);
+			if(!p1.isSame(i)) return false;
+			if(!p2.isSame(j)) return false;
 			if(i==j && !code.isEqual())  return false;
 			else if(i>j && !code.isLarger())  return false;
 			else if(i<j && !code.isSmaller())  return false;
-
-			delete p1;
-			delete p2;
 		}
 	}
 	return true;
@@ -1637,33 +1628,32 @@ bool PositiveInteger::VerifyCompare(unsigned int const max)
 
 bool PositiveInteger::VerifyAdd(unsigned int const max,bool const overwrite)
 {
-	PositiveInteger* one = new PositiveInteger(true,true);
 	for(unsigned int i=1;i<=max;i++)
 	{
 		for(unsigned int j=1;j<=max;j++)
 		{
-			bool AddIsCarried;
-			PositiveInteger* const p1 = new PositiveInteger(i);
-			PositiveInteger* const n1 = p1->getNumberOfByte();
-			PositiveInteger const * const p2 = new PositiveInteger(j);
+			PositiveInteger p1 = PositiveInteger(i);
+			PositiveInteger* const n1 = p1.getNumberOfByte();
+			PositiveInteger const p2 = PositiveInteger(j);
 			//p1->printByte();
 			//p2->printByte();
-			PositiveInteger const * const p3 = PositiveInteger::Add(*p1,*p2,overwrite,&AddIsCarried);
+			bool AddIsCarried;
+			PositiveInteger const * const p3 = PositiveInteger::Add(p1,p2,overwrite,&AddIsCarried);
 			//p3->printByte();
 			if(overwrite)
 			{
-				if(!p1->isSame(i+j)) return false;
+				if(!p1.isSame(i+j)) return false;
 			}
 			else
 			{
-				if(!p1->isSame(i)) return false;
+				if(!p1.isSame(i)) return false;
 			}
-			if(!p2->isSame(j)) return false;
+			if(!p2.isSame(j)) return false;
 			if(!p3->isSame(i+j)) return false;
 			
-			
-			PositiveInteger* const n2 = p2->getNumberOfByte();
 			PositiveInteger const * const n3 = p3->getNumberOfByte();
+			if(!overwrite) delete p3;
+			
 			if(overwrite)
 			{
 				if(AddIsCarried)
@@ -1677,59 +1667,52 @@ bool PositiveInteger::VerifyAdd(unsigned int const max,bool const overwrite)
 			}
 			else
 			{
+				PositiveInteger const one = PositiveInteger(true,true);
+				PositiveInteger* const n2 = p2.getNumberOfByte();
 				if(PositiveInteger::compare(*n1,*n2).isLarger())
 				{
-					if(AddIsCarried) PositiveInteger::Add(*n1,*one,true);
+					if(AddIsCarried) PositiveInteger::Add(*n1,one,true);
 					if(!PositiveInteger::compare(*n3,*n1).isEqual()) return false;
 				}
 				else
 				{
-					if(AddIsCarried) PositiveInteger::Add(*n2,*one,true);
+					if(AddIsCarried) PositiveInteger::Add(*n2,one,true);
 					if(!PositiveInteger::compare(*n3,*n2).isEqual()) return false;
 				}
+				delete n2;
 			}
 			
-			delete p1;
-			delete p2;
-			if(!overwrite) delete p3;
 			delete n1;
-			delete n2;
 			delete n3;
 			//cout<<endl;
 		}
 	}
-	delete one;
 	return true;
 }
 
 bool PositiveInteger::VerifySubtract(unsigned int const max,bool const overwrite)
 {
-	PositiveInteger* p1;
-	PositiveInteger* p2;
-	PositiveInteger* p3;
 	for(unsigned int i=1;i<=max;i++)
 	{
 		for(unsigned int j=1;j<=i-1;j++)
 		{
-			p1 = new PositiveInteger(i);
-			p2 = new PositiveInteger(j);
+			PositiveInteger p1 = PositiveInteger(i);
+			PositiveInteger const p2 = PositiveInteger(j);
 			//p1->printByte();
 			//p2->printByte();
-			p3 = PositiveInteger::Subtract(p1,p2,overwrite);
+			PositiveInteger const * const p3 = PositiveInteger::Subtract(p1,p2,overwrite);
 			//p3->printByte();
 			if(overwrite)
 			{
-				if(!p1->isSame(i-j)) return false;
+				if(!p1.isSame(i-j)) return false;
 			}
 			else
 			{
-				if(!p1->isSame(i)) return false;
+				if(!p1.isSame(i)) return false;
 			}
-			if(!p2->isSame(j)) return false;
+			if(!p2.isSame(j)) return false;
 			if(!p3->isSame(i-j)) return false;
 			
-			delete p1;
-			delete p2;
 			if(!overwrite) delete p3;
 		}
 		//cout<<endl;
@@ -1776,7 +1759,7 @@ bool PositiveInteger::VerifyMultiply(unsigned int const max)
 			else
 			{
 				PositiveInteger::Add(*n1,*n2,true);
-				PositiveInteger::Subtract(n1,one,true);
+				PositiveInteger::Subtract(*n1,*one,true);
 				if(!PositiveInteger::compare(*n1,*n3).isEqual()) return false;
 			}
 		
@@ -1843,12 +1826,12 @@ bool PositiveInteger::VerifyDivide(unsigned int const max,bool const overwrite)
 			if(DivideIsCarried)
 			{
 				PositiveInteger::Add(*n1,*one,true);
-				PositiveInteger::Subtract(n1,n2,true);
+				PositiveInteger::Subtract(*n1,*n2,true);
 				if(!PositiveInteger::compare(*n1,*n3).isEqual()) {cout<<"Error Code: 22"<<endl; return false;}
 			}
 			else
 			{
-				PositiveInteger::Subtract(n1,n2,true);
+				PositiveInteger::Subtract(*n1,*n2,true);
 				if(!PositiveInteger::compare(*n1,*n3).isEqual()) {cout<<"Error Code: 23"<<endl; return false;}
 			}
 			
