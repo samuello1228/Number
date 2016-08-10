@@ -1306,51 +1306,45 @@ void PositiveInteger::Divide(PositiveInteger& x1,PositiveInteger const& x2,Posit
 	}
 }
 
-void PositiveInteger::printList(PositiveInteger::ListOfPositiveInteger* list,bool isDecimal)
+void PositiveInteger::printList(PositiveInteger::ListOfPositiveInteger const& list,bool const isDecimal)
 {
-	ListOfPositiveInteger* element1;
-	ListOfPositiveInteger* element2;
-	PositiveInteger* x;
-	unsigned int base = Byte::getBase();
-	
-	element2 = list;
+	unsigned int const base = Byte::getBase();
+	ListOfPositiveInteger const * element1 = &list;
 	while(true)
 	{
 		if(isDecimal)
 		{
-			x = element2->Element->changeBase(10);
+			PositiveInteger const * const x = element1->Element->changeBase(10);
 			x->printByte();
-			Byte::setBase(base);
 			delete x;
+			Byte::setBase(base);
 		}
 		else
 		{
-			element2->Element->printByte();
+			element1->Element->printByte();
 		}
-		element1 = element2;
+		
 		if(element1->Next==nullptr) break;
-		element2 = element1->Next;
+		ListOfPositiveInteger const * const element2 = element1->Next;
+		element1 = element2;
 	}
 }
 
-void PositiveInteger::deleteList(PositiveInteger::ListOfPositiveInteger* list)
+void PositiveInteger::deleteList(PositiveInteger::ListOfPositiveInteger const& list)
 {
-	ListOfPositiveInteger* element1;
-	ListOfPositiveInteger* element2;
-	
-	element1 = list;
-	delete element1->Element;
-	while(element1->Next!=nullptr)
+	ListOfPositiveInteger const * element1 = &list;
+	while(true)
 	{
-		element2 = element1->Next;
+		delete element1->Element;
+		if(element1->Next==nullptr) break;
+		ListOfPositiveInteger const * const element2 = element1->Next;
 		delete element1;
-		delete element2->Element;
 		element1 = element2;
 	}
 	delete element1;
 }
 
-PositiveInteger::ListOfPositiveInteger* PositiveInteger::findPrime(PositiveInteger* max)
+PositiveInteger::ListOfPositiveInteger* PositiveInteger::findPrime(PositiveInteger const& max)
 {
 	PositiveInteger* one = new PositiveInteger(true,true);
 	PositiveInteger* two = PositiveInteger::Add(*one,*one,false);
@@ -1370,7 +1364,7 @@ PositiveInteger::ListOfPositiveInteger* PositiveInteger::findPrime(PositiveInteg
 	bool divisible = false;
 	while(true)
 	{
-		if(PositiveInteger::compare(*i,*max).isLarger())
+		if(PositiveInteger::compare(*i,max).isLarger())
 		{
 			break;
 		}

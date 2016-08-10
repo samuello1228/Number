@@ -55,9 +55,9 @@ public:
 		PositiveInteger* Element;
 		ListOfPositiveInteger* Next=nullptr;
 	};
-	static void printList(ListOfPositiveInteger*,bool);
-	static void deleteList(ListOfPositiveInteger*);
-	static ListOfPositiveInteger* findPrime(PositiveInteger*);
+	static void printList(ListOfPositiveInteger const&,bool const);
+	static void deleteList(ListOfPositiveInteger const&);
+	static ListOfPositiveInteger* findPrime(PositiveInteger const&);
 	static PositiveInteger* GCD(PositiveInteger*,PositiveInteger*);
 	
 	//verification

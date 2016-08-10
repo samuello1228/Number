@@ -125,7 +125,7 @@ int main()
 	delete iMax;
 	delete jMax;
 	
-	///*
+	/*
 	if(!PositiveInteger::VerifyCopy(100)) cout<<"Error"<<endl;
 	if(!PositiveInteger::VerifyCounter(100)) cout<<"Error"<<endl;
 	if(!PositiveInteger::VerifyPositiveInteger(100)) cout<<"Error"<<endl;
@@ -138,16 +138,15 @@ int main()
 	if(!PositiveInteger::VerifyDivide(100,0)) cout<<"Error"<<endl;
 	if(!PositiveInteger::VerifyDivide(100,1)) cout<<"Error"<<endl;
 	else cout<<"OK"<<endl;
-	//*/
+	*/
 
-	/*
-	PositiveInteger* max = new PositiveInteger(97);
+	///*
+	PositiveInteger max = PositiveInteger(97);
 	PositiveInteger::ListOfPositiveInteger* list;
 	list = PositiveInteger::findPrime(max);
-	PositiveInteger::printList(list,1);
-	PositiveInteger::deleteList(list);
-	delete max;
-	*/
+	PositiveInteger::printList(*list,1);
+	PositiveInteger::deleteList(*list);
+	//*/
 	
 	/*
 	Byte::setBase(2);
