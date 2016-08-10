@@ -1545,41 +1545,29 @@ bool PositiveInteger::VerifyCounter(unsigned int const max)
 	}
 	return true;
 }
-/*
+
 bool PositiveInteger::VerifyPositiveInteger(unsigned int const max)
 {
-	PositiveInteger* p1;
-	PositiveInteger* p2;
 	std::string s;
-	Byte* b1;
 	for(unsigned int i=1;i<=max;i++)
 	{
 		s.clear();
-		p1 = new PositiveInteger(i);
-		b1 = p1->getLeftEnd();
-		while(true)
+		PositiveInteger const p1 = PositiveInteger(i);
 		{
-			if(b1->getByte())
+			Byte const * d1 = p1.getLeftEnd();
+			while(true)
 			{
-				s.push_back('1');
+				s.push_back(d1->getByteChar());
+				if(d1->getIsRightEnd()) break;
+				d1 = d1->getRight();
 			}
-			else
-			{
-				s.push_back('0');
-			}
-			if(b1->getIsRightEnd()) break;
-			b1 = b1->getRight();
 		}
 		//cout<<s<<endl;
-		p2 = new PositiveInteger(s);
-		if(!p2->isSame(i)) return false;
-		
-		delete p1;
-		delete p2;
+		PositiveInteger const p2 = PositiveInteger(s);
+		if(!p2.isSame(i)) return false;
 	}
 	return true;
 }
-*/
 
 bool PositiveInteger::VerifyCompare(unsigned int const max)
 {

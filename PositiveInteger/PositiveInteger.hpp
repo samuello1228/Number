@@ -67,6 +67,7 @@ public:
 	
 	static bool VerifyCopy(unsigned int const);
 	static bool VerifyCounter(unsigned int const);
+	static bool VerifyPositiveInteger(unsigned int const);
 	static bool VerifyCompare(unsigned int const);
 	static bool VerifyAdd(unsigned int const,bool const);
 	static bool VerifySubtract(unsigned int const,bool const);
