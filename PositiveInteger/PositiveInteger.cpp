@@ -44,22 +44,21 @@ PositiveInteger::PositiveInteger(const bool x,const bool temp)
 PositiveInteger::PositiveInteger(std::string& x)
 {
 	std::string::iterator i=x.begin();
-	Byte* b1;
-	Byte* b2 = new Byte;
-	b2->setLeft(nullptr);
-	b2->setIsLeftEnd(true);
-	setLeftEnd(b2);
+	Byte* b1 = new Byte;
+	b1->setLeft(nullptr);
+	b1->setIsLeftEnd(true);
+	setLeftEnd(b1);
 	
 	while(true)
 	{
-		b2->setByteChar(*i);
-		b1 = b2;
+		b1->setByteChar(*i);
 		i++;
 		
 		if(i==x.end()) break;
-		b2 = new Byte;
+		Byte* const b2 = new Byte;
 		b1->setRight(b2);
 		b2->setLeft(b1);
+		b1 = b2;
 	}
 	b1->setRight(nullptr);
 	b1->setIsRightEnd(true);
@@ -311,52 +310,47 @@ CompareCode PositiveInteger::compare(PositiveInteger const& x1, PositiveInteger 
 
 PositiveInteger* PositiveInteger::AddAux(Byte& RightEnd1, Byte const& RightEnd2,bool const overwrite,bool& AddIsCarried,Byte*& LeftEnd1,Byte const * const Multiple)
 {
-	Byte* carry3 = nullptr;
-	Byte* carry4 = nullptr;
-	if(Multiple!=nullptr)
-	{
-		carry3 = new Byte;
-		carry4 = new Byte;
-		carry3->setByteZero();
-	}
-	
 	Byte* b1 = nullptr;
-	Byte* b2 = nullptr;
 	PositiveInteger* y = nullptr;
 	if(!overwrite)
 	{
 		y = new PositiveInteger;
-		b2 = new Byte;
-		b2->setRight(nullptr);
-		b2->setIsRightEnd(true);
-		y->setRightEnd(b2);
+		b1 = new Byte;
+		b1->setRight(nullptr);
+		b1->setIsRightEnd(true);
+		y->setRightEnd(b1);
 	}
 	
 	Byte* c1 = &RightEnd1;
 	Byte const* c2 = &RightEnd2;
 	bool carry1 = 0;
-	bool carry2;
+	Byte carry3;
+	if(Multiple!=nullptr)
+	{
+		carry3.setByteZero();
+	}
 	AddIsCarried = false;
 	while(true)
 	{
 		//Add
 		if(Multiple==nullptr)
 		{
+			bool carry2;
 			if(overwrite)
 			{
 				Byte::AddThreeByte(*c1,*c2,carry1,carry2,*c1);
 			}
 			else
 			{
-				Byte::AddThreeByte(*c1,*c2,carry1,carry2,*b2);
-				b1 = b2;
+				Byte::AddThreeByte(*c1,*c2,carry1,carry2,*b1);
 			}
 			carry1 = carry2;
 		}
 		else
 		{
-			Byte::MultiplyAux3(*c1,*c2,*Multiple,*carry3,*carry4,*c1);
-			carry3->setBytePointer(*carry4);
+			Byte carry4;
+			Byte::MultiplyAux3(*c1,*c2,*Multiple,carry3,carry4,*c1);
+			carry3.setBytePointer(carry4);
 		}
 		
 		//find left end
@@ -367,19 +361,19 @@ PositiveInteger* PositiveInteger::AddAux(Byte& RightEnd1, Byte const& RightEnd2,
 				//the length of x1 and x2 are equal
 				if(Multiple!=nullptr)
 				{
-					if(carry3->isZero()) carry1 = false;
+					if(carry3.isZero()) carry1 = false;
 					else carry1 = true;
 				}
 				
 				if(carry1)
 				{
 					//fill carry
-					b2 = new Byte;
+					Byte* const b2 = new Byte;
 					b2->setLeft(nullptr);
 					b2->setIsLeftEnd(true);
 					
 					if(Multiple==nullptr) b2->setByteOne();
-					else b2->setBytePointer(*carry3);
+					else b2->setBytePointer(carry3);
 					
 					AddIsCarried = true;
 					if(overwrite)
@@ -388,12 +382,6 @@ PositiveInteger* PositiveInteger::AddAux(Byte& RightEnd1, Byte const& RightEnd2,
 						c1->setLeft(b2);
 						b2->setRight(c1);
 						LeftEnd1 = b2;
-						
-						if(Multiple!=nullptr)
-						{
-							delete carry3;
-							delete carry4;
-						}
 						return nullptr;
 					}
 					else
@@ -409,11 +397,6 @@ PositiveInteger* PositiveInteger::AddAux(Byte& RightEnd1, Byte const& RightEnd2,
 					//cout<<"For multiply: the left end of x1 is 0"<<endl;
 					if(overwrite)
 					{
-						if(Multiple!=nullptr)
-						{
-							delete carry3;
-							delete carry4;
-						}
 						return nullptr;
 					}
 					else
@@ -444,7 +427,7 @@ PositiveInteger* PositiveInteger::AddAux(Byte& RightEnd1, Byte const& RightEnd2,
 							c2 = c2->getLeft();
 							if(c2->isMax())
 							{
-								b2 = new Byte;
+								Byte* const b2 = new Byte;
 								b2->setByteZero();
 								if(overwrite)
 								{
@@ -461,7 +444,7 @@ PositiveInteger* PositiveInteger::AddAux(Byte& RightEnd1, Byte const& RightEnd2,
 								
 								if(c2->getIsLeftEnd())
 								{
-									b2 = new Byte;
+									Byte* const b2 = new Byte;
 									b2->setByteOne();
 									if(overwrite)
 									{
@@ -481,7 +464,7 @@ PositiveInteger* PositiveInteger::AddAux(Byte& RightEnd1, Byte const& RightEnd2,
 							}
 							else
 							{
-								b2 = new Byte;
+								Byte* const b2 = new Byte;
 								b2->setByteAddOne(*c2);
 								if(overwrite)
 								{
@@ -506,22 +489,26 @@ PositiveInteger* PositiveInteger::AddAux(Byte& RightEnd1, Byte const& RightEnd2,
 					while(true)
 					{
 						c2 = c2->getLeft();
+						{
+							Byte* const b2 = new Byte;
+							c1->setLeft(b2);
+							b2->setRight(c1);
+							c1 = b2;
+						}
 						
-						b2 = new Byte;
-						c1->setLeft(b2);
-						b2->setRight(c1);
-						c1 = b2;
-						Byte::MultiplyAux2(*c2,*Multiple,*carry3,*carry4,*c1);
-						carry3->setBytePointer(*carry4);
-						
+						{
+							Byte carry4;
+							Byte::MultiplyAux2(*c2,*Multiple,carry3,carry4,*c1);
+							carry3.setBytePointer(carry4);
+						}
 						if(c2->getIsLeftEnd()) break;
 					}
 					
 					//carry
-					if(!carry3->isZero())
+					if(!carry3.isZero())
 					{
-						b2 = new Byte;
-						b2->setBytePointer(*carry3);
+						Byte* const b2 = new Byte;
+						b2->setBytePointer(carry3);
 						c1->setLeft(b2);
 						b2->setRight(c1);
 						c1 = b2;
@@ -532,7 +519,7 @@ PositiveInteger* PositiveInteger::AddAux(Byte& RightEnd1, Byte const& RightEnd2,
 				if(!c2->getIsLeftEnd())
 				{
 					c2 = c2->getLeft();
-					b2 = new Byte;
+					Byte* const b2 = new Byte;
 					if(overwrite)
 					{
 						c1->setLeft(b2);
@@ -556,12 +543,6 @@ PositiveInteger* PositiveInteger::AddAux(Byte& RightEnd1, Byte const& RightEnd2,
 					c1->setIsLeftEnd(true);
 					LeftEnd1 = c1;
 					AddIsCarried = true;
-					
-					if(Multiple!=nullptr)
-					{
-						delete carry3;
-						delete carry4;
-					}
 					return nullptr;
 				}
 				else
@@ -594,7 +575,7 @@ PositiveInteger* PositiveInteger::AddAux(Byte& RightEnd1, Byte const& RightEnd2,
 							}
 							else
 							{
-								b2 = new Byte;
+								Byte* const b2 = new Byte;
 								b2->setByteZero();
 								b1->setLeft(b2);
 								b2->setRight(b1);
@@ -603,7 +584,7 @@ PositiveInteger* PositiveInteger::AddAux(Byte& RightEnd1, Byte const& RightEnd2,
 							
 							if(c1->getIsLeftEnd())
 							{
-								b2 = new Byte;
+								Byte* const b2 = new Byte;
 								b2->setLeft(nullptr);
 								b2->setIsLeftEnd(true);
 								b2->setByteOne();
@@ -621,7 +602,6 @@ PositiveInteger* PositiveInteger::AddAux(Byte& RightEnd1, Byte const& RightEnd2,
 									b1->setLeft(b2);
 									b2->setRight(b1);
 									y->setLeftEnd(b2);
-									
 									return y;
 								}
 							}
@@ -634,7 +614,7 @@ PositiveInteger* PositiveInteger::AddAux(Byte& RightEnd1, Byte const& RightEnd2,
 							}
 							else
 							{
-								b2 = new Byte;
+								Byte* const b2 = new Byte;
 								b2->setByteAddOne(*c1);
 								b1->setLeft(b2);
 								b2->setRight(b1);
@@ -655,7 +635,7 @@ PositiveInteger* PositiveInteger::AddAux(Byte& RightEnd1, Byte const& RightEnd2,
 					if(!c1->getIsLeftEnd())
 					{
 						c1 = c1->getLeft();
-						b2 = new Byte;
+						Byte* const b2 = new Byte;
 						b1->setLeft(b2);
 						b2->setRight(b1);
 						b1 = b2;
@@ -681,9 +661,10 @@ PositiveInteger* PositiveInteger::AddAux(Byte& RightEnd1, Byte const& RightEnd2,
 		//for c1 and c2 are not left end
 		if(!overwrite)
 		{
-			b2 = new Byte;
+			Byte* const b2 = new Byte;
 			b1->setLeft(b2);
 			b2->setRight(b1);
+			b1 = b2;
 		}
 	}
 }
