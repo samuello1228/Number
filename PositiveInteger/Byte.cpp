@@ -507,7 +507,7 @@ void Byte::DivideAux(Byte const * a1,Byte const * a2,Byte const& a3,Byte const *
 		}
 		else
 		{
-			if(base == 1<<2 || base == 1<<3 || base == 1<<4)
+			if(base == 1<<2 || base == 1<<3 || base == 1<<4 || base == 1<<15)
 			{
 				//2*size <= 31
 				//size <= 15

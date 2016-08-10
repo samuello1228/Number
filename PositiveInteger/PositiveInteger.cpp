@@ -1346,22 +1346,14 @@ void PositiveInteger::deleteList(PositiveInteger::ListOfPositiveInteger const& l
 
 PositiveInteger::ListOfPositiveInteger* PositiveInteger::findPrime(PositiveInteger const& max)
 {
-	PositiveInteger* one = new PositiveInteger(true,true);
-	PositiveInteger* two = PositiveInteger::Add(*one,*one,false);
-	PositiveInteger* i;
+	PositiveInteger one = PositiveInteger(true,true);
+	PositiveInteger* const two = PositiveInteger::Add(one,one,false);
 	
-	ListOfPositiveInteger* FirstElement = new ListOfPositiveInteger;
-	ListOfPositiveInteger* FinalElement;
-	ListOfPositiveInteger* element1;
-	ListOfPositiveInteger* element2;
-	
+	ListOfPositiveInteger* const FirstElement = new ListOfPositiveInteger;
 	FirstElement->Element = two->copy();
-	FinalElement = FirstElement;
+	ListOfPositiveInteger* FinalElement = FirstElement;
 	
-	i = PositiveInteger::Add(*two,*one,false);
-	PositiveInteger* p1;
-	PositiveInteger* p2;
-	bool divisible = false;
+	PositiveInteger* i = PositiveInteger::Add(*two,one,false);
 	while(true)
 	{
 		if(PositiveInteger::compare(*i,max).isLarger())
@@ -1369,39 +1361,45 @@ PositiveInteger::ListOfPositiveInteger* PositiveInteger::findPrime(PositiveInteg
 			break;
 		}
 		
-		element1 = FirstElement;
+		ListOfPositiveInteger const * element1 = FirstElement;
 		while(true)
 		{
-			p1 = PositiveInteger::Multiply(*(element1->Element),*(element1->Element));
-			if(PositiveInteger::compare(*i,*p1).isSmaller())
 			{
-				element2 = new ListOfPositiveInteger;
-				FinalElement->Next = element2;
-				element2->Element = i->copy();
-				FinalElement = element2;
+				PositiveInteger const * const p1 = PositiveInteger::Multiply(*(element1->Element),*(element1->Element));
+				if(PositiveInteger::compare(*i,*p1).isSmaller())
+				{
+					//find a prime
+					ListOfPositiveInteger* element2 = new ListOfPositiveInteger;
+					FinalElement->Next = element2;
+					element2->Element = i->copy();
+					FinalElement = element2;
+					delete p1;
+					break;
+				}
 				delete p1;
-				break;
-			}
-			delete p1;
-			
-			PositiveInteger::Divide(*i,*(element1->Element),p1,p2,divisible,false);
-			delete p1;
-			if(divisible)
-			{
-				break;
-			}
-			else
-			{
-				delete p2;
 			}
 			
+			{
+				//check divisibility
+				PositiveInteger* p1;
+				PositiveInteger* p2;
+				bool divisible;
+				PositiveInteger::Divide(*i,*(element1->Element),p1,p2,divisible,false);
+				delete p1;
+				if(divisible)
+				{
+					break;
+				}
+				else
+				{
+					delete p2;
+				}
+			}
 			element1 = element1->Next;
-			
 		}
-		PositiveInteger::Add(*i,*one,true);
+		PositiveInteger::Add(*i,one,true);
 	}
 	delete i;
-	delete one;
 	delete two;
 	return FirstElement;
 }

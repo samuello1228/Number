@@ -12,7 +12,9 @@ using namespace std;
 
 int main()
 {
-	Byte::setBase(8);
+	//Byte::setBase(8);
+	Byte::setBase(1<<15);
+	
 	
 	PositiveInteger* one = new PositiveInteger(true,true);
 	PositiveInteger* i = new PositiveInteger(true,true);
@@ -141,9 +143,10 @@ int main()
 	*/
 
 	///*
-	PositiveInteger max = PositiveInteger(97);
+	PositiveInteger max = PositiveInteger(300000);
 	PositiveInteger::ListOfPositiveInteger* list;
 	list = PositiveInteger::findPrime(max);
+	cout<<"done"<<endl;
 	PositiveInteger::printList(*list,1);
 	PositiveInteger::deleteList(*list);
 	//*/
