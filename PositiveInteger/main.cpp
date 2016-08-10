@@ -55,7 +55,7 @@ int main()
 			}
 			PositiveInteger* x1 = i->copy();
 			PositiveInteger* x2 = j->copy();
-			PositiveInteger* x3 = PositiveInteger::Subtract(x1,x2,1);
+			PositiveInteger* x3 = PositiveInteger::Subtract(*x1,*x2,1);
 			//x3->printByte();
 			//delete x3;
 			//x1->printByte();
@@ -67,7 +67,7 @@ int main()
 			PositiveInteger* x1 = i->copy();
 			PositiveInteger* x2 = j->copy();
 			PositiveInteger* x3 = PositiveInteger::Multiply(*x1,*x2);
-			x3->printByte();
+			//x3->printByte();
 			delete x3;
 			delete x1;
 			delete x2;
@@ -84,8 +84,7 @@ int main()
 			PositiveInteger* x3;
 			PositiveInteger* x4;
 			bool divisible;
-			bool temp;
-			PositiveInteger::Divide(x1,x2,x3,x4,divisible,temp,1);
+			PositiveInteger::Divide(*x1,*x2,x3,x4,divisible,1);
 			//x3->printByte();
 			if(!divisible)
 			{

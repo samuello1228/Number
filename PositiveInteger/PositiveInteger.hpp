@@ -46,8 +46,8 @@ public:
 	static PositiveInteger* Subtract(PositiveInteger&,PositiveInteger const&,bool const);
 	static void MultiplyAux(Byte const&,Byte const&,Byte&,Byte*&,bool* const MultiplyIsCarried=nullptr);
 	static PositiveInteger* Multiply(PositiveInteger const&,PositiveInteger const&,bool* const MultiplyIsCarried=nullptr);
-	static void DivideAux(Byte const&,Byte const&,PositiveInteger&,Byte*&,bool&,bool&);
-	static void Divide(PositiveInteger*,PositiveInteger*,PositiveInteger*&,PositiveInteger*&,bool&,bool&,bool);
+	static void DivideAux(Byte const&,Byte const&,PositiveInteger&,Byte*&,bool&,bool* DivideIsCarried=nullptr);
+	static void Divide(PositiveInteger&,PositiveInteger const&,PositiveInteger*&,PositiveInteger*&,bool&,bool const,bool* DivideIsCarried=nullptr);
 	
 	
 	struct ListOfPositiveInteger

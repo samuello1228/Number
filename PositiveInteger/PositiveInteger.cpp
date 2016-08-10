@@ -105,7 +105,6 @@ PositiveInteger* PositiveInteger::changeBase(const unsigned int base) const
 	Byte* b2;
 	bool divisible = false;
 	bool isEnd = false;
-	bool temp;
 
 	PositiveInteger* x1 = this->copy();
 	Digit* digit1 = new Digit;
@@ -119,7 +118,7 @@ PositiveInteger* PositiveInteger::changeBase(const unsigned int base) const
 		}
 		else
 		{
-			PositiveInteger::Divide(x1,&Base,x2,x1,divisible,temp,true);
+			PositiveInteger::Divide(*x1,Base,x2,x1,divisible,true);
 		}
 		
 		if(divisible)
@@ -958,7 +957,7 @@ PositiveInteger* PositiveInteger::Multiply(PositiveInteger const& x1,PositiveInt
 	return y;
 }
 
-void PositiveInteger::DivideAux(Byte const& x2LeftEnd,Byte const& x2RightEnd,PositiveInteger& y1,Byte*& y2LeftEnd,bool& divisible,bool& DivideIsCarried)
+void PositiveInteger::DivideAux(Byte const& x2LeftEnd,Byte const& x2RightEnd,PositiveInteger& y1,Byte*& y2LeftEnd,bool& divisible,bool* DivideIsCarried)
 {
 	//find tLeft
 	Byte* tLeft = y2LeftEnd;
@@ -1236,7 +1235,7 @@ void PositiveInteger::DivideAux(Byte const& x2LeftEnd,Byte const& x2RightEnd,Pos
 			//left end for y1
 			if(y1.getLeftEnd()->isZero())
 			{
-				DivideIsCarried = false;
+				if(DivideIsCarried!=nullptr) *DivideIsCarried = false;
 				//delete the additional 0 at the left end of y1
 				b1 = y1.getLeftEnd()->getRight();
 				delete b1->getLeft();
@@ -1244,7 +1243,7 @@ void PositiveInteger::DivideAux(Byte const& x2LeftEnd,Byte const& x2RightEnd,Pos
 			}
 			else
 			{
-				DivideIsCarried = true;
+				if(DivideIsCarried!=nullptr) *DivideIsCarried = true;
 				b1 = y1.getLeftEnd();
 			}
 			b1->setLeft(nullptr);
@@ -1259,26 +1258,22 @@ void PositiveInteger::DivideAux(Byte const& x2LeftEnd,Byte const& x2RightEnd,Pos
 	}
 }
 
-void PositiveInteger::Divide(PositiveInteger* x1,PositiveInteger* x2,PositiveInteger*& y1,PositiveInteger*& y2,bool& divisible,bool& DivideIsCarried, bool overwrite)
+void PositiveInteger::Divide(PositiveInteger& x1,PositiveInteger const& x2,PositiveInteger*& y1,PositiveInteger*& y2,bool& divisible,bool const overwrite,bool* DivideIsCarried)
 {
 	//y1 is quotient
 	//y2 is remainder
-	Byte* y2LeftEnd;
-	Byte* d1;
-	Byte* d2;
-
 	if(overwrite)
 	{
-		y2 = x1;
+		y2 = &x1;
 	}
 	else
 	{
-		y2 = x1->copy();
+		y2 = x1.copy();
 	}
 	
 	//find d1 and d2
-	d1 = y2->getRightEnd();
-	d2 = x2->getRightEnd();
+	Byte* d1 = y2->getRightEnd();
+	Byte* d2 = x2.getRightEnd();
 	while(true)
 	{
 		if(!d1->isZero() || !d2->isZero()) break;
@@ -1295,8 +1290,8 @@ void PositiveInteger::Divide(PositiveInteger* x1,PositiveInteger* x2,PositiveInt
 	
 	//Divide
 	y1 = new PositiveInteger;
-	y2LeftEnd = y2->getLeftEnd();
-	PositiveInteger::DivideAux(*(x2->getLeftEnd()),*d2,*y1,y2LeftEnd,divisible,DivideIsCarried);
+	Byte* y2LeftEnd = y2->getLeftEnd();
+	PositiveInteger::DivideAux(*(x2.getLeftEnd()),*d2,*y1,y2LeftEnd,divisible,DivideIsCarried);
 	y2->setLeftEnd(y2LeftEnd);
 	
 	//recover right end
@@ -1397,8 +1392,7 @@ PositiveInteger::ListOfPositiveInteger* PositiveInteger::findPrime(PositiveInteg
 			}
 			delete p1;
 			
-			bool temp;
-			PositiveInteger::Divide(i,element1->Element,p1,p2,divisible,temp,false);
+			PositiveInteger::Divide(*i,*(element1->Element),p1,p2,divisible,false);
 			delete p1;
 			if(divisible)
 			{
@@ -1427,7 +1421,6 @@ PositiveInteger* PositiveInteger::GCD(PositiveInteger* x1,PositiveInteger* x2)
 	PositiveInteger* p3;
 	PositiveInteger* p4;
 	bool divisible = false;
-	bool temp;
 	
 	if(PositiveInteger::compare(*x1,*x2).isSmaller())
 	{
@@ -1442,7 +1435,7 @@ PositiveInteger* PositiveInteger::GCD(PositiveInteger* x1,PositiveInteger* x2)
 	
 	while(true)
 	{
-		PositiveInteger::Divide(p1,p2,p3,p4,divisible,temp,false);
+		PositiveInteger::Divide(*p1,*p2,p3,p4,divisible,false);
 		delete p1;
 		delete p3;
 		if(divisible)
@@ -1747,35 +1740,31 @@ bool PositiveInteger::VerifyMultiply(unsigned int const max)
 
 bool PositiveInteger::VerifyDivide(unsigned int const max,bool const overwrite)
 {
-	PositiveInteger* one = new PositiveInteger(true,true);
-	PositiveInteger* p1;
-	PositiveInteger* p2;
-	PositiveInteger* p3;
-	PositiveInteger* p4;
-	PositiveInteger* n1;
-	PositiveInteger* n2;
-	PositiveInteger* n3;
-	bool divisible=0;
-	bool DivideIsCarried;
-	
 	for(unsigned int i=1;i<=max;i++)
 	//for(unsigned int i=112;i<=112;i++)
 	{
 		for(unsigned int j=1;j<=i;j++)
 		//for(unsigned int j=19;j<=19;j++)
 		{
-			p1 = new PositiveInteger(i);
-			p2 = new PositiveInteger(j);
+			PositiveInteger* const p1 = new PositiveInteger(i);
+			PositiveInteger* const n1 = p1->getNumberOfByte(); //for overwrite, it will be delete
+			PositiveInteger const p2 = PositiveInteger(j);
 			//p1->printByte();
 			//p2->printByte();
-			n1 = p1->getNumberOfByte(); //for overwrite, it will be delete
-			PositiveInteger::Divide(p1,p2,p3,p4,divisible,DivideIsCarried,overwrite);
+			
+			PositiveInteger* p3;
+			PositiveInteger* p4;
+			bool divisible;
+			bool DivideIsCarried;
+			PositiveInteger::Divide(*p1,p2,p3,p4,divisible,overwrite,&DivideIsCarried);
 			//p3->printByte();
+			
 			if(!overwrite)
 			{
 				if(!p1->isSame(i)) {cout<<"Error Code: 16"<<endl; return false;}
+				delete p1;
 			}
-			if(!p2->isSame(j)) {cout<<"Error Code: 17"<<endl; return false;}
+			if(!p2.isSame(j)) {cout<<"Error Code: 17"<<endl; return false;}
 			if(!p3->isSame(i/j)) {cout<<"Error Code: 18"<<endl; return false;}
 			if(i%j==0)
 			{
@@ -1789,12 +1778,14 @@ bool PositiveInteger::VerifyDivide(unsigned int const max,bool const overwrite)
 				delete p4;
 			}
 			
-			n2 = p2->getNumberOfByte();
-			n3 = p3->getNumberOfByte();
+			PositiveInteger const * const n2 = p2.getNumberOfByte();
+			PositiveInteger const * const n3 = p3->getNumberOfByte();
+			delete p3;
 			
 			if(DivideIsCarried)
 			{
-				PositiveInteger::Add(*n1,*one,true);
+				PositiveInteger one = PositiveInteger(true,true);
+				PositiveInteger::Add(*n1,one,true);
 				PositiveInteger::Subtract(*n1,*n2,true);
 				if(!PositiveInteger::compare(*n1,*n3).isEqual()) {cout<<"Error Code: 22"<<endl; return false;}
 			}
@@ -1803,16 +1794,12 @@ bool PositiveInteger::VerifyDivide(unsigned int const max,bool const overwrite)
 				PositiveInteger::Subtract(*n1,*n2,true);
 				if(!PositiveInteger::compare(*n1,*n3).isEqual()) {cout<<"Error Code: 23"<<endl; return false;}
 			}
-			
-			if(!overwrite) delete p1;
-			delete p2;
-			delete p3;
+
 			delete n1;
 			delete n2;
 			delete n3;
 			//cout<<endl;
 		}
 	}
-	delete one;
 	return true;
 }
