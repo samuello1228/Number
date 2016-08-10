@@ -184,11 +184,11 @@ void PositiveInteger::printByte() const
 	}
 	cout<<endl;
 }
-//not optimize
+
 PositiveInteger* PositiveInteger::getNumberOfByte() const
 {
 	PositiveInteger* const y = new PositiveInteger(true,true);
-	Byte* c1 = getRightEnd();
+	Byte const * c1 = getRightEnd();
 	while(true)
 	{
 		if(c1->getIsLeftEnd()) break;
