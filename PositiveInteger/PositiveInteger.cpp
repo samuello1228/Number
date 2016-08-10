@@ -96,83 +96,81 @@ int PositiveInteger::getInt() const
 	}
 	return y;
 }
-//not optimize
+
 PositiveInteger* PositiveInteger::changeBase(const unsigned int base) const
 {
-	PositiveInteger Base = PositiveInteger(base);
-	PositiveInteger* x2 = nullptr;
-	Byte* b1;
-	Byte* b2;
-	bool divisible = false;
-	bool isEnd = false;
-
-	PositiveInteger* x1 = this->copy();
 	Digit* digit1 = new Digit;
-	Digit* digit2;
-	while(true)
 	{
-		if(PositiveInteger::compare(*x1,Base).isSmaller())
+		PositiveInteger const Base = PositiveInteger(base);
+		PositiveInteger* x1 = this->copy();
+		bool isEnd = false;
+		while(true)
 		{
-			divisible = false;
-			isEnd = true;
-		}
-		else
-		{
-			PositiveInteger::Divide(*x1,Base,x2,x1,divisible,true);
-		}
-		
-		if(divisible)
-		{
-			digit1->digit = 0;
-		}
-		else
-		{
-			digit1->digit = x1->getInt();
-		}
-		
-		if(isEnd)
-		{
-			Byte::setBase(base);
-			PositiveInteger* y = new PositiveInteger;
-			b1 = new Byte;
-			b1->setLeft(nullptr);
-			b1->setIsLeftEnd(true);
-			y->setLeftEnd(b1);
-			
-			b1->setByteInt(digit1->digit);
-			while(true)
+			PositiveInteger* x2 = nullptr;
+			bool divisible;
+			if(PositiveInteger::compare(*x1,Base).isSmaller())
 			{
-				if(digit1->Right==nullptr) break;
-				digit2 = digit1->Right;
-				delete digit1;
-				
-				b2 = new Byte;
-				b2->setByteInt(digit2->digit);
-				b1->setRight(b2);
-				b2->setLeft(b1);
-				
-				b1 = b2;
+				divisible = false;
+				isEnd = true;
+			}
+			else
+			{
+				PositiveInteger::Divide(*x1,Base,x2,x1,divisible,true);
+			}
+			
+			if(divisible)
+			{
+				digit1->digit = 0;
+			}
+			else
+			{
+				digit1->digit = x1->getInt();
+			}
+			
+			if(!divisible)
+			{
+				delete x1;
+			}
+			x1 = x2;
+			
+			if(isEnd) break;
+			
+			{
+				Digit* const digit2 = new Digit;
+				digit2->Right = digit1;
 				digit1 = digit2;
 			}
-			delete digit1;
-			
-			b1->setRight(nullptr);
-			b1->setIsRightEnd(true);
-			y->setRightEnd(b1);
-			
-			delete x1;
-			return y;
 		}
-		
-		digit2 = new Digit;
-		digit2->Right = digit1;
-		digit1 = digit2;
-		if(!divisible)
-		{
-			delete x1;
-		}
-		x1 = x2;
 	}
+	
+	Byte::setBase(base);
+	PositiveInteger* const y = new PositiveInteger;
+	Byte* b1 = new Byte;
+	b1->setLeft(nullptr);
+	b1->setIsLeftEnd(true);
+	y->setLeftEnd(b1);
+	
+	while(true)
+	{
+		b1->setByteInt(digit1->digit);
+		
+		if(digit1->Right==nullptr) break;
+		Digit* const digit2 = digit1->Right;
+		delete digit1;
+		digit1 = digit2;
+		
+		Byte* const b2 = new Byte;
+		b1->setRight(b2);
+		b2->setLeft(b1);
+		b1 = b2;
+	}
+	delete digit1;
+	
+	b1->setRight(nullptr);
+	b1->setIsRightEnd(true);
+	y->setRightEnd(b1);
+
+	return y;
 }
 
 void PositiveInteger::printByte() const
