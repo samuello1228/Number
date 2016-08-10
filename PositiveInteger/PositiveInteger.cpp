@@ -672,7 +672,7 @@ PositiveInteger* PositiveInteger::Add(PositiveInteger& x1,PositiveInteger const&
 {
 	bool AddIsCarriedAux;
 	Byte* LeftEnd;
-	PositiveInteger* y = PositiveInteger::AddAux(*(x1.getRightEnd()),*(x2.getRightEnd()),overwrite,AddIsCarriedAux,LeftEnd);
+	PositiveInteger* const y = PositiveInteger::AddAux(*(x1.getRightEnd()),*(x2.getRightEnd()),overwrite,AddIsCarriedAux,LeftEnd);
 	if(AddIsCarried!=nullptr)
 	{
 		*AddIsCarried = AddIsCarriedAux;
@@ -819,7 +819,7 @@ PositiveInteger* PositiveInteger::Subtract(PositiveInteger& x1,PositiveInteger c
 	return y;
 }
 
-void PositiveInteger::MultiplyAux(Byte const& RightEnd1,Byte const& RightEnd2,Byte& tRightEnd,Byte*& b1,bool& MultiplyIsCarried)
+void PositiveInteger::MultiplyAux(Byte const& RightEnd1,Byte const& RightEnd2,Byte& tRightEnd,Byte*& b1,bool* const MultiplyIsCarried)
 {
 	Byte const * c1 = &RightEnd1;
 	Byte const * c2 = &RightEnd2;
@@ -851,7 +851,7 @@ void PositiveInteger::MultiplyAux(Byte const& RightEnd1,Byte const& RightEnd2,By
 					Byte::MultiplyAux1(*c1,*c2,carry,*b1);
 					if(!carry.isZero())
 					{
-						MultiplyIsCarried = true;
+						if(MultiplyIsCarried!=nullptr) *MultiplyIsCarried = true;
 						Byte* const b2 = new Byte;
 						b1->setLeft(b2);
 						b2->setRight(b1);
@@ -882,15 +882,15 @@ void PositiveInteger::MultiplyAux(Byte const& RightEnd1,Byte const& RightEnd2,By
 					
 					if(AddIsCarried)
 					{
-						if(!b1->getLeft()->getIsLeftEnd())
+						if(MultiplyIsCarried!=nullptr && !b1->getLeft()->getIsLeftEnd())
 						{
-							MultiplyIsCarried = true;
+							*MultiplyIsCarried = true;
 						}
 						b1 = LeftEnd;
 					}
 					else
 					{
-						MultiplyIsCarried = false;
+						if(MultiplyIsCarried!=nullptr) *MultiplyIsCarried = false;
 					}
 				}
 				else
@@ -911,28 +911,21 @@ void PositiveInteger::MultiplyAux(Byte const& RightEnd1,Byte const& RightEnd2,By
 		}
 	}
 }
-PositiveInteger* PositiveInteger::Multiply(PositiveInteger* x1,PositiveInteger* x2,bool& MultiplyIsCarried)
+PositiveInteger* PositiveInteger::Multiply(PositiveInteger const& x1,PositiveInteger const& x2,bool* const MultiplyIsCarried)
 {
-	PositiveInteger* y;
-	Byte* b1;
-	Byte* b2;
-	Byte* c1;
-	Byte* c2;
-	Byte* tRight;
-	
-	y = new PositiveInteger;
-	b1 = new Byte;
+	PositiveInteger* const y = new PositiveInteger;
+	Byte* b1 = new Byte;
 	b1->setRight(nullptr);
 	b1->setIsRightEnd(true);
 	y->setRightEnd(b1);
 	
 	//////////////// copy zero of x1
-	c1 = x1->getRightEnd();
+	Byte const* c1 = x1.getRightEnd();
 	while(true)
 	{
 		if(!c1->isZero()) break;
 		b1->setByteZero();
-		b2 = new Byte;
+		Byte* const b2 = new Byte;
 		b1->setLeft(b2);
 		b2->setRight(b1);
 		b1 = b2;
@@ -940,29 +933,31 @@ PositiveInteger* PositiveInteger::Multiply(PositiveInteger* x1,PositiveInteger* 
 	}
 	
 	////////////////copy zero of x2
-	c2 = x2->getRightEnd();
+	Byte const* c2 = x2.getRightEnd();
 	while(true)
 	{
 		if(!c2->isZero()) break;
 		b1->setByteZero();
-		b2 = new Byte;
+		Byte* const b2 = new Byte;
 		b1->setLeft(b2);
 		b2->setRight(b1);
 		b1 = b2;
 		c2 = c2->getLeft();
 	}
-	tRight = b1;
+	Byte* const tRight = b1;
 	
 	////////////////copy x1 without zero
-	PositiveInteger::copyAux(b1,*c1,c2,&MultiplyIsCarried);
+	PositiveInteger::copyAux(b1,*c1,c2,MultiplyIsCarried);
 	b1->setIsLeftEnd(true);
-
+	
 	////////////////
 	PositiveInteger::MultiplyAux(*c1,*c2,*tRight,b1,MultiplyIsCarried);
+	
 	b1->setLeft(nullptr);
 	y->setLeftEnd(b1);
 	return y;
 }
+
 void PositiveInteger::DivideAux(Byte* x2LeftEnd,Byte* x2RightEnd,PositiveInteger*& y1,Byte*& y2LeftEnd,bool& divisible,bool& DivideIsCarried)
 {
 	Byte* b1;
@@ -1403,7 +1398,7 @@ PositiveInteger::ListOfPositiveInteger* PositiveInteger::findPrime(PositiveInteg
 		element1 = FirstElement;
 		while(true)
 		{
-			p1 = PositiveInteger::Multiply(element1->Element,element1->Element,temp);
+			p1 = PositiveInteger::Multiply(*(element1->Element),*(element1->Element),&temp);
 			if(PositiveInteger::compare(*i,*p1).isSmaller())
 			{
 				element2 = new ListOfPositiveInteger;
@@ -1722,57 +1717,43 @@ bool PositiveInteger::VerifySubtract(unsigned int const max,bool const overwrite
 
 bool PositiveInteger::VerifyMultiply(unsigned int const max)
 {
-	PositiveInteger* one = new PositiveInteger(true,true);
-	PositiveInteger* p1;
-	PositiveInteger* p2;
-	PositiveInteger* p3;
-	PositiveInteger* n1;
-	PositiveInteger* n2;
-	PositiveInteger* n3;
-	bool MultiplyIsCarried;
 	for(unsigned int i=1;i<=max;i++)
 	//for(unsigned int i=14;i<=14;i++)
 	{
 		for(unsigned int j=1;j<=max;j++)
 		//for(unsigned int j=15;j<=15;j++)
 		{
-			p1 = new PositiveInteger(i);
-			p2 = new PositiveInteger(j);
+			PositiveInteger const p1 = PositiveInteger(i);
+			PositiveInteger const p2 = PositiveInteger(j);
 			//p1->printByte();
 			//p2->printByte();
-			p3 = PositiveInteger::Multiply(p1,p2,MultiplyIsCarried);
+			bool MultiplyIsCarried;
+			PositiveInteger const * const p3 = PositiveInteger::Multiply(p1,p2,&MultiplyIsCarried);
 			//p3->printByte();
 			
-			if(!p1->isSame(i)) return false;
-			if(!p2->isSame(j)) return false;
+			if(!p1.isSame(i)) return false;
+			if(!p2.isSame(j)) return false;
 			if(!p3->isSame(i*j)) return false;
 			
-			n1 = p1->getNumberOfByte();
-			n2 = p2->getNumberOfByte();
-			n3 = p3->getNumberOfByte();
-			
-			if(MultiplyIsCarried)
-			{
-				PositiveInteger::Add(*n1,*n2,true);
-				if(!PositiveInteger::compare(*n1,*n3).isEqual()) return false;
-			}
-			else
-			{
-				PositiveInteger::Add(*n1,*n2,true);
-				PositiveInteger::Subtract(*n1,*one,true);
-				if(!PositiveInteger::compare(*n1,*n3).isEqual()) return false;
-			}
-		
-			delete p1;
-			delete p2;
+			PositiveInteger* const n1 = p1.getNumberOfByte();
+			PositiveInteger const * const n2 = p2.getNumberOfByte();
+			PositiveInteger const * const n3 = p3->getNumberOfByte();
 			delete p3;
-			delete n1;
+			
+			PositiveInteger::Add(*n1,*n2,true);
 			delete n2;
+			
+			if(!MultiplyIsCarried)
+			{
+				PositiveInteger const one = PositiveInteger(true,true);
+				PositiveInteger::Subtract(*n1,one,true);
+			}
+			if(!PositiveInteger::compare(*n1,*n3).isEqual()) return false;
+			delete n1;
 			delete n3;
 			//cout<<endl;
 		}
 	}
-	delete one;
 	return true;
 }
 

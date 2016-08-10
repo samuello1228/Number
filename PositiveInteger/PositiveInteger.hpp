@@ -36,7 +36,7 @@ public:
 	int getInt() const;
 	PositiveInteger* getNumberOfByte() const;
 	
-	static void copyAux(Byte*&,Byte const&,Byte const * const multiple=nullptr,bool* AddIsCarried=nullptr);
+	static void copyAux(Byte*&,Byte const&,Byte const * const multiple=nullptr,bool* const AddIsCarried=nullptr);
 	PositiveInteger* copy() const;
 	static CompareCode compare(PositiveInteger const&,PositiveInteger const&);
 	static PositiveInteger* AddAux(Byte&,Byte const&,bool const,bool&,Byte*&,Byte const * const multiple=nullptr);
@@ -44,8 +44,8 @@ public:
 	static void SubtractAux(Byte*&,Byte&,Byte const&,bool*,bool const,
 							bool const,Byte*&,Byte*&,bool const,bool&,bool&,bool&);
 	static PositiveInteger* Subtract(PositiveInteger&,PositiveInteger const&,bool const);
-	static void MultiplyAux(Byte const&,Byte const&,Byte&,Byte*&,bool&);
-	static PositiveInteger* Multiply(PositiveInteger*,PositiveInteger*,bool&);
+	static void MultiplyAux(Byte const&,Byte const&,Byte&,Byte*&,bool* const MultiplyIsCarried=nullptr);
+	static PositiveInteger* Multiply(PositiveInteger const&,PositiveInteger const&,bool* const MultiplyIsCarried=nullptr);
 	static void DivideAux(Byte*,Byte*,PositiveInteger*&,Byte*&,bool&,bool&);
 	static void Divide(PositiveInteger*,PositiveInteger*,PositiveInteger*&,PositiveInteger*&,bool&,bool&,bool);
 	

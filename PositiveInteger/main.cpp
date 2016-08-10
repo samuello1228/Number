@@ -64,11 +64,10 @@ int main()
 			*/
 			
 			/*
-			bool temp;
 			PositiveInteger* x1 = i->copy();
 			PositiveInteger* x2 = j->copy();
-			PositiveInteger* x3 = PositiveInteger::Multiply(x1,x2,temp);
-			//x3->printByte();
+			PositiveInteger* x3 = PositiveInteger::Multiply(*x1,*x2);
+			x3->printByte();
 			delete x3;
 			delete x1;
 			delete x2;
