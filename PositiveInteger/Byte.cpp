@@ -479,7 +479,7 @@ void Byte::MultiplyAux3(Byte const& x1,Byte const& x2,Byte const& Multiple,Byte 
 		carry2.byte = y/base;
 	}
 }
-void Byte::DivideAux(Byte* a1,Byte* a2,Byte const& a3,Byte* b1,Byte const& b2,Byte& y)
+void Byte::DivideAux(Byte const * a1,Byte const * a2,Byte const& a3,Byte const * b1,Byte const& b2,Byte& y)
 {
 	if(base == 2)
 	{

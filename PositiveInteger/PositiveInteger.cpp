@@ -958,100 +958,80 @@ PositiveInteger* PositiveInteger::Multiply(PositiveInteger const& x1,PositiveInt
 	return y;
 }
 
-void PositiveInteger::DivideAux(Byte* x2LeftEnd,Byte* x2RightEnd,PositiveInteger*& y1,Byte*& y2LeftEnd,bool& divisible,bool& DivideIsCarried)
+void PositiveInteger::DivideAux(Byte const& x2LeftEnd,Byte const& x2RightEnd,PositiveInteger& y1,Byte*& y2LeftEnd,bool& divisible,bool& DivideIsCarried)
 {
-	Byte* b1;
-	Byte* b2 = nullptr;
-	Byte* tLeft;
-	Byte* tRight;
-	Byte* d1;
-	Byte* d2 = nullptr;
-	Byte* Multiple;
-	CompareCode compareByte;
-	CompareCode compareInteger;
-	bool isEnd;
-	bool isZero;
-	bool b1IsFilled;
-	bool MultiplyIsCarried;
-	PositiveInteger* product = nullptr;
-
 	//find tLeft
-	tLeft = y2LeftEnd;
+	Byte* tLeft = y2LeftEnd;
 	
 	//find tRight
-	tRight = y2LeftEnd;
-	d1 = x2LeftEnd;
-	while(true)
+	Byte* tRight = y2LeftEnd;
 	{
-		if(d1->getIsRightEnd())
+		Byte const * d1 = &x2LeftEnd;
+		while(true)
 		{
-			break;
+			if(d1->getIsRightEnd())
+			{
+				break;
+			}
+			if(tRight->getIsRightEnd())
+			{
+				cout<<"Error! PositiveInteger does not support number zero."<<endl;
+				return;
+			}
+			tRight = tRight->getRight();
+			d1 = d1->getRight();
 		}
-		if(tRight->getIsRightEnd())
-		{
-			cout<<"Error! PositiveInteger does not support number zero."<<endl;
-			return;
-		}
-		tRight = tRight->getRight();
-		d1 = d1->getRight();
 	}
 	
 	//create left end for y1
-	y1 = new PositiveInteger;
-	b1 = new Byte;
-	y1->setLeftEnd(b1);
-	
+	Byte* b1 = new Byte;
+	y1.setLeftEnd(b1);
+
 	//////////////////
-	b1IsFilled = false;
-	isEnd = false;
+	bool b1IsFilled = false;
+	bool isEnd = false;
 	divisible = false;
-	if(Byte::getBase() == 2)
-	{
-		Multiple = nullptr;
-	}
-	else
-	{
-		Multiple = new Byte;
-	}
-	
 	while(true)
 	{
+		CompareCode compareInteger;
 		if(!isEnd)
 		{
 			//compare y1(tLeft to tRight) and x2
-			d1 = tLeft;
-			d2 = x2LeftEnd;
-			while(true)
 			{
-				compareByte = Byte::compare(*d1,*d2);
-				if(compareByte.isLarger())
+				Byte const * d1 = tLeft;
+				Byte const * d2 = &x2LeftEnd;
+				while(true)
 				{
-					//y1(tLeft to tRight) is larger than x2
-					compareInteger = CompareCode(false,true);
-					break;
+					CompareCode const compareByte = Byte::compare(*d1,*d2);
+					if(compareByte.isLarger())
+					{
+						//y1(tLeft to tRight) is larger than x2
+						compareInteger = CompareCode(false,true);
+						break;
+					}
+					else if(compareByte.isSmaller())
+					{
+						//y1(tLeft to tRight) is smaller than x2
+						compareInteger = CompareCode(false,false);
+						break;
+					}
+					
+					if(d2->getIsRightEnd())
+					{
+						//y1(tLeft to tRight) and x2 are equal
+						compareInteger = CompareCode(true);
+						break;
+					}
+					if(d1->getIsRightEnd())
+					{
+						//x1 < x2
+						cout<<"Logic Error!"<<endl;
+						return;
+					}
+					
+					d1 = d1->getRight();
+					d2 = d2->getRight();
 				}
-				else if(compareByte.isSmaller())
-				{
-					//y1(tLeft to tRight) is smaller than x2
-					compareInteger = CompareCode(false,false);
-					break;
-				}
-				
-				if(d2->getIsRightEnd())
-				{
-					//y1(tLeft to tRight) and x2 are equal
-					compareInteger = CompareCode(true);
-					break;
-				}
-				if(d1->getIsRightEnd())
-				{
-					//x1 < x2
-					cout<<"Logic Error!"<<endl;
-					return;
-				}
-				
-				d1 = d1->getRight();
-				d2 = d2->getRight();
 			}
 			
 			//fill y1 with 0
@@ -1069,7 +1049,7 @@ void PositiveInteger::DivideAux(Byte* x2LeftEnd,Byte* x2RightEnd,PositiveInteger
 				else
 				{
 					tRight = tRight->getRight();
-					b2 = new Byte;
+					Byte* const b2 = new Byte;
 					b2->setLeft(b1);
 					b1->setRight(b2);
 					b1 = b2;
@@ -1081,15 +1061,16 @@ void PositiveInteger::DivideAux(Byte* x2LeftEnd,Byte* x2RightEnd,PositiveInteger
 		if(!isEnd)
 		{
 			//ignore zero at the right of x2
-			d1 = tRight;
-			d2 = x2RightEnd;
+			Byte* y2RightEnd = tRight;
+			Byte const * productRightEnd = &x2RightEnd;
 			while(true)
 			{
-				if(!d2->isZero()) break;
-				d1 = d1->getLeft();
-				d2 = d2->getLeft();
+				if(!productRightEnd->isZero()) break;
+				y2RightEnd = y2RightEnd->getLeft();
+				productRightEnd = productRightEnd->getLeft();
 			}
 			
+			PositiveInteger* product = nullptr;
 			if(Byte::getBase() == 2)
 			{
 				//fill y1 with 1
@@ -1105,96 +1086,107 @@ void PositiveInteger::DivideAux(Byte* x2LeftEnd,Byte* x2RightEnd,PositiveInteger
 				}
 				else
 				{
-					if(x2LeftEnd->getIsRightEnd())
+					if(x2LeftEnd.getIsRightEnd())
 					{
 						//calculate correct Multiple
+						Byte Multiple;
 						if(compareInteger.isLarger())
 						{
-							Byte::DivideAux(nullptr,nullptr,*tLeft,nullptr,*x2LeftEnd,*Multiple);
+							Byte::DivideAux(nullptr,nullptr,*tLeft,nullptr,x2LeftEnd,Multiple);
 						}
 						else
 						{
-							Byte::DivideAux(nullptr,tLeft,*(tLeft->getRight()),nullptr,*x2LeftEnd,*Multiple);
+							Byte::DivideAux(nullptr,tLeft,*(tLeft->getRight()),nullptr,x2LeftEnd,Multiple);
 						}
-		
-						if(!Multiple->isOne())
+						b1->setBytePointer(Multiple);
+						
+						if(!Multiple.isOne())
 						{
 							//calculate product
 							product = new PositiveInteger;
-							b2 = new Byte;
+							Byte* b2 = new Byte;
 							b2->setIsRightEnd(true);
 							product->setRightEnd(b2);
-							PositiveInteger::copyAux(b2,*d2,Multiple);
+							PositiveInteger::copyAux(b2,*productRightEnd,&Multiple);
 							b2->setIsLeftEnd(true);
 							product->setLeftEnd(b2);
 							
-							d2 = product->getRightEnd();
+							productRightEnd = product->getRightEnd();
 						}
 					}
 					else
 					{
 						//calculate estimated Multiple
+						Byte Multiple;
 						if(compareInteger.isLarger())
 						{
-							Byte::DivideAux(nullptr,tLeft,*(tLeft->getRight()),x2LeftEnd,*(x2LeftEnd->getRight()),*Multiple);
+							Byte::DivideAux(nullptr,tLeft,*(tLeft->getRight()),&x2LeftEnd,*(x2LeftEnd.getRight()),Multiple);
 						}
 						else
 						{
 							Byte::DivideAux(tLeft,tLeft->getRight(),*(tLeft->getRight()->getRight()),
-											x2LeftEnd,*(x2LeftEnd->getRight()),*Multiple);
+											&x2LeftEnd,*(x2LeftEnd.getRight()),Multiple);
 						}
 						
 						//calculate correct Multiple
-						bool isSubtractOne = false;
-						if(!Multiple->isOne())
+						if(Multiple.isOne())
+						{
+							b1->setByteOne();
+						}
+						else
 						{
 							//calculate estimated product
+							bool isSubtractOne = false;
 							product = new PositiveInteger;
-							b2 = new Byte;
-							b2->setIsRightEnd(true);
-							product->setRightEnd(b2);
-							PositiveInteger::copyAux(b2,*d2,Multiple,&MultiplyIsCarried);
-							b2->setIsLeftEnd(true);
-							product->setLeftEnd(b2);
-							
-							//compare y1(tLeft to tRight) and product
-							if(compareInteger.isLarger() && MultiplyIsCarried)
 							{
-								//y1(tLeft to tRight) are shorter than product
-								Multiple->setByteSubtractOne();
-								isSubtractOne = true;
-							}
-							else if(compareInteger.isLarger() || MultiplyIsCarried)
-							{
-								//the length of y1(tLeft to tRight) and product are equal
-								//compareInteger.isLarger() and !MultiplyIsCarried
-								//compareInteger.isSmall() and MultiplyIsCarried
-								Byte* d3 = tLeft;
-								Byte* d4 = b2;
-								while(true)
+								Byte* b2 = new Byte;
+								b2->setIsRightEnd(true);
+								product->setRightEnd(b2);
+								bool MultiplyIsCarried;
+								PositiveInteger::copyAux(b2,*productRightEnd,&Multiple,&MultiplyIsCarried);
+								b2->setIsLeftEnd(true);
+								product->setLeftEnd(b2);
+								
+								//compare y1(tLeft to tRight) and product
+								if(compareInteger.isLarger() && MultiplyIsCarried)
 								{
-									compareByte = Byte::compare(*d3,*d4);
-									if(compareByte.isLarger())
-									{
-										//y1(tLeft to tRight) is larger than product
-										break;
-									}
-									else if(compareByte.isSmaller())
-									{
-										//y1(tLeft to tRight) is smaller than product
-										Multiple->setByteSubtractOne();
-										isSubtractOne = true;
-										break;
-									}
-									
-									if(d4->getIsRightEnd())
-									{
-										//y1(tLeft to tRight) is larger than or equal to product
-										break;
-									}
-									d3 = d3->getRight();
-									d4 = d4->getRight();
+									//y1(tLeft to tRight) are shorter than product
+									Multiple.setByteSubtractOne();
+									isSubtractOne = true;
 								}
+								else if(compareInteger.isLarger() || MultiplyIsCarried)
+								{
+									//the length of y1(tLeft to tRight) and product are equal
+									//compareInteger.isLarger() and !MultiplyIsCarried
+									//compareInteger.isSmall() and MultiplyIsCarried
+									Byte const * d1 = tLeft;
+									Byte const * d2 = b2;
+									while(true)
+									{
+										CompareCode const compareByte = Byte::compare(*d1,*d2);
+										if(compareByte.isLarger())
+										{
+											//y1(tLeft to tRight) is larger than product
+											break;
+										}
+										else if(compareByte.isSmaller())
+										{
+											//y1(tLeft to tRight) is smaller than product
+											Multiple.setByteSubtractOne();
+											isSubtractOne = true;
+											break;
+										}
+										
+										if(d2->getIsRightEnd())
+										{
+											//y1(tLeft to tRight) is larger than or equal to product
+											break;
+										}
+										d1 = d1->getRight();
+										d2 = d2->getRight();
+									}
+								}
+								b1->setBytePointer(Multiple);
 							}
 							
 							if(isSubtractOne)
@@ -1204,23 +1196,23 @@ void PositiveInteger::DivideAux(Byte* x2LeftEnd,Byte* x2RightEnd,PositiveInteger
 							
 								//calculate corrected product
 								product = new PositiveInteger;
-								b2 = new Byte;
+								Byte* b2 = new Byte;
 								b2->setIsRightEnd(true);
 								product->setRightEnd(b2);
-								PositiveInteger::copyAux(b2,*d2,Multiple);
+								PositiveInteger::copyAux(b2,*productRightEnd,&Multiple);
 								b2->setIsLeftEnd(true);
 								product->setLeftEnd(b2);
 							}
-							d2 = product->getRightEnd();
+							productRightEnd = product->getRightEnd();
 						}
 					}
-					b1->setBytePointer(*Multiple);
 				}
 			}
 			b1IsFilled = true;
 			
 			//Subtract
-			PositiveInteger::SubtractAux(tLeft,*d1,*d2,nullptr,true,
+			bool isZero;
+			PositiveInteger::SubtractAux(tLeft,*y2RightEnd,*productRightEnd,nullptr,true,
 											true,b1,tRight,compareInteger.isSmaller(),b1IsFilled,isZero,isEnd);
 			if(product!=nullptr)
 			{
@@ -1239,21 +1231,21 @@ void PositiveInteger::DivideAux(Byte* x2LeftEnd,Byte* x2RightEnd,PositiveInteger
 			//right end for y1
 			b1->setRight(nullptr);
 			b1->setIsRightEnd(true);
-			y1->setRightEnd(b1);
+			y1.setRightEnd(b1);
 			
 			//left end for y1
-			if(y1->getLeftEnd()->isZero())
+			if(y1.getLeftEnd()->isZero())
 			{
 				DivideIsCarried = false;
 				//delete the additional 0 at the left end of y1
-				b1 = y1->getLeftEnd()->getRight();
+				b1 = y1.getLeftEnd()->getRight();
 				delete b1->getLeft();
-				y1->setLeftEnd(b1);
+				y1.setLeftEnd(b1);
 			}
 			else
 			{
 				DivideIsCarried = true;
-				b1 = y1->getLeftEnd();
+				b1 = y1.getLeftEnd();
 			}
 			b1->setLeft(nullptr);
 			b1->setIsLeftEnd(true);
@@ -1262,11 +1254,6 @@ void PositiveInteger::DivideAux(Byte* x2LeftEnd,Byte* x2RightEnd,PositiveInteger
 			tLeft->setLeft(nullptr);
 			y2LeftEnd = tLeft;
 			
-			//delete
-			if(Byte::getBase() != 2)
-			{
-				delete Multiple;
-			}
 			return;
 		}
 	}
@@ -1307,8 +1294,9 @@ void PositiveInteger::Divide(PositiveInteger* x1,PositiveInteger* x2,PositiveInt
 	}
 	
 	//Divide
+	y1 = new PositiveInteger;
 	y2LeftEnd = y2->getLeftEnd();
-	PositiveInteger::DivideAux(x2->getLeftEnd(),d2,y1,y2LeftEnd,divisible,DivideIsCarried);
+	PositiveInteger::DivideAux(*(x2->getLeftEnd()),*d2,*y1,y2LeftEnd,divisible,DivideIsCarried);
 	y2->setLeftEnd(y2LeftEnd);
 	
 	//recover right end
@@ -1387,7 +1375,6 @@ PositiveInteger::ListOfPositiveInteger* PositiveInteger::findPrime(PositiveInteg
 	PositiveInteger* p1;
 	PositiveInteger* p2;
 	bool divisible = false;
-	bool temp;
 	while(true)
 	{
 		if(PositiveInteger::compare(*i,*max).isLarger())
@@ -1398,7 +1385,7 @@ PositiveInteger::ListOfPositiveInteger* PositiveInteger::findPrime(PositiveInteg
 		element1 = FirstElement;
 		while(true)
 		{
-			p1 = PositiveInteger::Multiply(*(element1->Element),*(element1->Element),&temp);
+			p1 = PositiveInteger::Multiply(*(element1->Element),*(element1->Element));
 			if(PositiveInteger::compare(*i,*p1).isSmaller())
 			{
 				element2 = new ListOfPositiveInteger;
@@ -1410,6 +1397,7 @@ PositiveInteger::ListOfPositiveInteger* PositiveInteger::findPrime(PositiveInteg
 			}
 			delete p1;
 			
+			bool temp;
 			PositiveInteger::Divide(i,element1->Element,p1,p2,divisible,temp,false);
 			delete p1;
 			if(divisible)
