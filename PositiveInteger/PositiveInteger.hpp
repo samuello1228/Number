@@ -58,7 +58,7 @@ public:
 	static void printList(ListOfPositiveInteger const&,bool const);
 	static void deleteList(ListOfPositiveInteger const&);
 	static ListOfPositiveInteger* findPrime(PositiveInteger const&);
-	static PositiveInteger* GCD(PositiveInteger*,PositiveInteger*);
+	static PositiveInteger* GCD(PositiveInteger const&,PositiveInteger const&);
 	
 	//verification
 	PositiveInteger(unsigned int);

@@ -12,16 +12,16 @@ using namespace std;
 
 int main()
 {
-	//Byte::setBase(8);
-	Byte::setBase(1<<15);
+	Byte::setBase(10);
+	//Byte::setBase(1<<15);
 	
 	
 	PositiveInteger* one = new PositiveInteger(true,true);
 	PositiveInteger* i = new PositiveInteger(true,true);
-	PositiveInteger* iMax = new PositiveInteger(1024);
-	PositiveInteger* jMax = new PositiveInteger(1024);
-	//PositiveInteger* iMax = new PositiveInteger(1);
-	//PositiveInteger* jMax = new PositiveInteger(1);
+	//PositiveInteger* iMax = new PositiveInteger(1024);
+	//PositiveInteger* jMax = new PositiveInteger(1024);
+	PositiveInteger* iMax = new PositiveInteger(1);
+	PositiveInteger* jMax = new PositiveInteger(1);
 	
 	while(1)
 	{
@@ -103,17 +103,17 @@ int main()
 			delete x3;
 			*/
 			
-			/*
+			///*
 			//PositiveInteger* x1 = i->copy();
 			//PositiveInteger* x2 = j->copy();
 			PositiveInteger* x1 = new PositiveInteger(60);
 			PositiveInteger* x2 = new PositiveInteger(72);
-			PositiveInteger* x3 = PositiveInteger::GCD(x1,x2);
+			PositiveInteger* x3 = PositiveInteger::GCD(*x1,*x2);
 			x3->printByte();
 			delete x1;
 			delete x2;
 			delete x3;
-			*/
+			//*/
 	
 			PositiveInteger::Add(*j,*one,true);
 		}
@@ -127,7 +127,7 @@ int main()
 	delete iMax;
 	delete jMax;
 	
-	/*
+	///*
 	if(!PositiveInteger::VerifyCopy(100)) cout<<"Error"<<endl;
 	if(!PositiveInteger::VerifyCounter(100)) cout<<"Error"<<endl;
 	if(!PositiveInteger::VerifyPositiveInteger(100)) cout<<"Error"<<endl;
@@ -140,16 +140,16 @@ int main()
 	if(!PositiveInteger::VerifyDivide(100,0)) cout<<"Error"<<endl;
 	if(!PositiveInteger::VerifyDivide(100,1)) cout<<"Error"<<endl;
 	else cout<<"OK"<<endl;
-	*/
+	//*/
 
-	///*
+	/*
 	PositiveInteger max = PositiveInteger(300000);
 	PositiveInteger::ListOfPositiveInteger* list;
 	list = PositiveInteger::findPrime(max);
 	cout<<"done"<<endl;
 	PositiveInteger::printList(*list,1);
 	PositiveInteger::deleteList(*list);
-	//*/
+	*/
 	
 	/*
 	Byte::setBase(2);

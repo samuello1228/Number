@@ -1404,29 +1404,27 @@ PositiveInteger::ListOfPositiveInteger* PositiveInteger::findPrime(PositiveInteg
 	return FirstElement;
 }
 
-PositiveInteger* PositiveInteger::GCD(PositiveInteger* x1,PositiveInteger* x2)
+PositiveInteger* PositiveInteger::GCD(PositiveInteger const& x1,PositiveInteger const& x2)
 {
 	PositiveInteger* p1;
 	PositiveInteger* p2;
-	PositiveInteger* p3;
-	PositiveInteger* p4;
-	bool divisible = false;
-	
-	if(PositiveInteger::compare(*x1,*x2).isSmaller())
+	if(PositiveInteger::compare(x1,x2).isSmaller())
 	{
-		p1 = x2->copy();
-		p2 = x1->copy();
+		p1 = x2.copy();
+		p2 = x1.copy();
 	}
 	else
 	{
-		p1 = x1->copy();
-		p2 = x2->copy();
+		p1 = x1.copy();
+		p2 = x2.copy();
 	}
 	
 	while(true)
 	{
-		PositiveInteger::Divide(*p1,*p2,p3,p4,divisible,false);
-		delete p1;
+		bool divisible;
+		PositiveInteger* p3;
+		PositiveInteger* p4;
+		PositiveInteger::Divide(*p1,*p2,p3,p4,divisible,true);
 		delete p3;
 		if(divisible)
 		{
