@@ -100,8 +100,7 @@ int PositiveInteger::getInt() const
 //not optimize
 PositiveInteger* PositiveInteger::changeBase(const unsigned int base) const
 {
-	
-	PositiveInteger* const Base = new PositiveInteger(base);
+	PositiveInteger Base = PositiveInteger(base);
 	PositiveInteger* x2 = nullptr;
 	Byte* b1;
 	Byte* b2;
@@ -114,14 +113,14 @@ PositiveInteger* PositiveInteger::changeBase(const unsigned int base) const
 	Digit* digit2;
 	while(true)
 	{
-		if(PositiveInteger::compare(*x1,*Base).isSmaller())
+		if(PositiveInteger::compare(*x1,Base).isSmaller())
 		{
 			divisible = false;
 			isEnd = true;
 		}
 		else
 		{
-			PositiveInteger::Divide(x1,Base,x2,x1,divisible,temp,true);
+			PositiveInteger::Divide(x1,&Base,x2,x1,divisible,temp,true);
 		}
 		
 		if(divisible)
@@ -164,7 +163,6 @@ PositiveInteger* PositiveInteger::changeBase(const unsigned int base) const
 			y->setRightEnd(b1);
 			
 			delete x1;
-			delete Base;
 			return y;
 		}
 		
@@ -193,12 +191,12 @@ void PositiveInteger::printByte() const
 //not optimize
 PositiveInteger* PositiveInteger::getNumberOfByte() const
 {
-	PositiveInteger const one = PositiveInteger(true,true);
-	PositiveInteger* y = new PositiveInteger(true,true);
+	PositiveInteger* const y = new PositiveInteger(true,true);
 	Byte* c1 = getRightEnd();
 	while(true)
 	{
 		if(c1->getIsLeftEnd()) break;
+		PositiveInteger const one = PositiveInteger(true,true);
 		PositiveInteger::Add(*y,one,true);
 		c1 = c1->getLeft();
 	}
@@ -206,17 +204,13 @@ PositiveInteger* PositiveInteger::getNumberOfByte() const
 }
 void PositiveInteger::copyAux(Byte*& b1,Byte const& c1,Byte const * const Multiple,bool * const AddIsCarried)
 {
-	Byte* carry1 = nullptr;
-	Byte* carry2 = nullptr;
+	Byte carry1;
 	if(Multiple!=nullptr)
 	{
-		carry1 = new Byte;
-		carry2 = new Byte;
-		carry1->setByteZero();
+		carry1.setByteZero();
 	}
 	
 	Byte const * d1 = &c1;
-	Byte* b2;
 	while(true)
 	{
 		if(Multiple==nullptr)
@@ -225,12 +219,14 @@ void PositiveInteger::copyAux(Byte*& b1,Byte const& c1,Byte const * const Multip
 		}
 		else
 		{
-			Byte::MultiplyAux2(*d1,*Multiple,*carry1,*carry2,*b1);
-			carry1->setBytePointer(*carry2);
+			Byte carry2;
+			Byte::MultiplyAux2(*d1,*Multiple,carry1,carry2,*b1);
+			carry1.setBytePointer(carry2);
 		}
+		
 		if(d1->getIsLeftEnd()) break;
 		d1 = d1->getLeft();
-		b2 = new Byte;
+		Byte* const b2 = new Byte;
 		b1->setLeft(b2);
 		b2->setRight(b1);
 		b1 = b2;
@@ -238,20 +234,14 @@ void PositiveInteger::copyAux(Byte*& b1,Byte const& c1,Byte const * const Multip
 	
 	//carry
 	if(AddIsCarried!=nullptr) *AddIsCarried = false;
-	if(Multiple!=nullptr && !carry1->isZero())
+	if(Multiple!=nullptr && !carry1.isZero())
 	{
 		if(AddIsCarried!=nullptr) *AddIsCarried = true;
-		b2 = new Byte;
+		Byte* const b2 = new Byte;
 		b1->setLeft(b2);
 		b2->setRight(b1);
 		b1 = b2;
-		b1->setBytePointer(*carry1);
-	}
-	
-	if(Multiple!=nullptr)
-	{
-		delete carry1;
-		delete carry2;
+		b1->setBytePointer(carry1);
 	}
 }
 
