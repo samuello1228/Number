@@ -834,10 +834,12 @@ void PositiveInteger::MultiplyAux(Byte const& RightEnd1,Byte const& RightEnd2,By
 			{
 				//tRight->getLeft() for y does not exist
 				b1->setIsLeftEnd(false);
-				Byte* b2 = new Byte;
-				b1->setLeft(b2);
-				b2->setRight(b1);
-				b1 = b2;
+				{
+					Byte* const b2 = new Byte;
+					b1->setLeft(b2);
+					b2->setRight(b1);
+					b1 = b2;
+				}
 				
 				if(Byte::getBase()==2)
 				{
@@ -851,7 +853,7 @@ void PositiveInteger::MultiplyAux(Byte const& RightEnd1,Byte const& RightEnd2,By
 					if(!carry.isZero())
 					{
 						MultiplyIsCarried = true;
-						b2 = new Byte;
+						Byte* const b2 = new Byte;
 						b1->setLeft(b2);
 						b2->setRight(b1);
 						b1 = b2;
