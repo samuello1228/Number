@@ -15,18 +15,18 @@ class Integer
 {
 public:
 	Integer();
-    Integer(std::string);
+    Integer(std::string&);
 	~Integer();
-	bool getIsZero();
-	void setIsZero(bool);
-	bool getSign();
-	void setSign(bool);
-	PositiveInteger* getMagnitude();
-	void setMagnitude(PositiveInteger*);
+	bool getIsZero() const;
+	void setIsZero(bool const);
+	bool getSign() const;
+	void setSign(bool const);
+	PositiveInteger* getMagnitude() const;
+	void setMagnitude(PositiveInteger* const&);
 	
-	void printBinary();
+	void printByte() const;
 	void printDecimal(bool);
-	Integer* copy();
+	Integer* copy() const;
 	static CompareCode compare(Integer*,Integer*);
 	static Integer* Add(Integer*&,Integer*&,bool);
 	Integer* Negation(bool);
@@ -34,12 +34,12 @@ public:
 	static Integer* Multiply(Integer*,Integer*);
 	
 	//verification
-	Integer(int);
-	bool isComplete();
-	bool isSame(int);
+	Integer(int const);
+	bool isComplete() const;
+	bool isSame(int const) const;
 	
-	static bool VerifyCopy(int);
-	static bool VerifyInteger(int);
+	static bool VerifyCopy(int const);
+	static bool VerifyInteger(int const);
 	static bool VerifyCompare(int);
 	static bool VerifyAdd(int,bool);
 	static bool VerifyNegation(int,bool);

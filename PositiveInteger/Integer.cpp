@@ -9,15 +9,23 @@
 #include "Integer.hpp"
 #include <iostream>
 using namespace std;
-/*
+
 Integer::Integer()
 {
-	setIsZero(false);
-	setSign(true);
+	//setIsZero(false);
+	//setSign(true);
 	setMagnitude(nullptr);
 }
 
-Integer::Integer(std::string x)
+Integer::~Integer()
+{
+	if(!getIsZero())
+	{
+		delete magnitude;
+	}
+}
+
+Integer::Integer(std::string& x)
 {
     std::string::iterator i=x.begin();
     
@@ -43,43 +51,36 @@ Integer::Integer(std::string x)
     PositiveInteger* m = new PositiveInteger(x);
     setMagnitude(m);
 }
-Integer::~Integer()
-{
-	if(!getIsZero())
-	{
-		delete magnitude;
-	}
-}
 
 
-bool Integer::getIsZero()
+bool Integer::getIsZero() const
 {
 	return isZero;
 }
-void Integer::setIsZero(bool newIsZero)
+void Integer::setIsZero(bool const newIsZero)
 {
 	isZero = newIsZero;
 }
 
-bool Integer::getSign()
+bool Integer::getSign() const
 {
 	return sign;
 }
-void Integer::setSign(bool newSign)
+void Integer::setSign(bool const newSign)
 {
 	sign = newSign;
 }
 
-PositiveInteger* Integer::getMagnitude()
+PositiveInteger* Integer::getMagnitude() const
 {
 	return magnitude;
 }
-void Integer::setMagnitude(PositiveInteger* newMagnitude)
+void Integer::setMagnitude(PositiveInteger* const& newMagnitude)
 {
 	magnitude = newMagnitude;
 }
 
-void Integer::printBinary()
+void Integer::printByte() const
 {
 	if(getIsZero())
 	{
@@ -87,14 +88,15 @@ void Integer::printBinary()
 	}
 	else if(getSign())
 	{
-		getMagnitude()->printBinary();
+		getMagnitude()->printByte();
 	}
 	else
 	{
 		cout<<"-";
-		getMagnitude()->printBinary();
+		getMagnitude()->printByte();
 	}
 }
+/*
 void Integer::printDecimal(bool overwrite)
 {
 	if(getIsZero())
@@ -111,38 +113,28 @@ void Integer::printDecimal(bool overwrite)
 		getMagnitude()->printDecimal(overwrite);
 	}
 }
+*/
 
-Integer* Integer::copy()
+Integer* Integer::copy() const
 {
-	Integer* y = new Integer;
-	PositiveInteger* p1;
+	Integer* const y = new Integer;
 	if(getIsZero())
 	{
 		y->setIsZero(true);
-		//y->setSign(true);
+		y->setSign(true);
 		//y->setMagnitude(nullptr);
-		return y;
 	}
 	else
 	{
-		//y->setIsZero(false);
-		if(getSign())
-		{
-			//y->setSign(true);
-			p1 = getMagnitude()->copy();
-			y->setMagnitude(p1);
-			return y;
-		}
-		else
-		{
-			y->setSign(false);
-			p1 = getMagnitude()->copy();
-			y->setMagnitude(p1);
-			return y;
-		}
+		y->setIsZero(false);
+		y->setSign(getSign());
+		PositiveInteger* const p1 = getMagnitude()->copy();
+		y->setMagnitude(p1);
 	}
+	return y;
 }
 
+/*
 CompareCode Integer::compare(Integer* x1, Integer* x2)
 {
 	if(x1->getIsZero())
@@ -392,9 +384,10 @@ Integer* Integer::Multiply(Integer* x1,Integer* x2)
 	y->setMagnitude(m1);
 	return y;
 }
+*/
 
 //verification
-Integer::Integer(int x)
+Integer::Integer(int const x)
 {
 	if(x==0)
 	{
@@ -404,23 +397,23 @@ Integer::Integer(int x)
 	}
 	else
 	{
-		PositiveInteger* m;
 		setIsZero(false);
 		if(x>0)
 		{
 			setSign(true);
-			m = new PositiveInteger(x);
+			PositiveInteger* m = new PositiveInteger(x);
 			setMagnitude(m);
 		}
 		else
 		{
 			setSign(false);
-			m = new PositiveInteger(-x);
+			PositiveInteger* m = new PositiveInteger(-x);
 			setMagnitude(m);
 		}
 	}
 }
-bool Integer::isComplete()
+
+bool Integer::isComplete() const
 {
 	if(getIsZero())
 	{
@@ -434,7 +427,7 @@ bool Integer::isComplete()
 	}
 	return true;
 }
-bool Integer::isSame(int x)
+bool Integer::isSame(int const x) const
 {
 	if(!isComplete()) return false;
 	
@@ -459,67 +452,55 @@ bool Integer::isSame(int x)
 	}
 	return true;
 }
-bool Integer::VerifyCopy(int max)
+bool Integer::VerifyCopy(int const max)
 {
-	Integer* p1;
-	Integer* p2;
 	for(int i=-max;i<=max;i++)
 	{
-		p1 = new Integer(i);
+		Integer const p1 = Integer(i);
 		//if(!p1->isComplete()) return false;
-		//p1->printBinary();
-		p2 = p1->copy();
-		if(!p1->isSame(i)) return false;
+		//p1->printByte();
+		Integer const * const p2 = p1.copy();
+		if(!p1.isSame(i)) return false;
 		if(!p2->isSame(i)) return false;
-		p2->printBinary();
+		//p2->printByte();
 		
-		delete p1;
 		delete p2;
 	}
 	return true;
 }
-bool Integer::VerifyInteger(int max)
+
+bool Integer::VerifyInteger(int const max)
 {
-	Integer* p1;
-	Integer* p2;
 	std::string s;
-	Bit* b1;
 	for(int i=-max;i<=max;i++)
 	{
-		p1 = new Integer(i);
 		if(i==0)
 		{
-			p2 = new Integer("0");
+			s="0";
 		}
 		else
 		{
 			s.clear();
 			if(i<0) s.push_back('-');
-			b1 = p1->getMagnitude()->getLeftEnd();
-			while(true)
+			
+			Integer const p1 = Integer(i);
 			{
-				if(b1->getDigit())
+				Byte const * d1 = p1.getMagnitude()->getLeftEnd();
+				while(true)
 				{
-					s.push_back('1');
+					s.push_back(d1->getByteChar());
+					if(d1->getIsRightEnd()) break;
+					d1 = d1->getRight();
 				}
-				else
-				{
-					s.push_back('0');
-				}
-				if(b1->isRightEnd()) break;
-				b1 = b1->getRight();
 			}
-			//cout<<s<<endl;
-			p2 = new Integer(s);
 		}
-		
-		if(!p2->isSame(i)) return false;
-		
-		delete p1;
-		delete p2;
+		//cout<<s<<endl;
+		Integer const p2 = Integer(s);
+		if(!p2.isSame(i)) return false;
 	}
 	return true;
 }
+/*
 bool Integer::VerifyCompare(int max)
 {
 	Integer* p1;
