@@ -27,8 +27,8 @@ public:
 	
 	//verification
 	RealNumberBound(bool IsZero,bool Sign,unsigned int m,int e);
-	bool isComplete();
-	bool isSame(bool IsZero,bool Sign=true,unsigned int m=0,int e=0);
+	bool isComplete() const;
+	bool isSame(bool IsZero,bool Sign=true,unsigned int m=0,int e=0) const;
 	
 	static bool VerifyCopy(int);
 	static bool VerifyRealNumberBound(int);

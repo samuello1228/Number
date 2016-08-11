@@ -12,8 +12,6 @@ using namespace std;
 
 RealNumberBound::RealNumberBound()
 {
-	setSignificand(nullptr);
-	setExponent(nullptr);
 }
 
 RealNumberBound::RealNumberBound(std::string m,std::string e)
@@ -21,16 +19,23 @@ RealNumberBound::RealNumberBound(std::string m,std::string e)
 	Integer* p1 = new Integer(m);
 	setSignificand(p1);
 	
-	p1 = new Integer(e);
-	setExponent(p1);
+	if(p1->getIsZero())
+	{
+		setExponent(nullptr);
+	}
+	else
+	{
+		p1 = new Integer(e);
+		setExponent(p1);
+	}
 }
 RealNumberBound::~RealNumberBound()
 {
 	if(!getSignificand()->getIsZero())
 	{
-		delete getSignificand();
 		delete getExponent();
 	}
+	delete getSignificand();
 }
 
 
@@ -99,27 +104,27 @@ RealNumberBound::RealNumberBound(bool IsZero,bool Sign,unsigned int m,int e)
 		return;
 	}
 
-	Integer* p2 = getSignificand();
-	p2->setIsZero(false);
+	Integer* p1 = getSignificand();
+	p1->setIsZero(false);
 	if(Sign)
 	{
-		p2->setSign(true);
+		p1->setSign(true);
 	}
 	else
 	{
-		p2->setSign(false);
+		p1->setSign(false);
 	}
 	
-	PositiveInteger* p1;
+	PositiveInteger* p2;
 	if(m==0)
 	{
-		p1 = new PositiveInteger(1);
+		p2 = new PositiveInteger(1);
 	}
 	else
 	{
-		p1 = new PositiveInteger(m);
+		p2 = new PositiveInteger(m);
 		
-		Byte* b1 = p1->getRightEnd();
+		Byte* b1 = p2->getRightEnd();
 		b1->setIsRightEnd(false);
 		
 		Byte* b2 = new Byte;
@@ -128,65 +133,47 @@ RealNumberBound::RealNumberBound(bool IsZero,bool Sign,unsigned int m,int e)
 		b2->setLeft(b1);
 		b2->setIsRightEnd(true);
 		b2->setRight(nullptr);
-		p1->setRightEnd(b2);
+		p2->setRightEnd(b2);
 	}
-	p2->setMagnitude(p1);
-	setSignificand(p2);
+	p1->setMagnitude(p2);
+	setSignificand(p1);
 	
-	p2 = new Integer(e);
-	setExponent(p2);
+	p1 = new Integer(e);
+	setExponent(p1);
 }
-/*
-bool RealNumberBound::isComplete()
+
+bool RealNumberBound::isComplete() const
 {
-	Bit* b1;
-	Bit* b2;
-	if(getIsZero())
+	if(getSignificand()==nullptr) {cout<<"Error Code: 26"<<endl; return false;}
+	Integer* p1 = getSignificand();
+	
+	if(p1->getIsZero())
 	{
-		if(!getSign()) return false;
-		if(getLeftEnd()!=nullptr) return false;
-		if(getRightEnd()!=nullptr) return false;
-		if(getExponent()!=nullptr) return false;
+		if(!p1->isSame(0)) {cout<<"Error Code: 27"<<endl; return false;}
+		if(getExponent()!=nullptr) {cout<<"Error Code: 28"<<endl; return false;}
 	}
 	else
 	{
-		if(getRightEnd()==nullptr) return false;
-		b1 = getRightEnd();
-		if(b1->getRight()!=nullptr) return false;
-		if(!b1->getDigit()) return false;
-		while(true)
-		{
-			if(b1->getLeft()==nullptr) break;
-			b2 = b1->getLeft();
-			if(b2->getRight()==nullptr) return false;
-			if(b2->getRight()!=b1) return false;
-			b1 = b2;
-		}
-		if(!b1->getDigit()) return false;
-		if(getLeftEnd()==nullptr) return false;
-		b2 = getLeftEnd();
-		if(b1!=b2) return false;
+		if(!p1->isComplete()) {cout<<"Error Code: 29"<<endl; return false;}
+		if(p1->getMagnitude()->getRightEnd()->isZero()) {cout<<"Error Code: 30"<<endl; return false;}
 
-		if(getExponent()==nullptr) return false;
-		if(!getExponent()->isComplete()) return false;
+		if(getExponent()==nullptr) {cout<<"Error Code: 31"<<endl; return false;}
+		if(!getExponent()->isComplete()) {cout<<"Error Code: 32"<<endl; return false;}
 	}
 	return true;
 }
-
-bool RealNumberBound::isSame(bool IsZero,bool Sign,unsigned int m,int e)
+/*
+bool RealNumberBound::isSame(bool IsZero,bool Sign,unsigned int m,int e) const
 {
-	PositiveInteger* p1;
-	Bit* b1;
-	Bit* b2;
-	
 	if(!isComplete()) return false;
+	Integer* p1 = getSignificand();
 	if(IsZero)
 	{
-		if(!getIsZero()) return false;
+		if(!getSignificand()->getIsZero()) return false;
 	}
 	else
 	{
-		if(getSign()!=Sign) return false;
+		if(getSignificand()->getSign()!=Sign) return false;
 		
 		if(m==0)
 		{

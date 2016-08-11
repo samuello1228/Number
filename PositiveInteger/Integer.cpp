@@ -426,37 +426,37 @@ bool Integer::isComplete() const
 {
 	if(getIsZero())
 	{
-		if(!getSign()) return false;
-		if(getMagnitude()!=nullptr) return false;
+		if(!getSign()) {cout<<"Error Code: 16"<<endl; return false;}
+		if(getMagnitude()!=nullptr) {cout<<"Error Code: 17"<<endl; return false;}
 	}
 	else
 	{
-		if(getMagnitude()==nullptr) return false;
-		if(!getMagnitude()->isComplete()) return false;
+		if(getMagnitude()==nullptr) {cout<<"Error Code: 18"<<endl; return false;}
+		if(!getMagnitude()->isComplete()) {cout<<"Error Code: 19"<<endl; return false;}
 	}
 	return true;
 }
 bool Integer::isSame(int const x) const
 {
-	if(!isComplete()) return false;
+	if(!isComplete()) {cout<<"Error Code: 20"<<endl; return false;}
 	
 	if(x==0)
 	{
-		if(!getIsZero()) return false;
+		if(!getIsZero()) {cout<<"Error Code: 21"<<endl; return false;}
 	}
 	else
 	{
-		if(getIsZero()) return false;
+		if(getIsZero()) {cout<<"Error Code: 22"<<endl; return false;}
 		if(x>0)
 		{
-			if(!getSign()) return false;
-			if(!getMagnitude()->isSame(x)) return false;
+			if(!getSign()) {cout<<"Error Code: 23"<<endl; return false;}
+			if(!getMagnitude()->isSame(x)) {cout<<"Error Code: 24"<<endl; return false;}
 
 		}
 		else
 		{
-			if(getSign()) return false;
-			if(!getMagnitude()->isSame(-x)) return false;
+			if(getSign()) {cout<<"Error Code: 25"<<endl; return false;}
+			if(!getMagnitude()->isSame(-x)) {cout<<"Error Code: 26"<<endl; return false;}
 		}
 	}
 	return true;

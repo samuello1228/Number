@@ -9,7 +9,6 @@
 #ifndef PositiveInteger_hpp
 #define PositiveInteger_hpp
 
-#include "Bit.hpp"
 #include "Byte.hpp"
 #include <string>
 

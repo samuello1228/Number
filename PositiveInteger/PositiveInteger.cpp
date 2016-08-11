@@ -1742,20 +1742,20 @@ bool PositiveInteger::VerifyDivide(unsigned int const max,bool const overwrite)
 			
 			if(!overwrite)
 			{
-				if(!p1->isSame(i)) {cout<<"Error Code: 16"<<endl; return false;}
+				if(!p1->isSame(i)) return false;
 				delete p1;
 			}
-			if(!p2.isSame(j)) {cout<<"Error Code: 17"<<endl; return false;}
-			if(!p3->isSame(i/j)) {cout<<"Error Code: 18"<<endl; return false;}
+			if(!p2.isSame(j)) return false;
+			if(!p3->isSame(i/j)) return false;
 			if(i%j==0)
 			{
-				if(!divisible) {cout<<"Error Code: 19"<<endl; return false;}
+				if(!divisible) return false;
 			}
 			else
 			{
 				//p4->printByte();
-				if(divisible) {cout<<"Error Code: 20"<<endl; return false;}
-				if(!p4->isSame(i%j)) {cout<<"Error Code: 21"<<endl; return false;}
+				if(divisible) return false;
+				if(!p4->isSame(i%j)) return false;
 				delete p4;
 			}
 			
@@ -1768,12 +1768,12 @@ bool PositiveInteger::VerifyDivide(unsigned int const max,bool const overwrite)
 				PositiveInteger one = PositiveInteger(true,true);
 				PositiveInteger::Add(*n1,one,true);
 				PositiveInteger::Subtract(*n1,*n2,true);
-				if(!PositiveInteger::compare(*n1,*n3).isEqual()) {cout<<"Error Code: 22"<<endl; return false;}
+				if(!PositiveInteger::compare(*n1,*n3).isEqual()) return false;
 			}
 			else
 			{
 				PositiveInteger::Subtract(*n1,*n2,true);
-				if(!PositiveInteger::compare(*n1,*n3).isEqual()) {cout<<"Error Code: 23"<<endl; return false;}
+				if(!PositiveInteger::compare(*n1,*n3).isEqual()) return false;
 			}
 
 			delete n1;
