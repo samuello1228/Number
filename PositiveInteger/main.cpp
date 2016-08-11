@@ -210,7 +210,8 @@ int main()
 	if(!Integer::VerifyCompare(100)) cout<<"Error"<<endl;
 	if(!Integer::VerifyAdd(100,0)) cout<<"Error"<<endl;
 	if(!Integer::VerifyAdd(100,1)) cout<<"Error"<<endl;
-	//if(!Integer::VerifyNegation(100,0)) cout<<"Error"<<endl;
+	if(!Integer::VerifyNegation(100,0)) cout<<"Error"<<endl;
+	if(!Integer::VerifyNegation(100,1)) cout<<"Error"<<endl;
 	//if(!Integer::VerifySubtract(100,0)) cout<<"Error"<<endl;
 	//if(!Integer::VerifyMultiply(100)) cout<<"Error"<<endl;
 	else cout<<"OK"<<endl;

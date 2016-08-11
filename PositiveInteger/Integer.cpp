@@ -317,7 +317,7 @@ Integer* Integer::Add(Integer*& x1,Integer*& x2,bool const overwrite)
 		}
 	}
 }
-/*
+
 Integer* Integer::Negation(bool const overwrite)
 {
 	Integer* y;
@@ -345,6 +345,7 @@ Integer* Integer::Negation(bool const overwrite)
 	}
 	return y;
 }
+/*
 Integer* Integer::Subtract(Integer*& x1,Integer*& x2,bool const overwrite)
 {
 	Integer* y;
@@ -549,32 +550,30 @@ bool Integer::VerifyAdd(int const max,bool const overwrite)
 	}
 	return true;
 }
-/*
+
 bool Integer::VerifyNegation(int const max,bool const overwrite)
 {
-	Integer* p1;
-	Integer* p2;
 	for(int i=-max;i<=max;i++)
 	{
-		p1 = new Integer(i);
-		p2 = p1->Negation(overwrite);
+		Integer p1 = Integer(i);
+		Integer const * const p2 = p1.Negation(overwrite);
 		if(overwrite)
 		{
-			if(!p1->isSame(-i)) return false;
+			if(!p1.isSame(-i)) return false;
 		}
 		else
 		{
-			if(!p1->isSame(i)) return false;
+			if(!p1.isSame(i)) return false;
 		}
 		
 		if(!p2->isSame(-i)) return false;
 		//p2->printByte();
 		
-		delete p1;
 		if(!overwrite) delete p2;
 	}
 	return true;
 }
+/*
 bool Integer::VerifySubtract(int const max,bool const overwrite)
 {
 	Integer* p1;
