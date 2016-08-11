@@ -5,188 +5,87 @@
 //  Created by Samuel Lo on 12/7/2016.
 //  Copyright © 2016年 Samuel Lo. All rights reserved.
 //
-/*
+
 #include "RealNumberBound.hpp"
 #include <iostream>
 using namespace std;
 
 RealNumberBound::RealNumberBound()
 {
-	setIsZero(false);
-	setSign(true);
-	setLeftEnd(nullptr);
-	setRightEnd(nullptr);
+	setSignificand(nullptr);
 	setExponent(nullptr);
 }
 
 RealNumberBound::RealNumberBound(std::string m,std::string e)
 {
-	std::string::iterator i=m.begin();
+	Integer* p1 = new Integer(m);
+	setSignificand(p1);
 	
-	if(*i == '0')
-	{
-		setIsZero(true);
-		setSign(true);
-		setLeftEnd(nullptr);
-		setRightEnd(nullptr);
-		setExponent(nullptr);
-		return;
-	}
-	else if(*i == '-')
-	{
-		setIsZero(false);
-		setSign(false);
-		m.erase(i);
-		i=m.begin();
-	}
-	else
-	{
-		setIsZero(false);
-		setSign(true);
-	}
-	
-	Bit* b1 = new Bit;
-	Bit* b2;
-	setLeftEnd(b1);
-	if(*i == '1')
-	{
-		b1->setDigit(1);
-	}
-	i++;
-	
-	while(i!=m.end())
-	{
-		b2 = new Bit;
-		b1->setRight(b2);
-		b2->setLeft(b1);
-		if(*i == '1')
-		{
-			b2->setDigit(1);
-		}
-		b1 = b2;
-		i++;
-	}
-	setRightEnd(b1);
-
-	Integer* p2 = new Integer(e);
-	setExponent(p2);
+	p1 = new Integer(e);
+	setExponent(p1);
 }
 RealNumberBound::~RealNumberBound()
 {
-	if(!getIsZero())
+	if(!getSignificand()->getIsZero())
 	{
-		//if(getLeftEnd() != nullptr && getRightEnd() != nullptr)
-		//{
-		Bit* digit1 = getLeftEnd();
-		Bit* digit2;
-		while(!digit1->isRightEnd())
-		{
-			digit2 = digit1->getRight();
-			delete digit1;
-			digit1 = digit2;
-		}
-		delete digit1;
-		//}
-		delete exponent;
+		delete getSignificand();
+		delete getExponent();
 	}
 }
 
 
-bool RealNumberBound::getIsZero()
+Integer* RealNumberBound::getSignificand() const
 {
-	return isZero;
+	return significand;
 }
-void RealNumberBound::setIsZero(bool newIsZero)
+void RealNumberBound::setSignificand(Integer* const& newSignificand)
 {
-	isZero = newIsZero;
-}
-
-bool RealNumberBound::getSign()
-{
-	return sign;
-}
-void RealNumberBound::setSign(bool newSign)
-{
-	sign = newSign;
+	significand = newSignificand;
 }
 
-Bit* RealNumberBound::getLeftEnd()
-{
-	return leftEnd;
-}
-void RealNumberBound::setLeftEnd(Bit* newLeftEnd)
-{
-	leftEnd = newLeftEnd;
-}
-Bit* RealNumberBound::getRightEnd()
-{
-	return rightEnd;
-}
-void RealNumberBound::setRightEnd(Bit* newRightEnd)
-{
-	rightEnd = newRightEnd;
-}
-
-Integer* RealNumberBound::getExponent()
+Integer* RealNumberBound::getExponent() const
 {
 	return exponent;
 }
-void RealNumberBound::setExponent(Integer* newExponent)
+void RealNumberBound::setExponent(Integer* const& newExponent)
 {
 	exponent = newExponent;
 }
 
-void RealNumberBound::printBinary()
+void RealNumberBound::printByte() const
 {
-	PositiveInteger* m;
-	Bit* b1;
-	
-	if(getIsZero())
+	if(getSignificand()->getIsZero())
 	{
 		cout<<"0"<<endl;
 		return;
 	}
 	
-	if(!getSign())
+	if(!getSignificand()->getSign())
 	{
 		cout<<"-";
 	}
 	
-	b1 = getLeftEnd();
-	if(b1->isRightEnd())
 	{
-		cout<<"1";
+		Byte* d1 = getSignificand()->getMagnitude()->getLeftEnd();
+		if(d1->getIsRightEnd())
+		{
+			cout<<"1";
+		}
+		else
+		{
+			cout<<"1.";
+		}
+		
+		while(true)
+		{
+			if(d1->getIsRightEnd()) break;
+			d1 = d1->getRight();
+			cout<<d1->getByteChar();
+		}
 	}
-	else
-	{
-		cout<<"1.";
-	}
-	while(!b1->isRightEnd())
-	{
-		b1 = b1->getRight();
-		cout<<b1->getDigit();
-	}
-	
+
 	cout<<"e";
-	if(getExponent()->getIsZero())
-	{
-		cout<<"0"<<endl;
-		return;
-	}
-	if(!getExponent()->getSign())
-	{
-		cout<<"-";
-	}
-	
-	m = getExponent()->getMagnitude();
-	b1 = m->getLeftEnd();
-	cout<<b1->getDigit();
-	while(!b1->isRightEnd())
-	{
-		b1 = b1->getRight();
-		cout<<b1->getDigit();
-	}
-	cout<<endl;
+	getExponent()->printByte();
 }
 
 //verification
@@ -194,64 +93,50 @@ RealNumberBound::RealNumberBound(bool IsZero,bool Sign,unsigned int m,int e)
 {
 	if(IsZero)
 	{
-		setIsZero(true);
-		setSign(true);
-		setLeftEnd(nullptr);
-		setRightEnd(nullptr);
+		Integer* p1 = new Integer(0);
+		setSignificand(p1);
 		setExponent(nullptr);
 		return;
 	}
-	PositiveInteger* p1;
-	Integer* p2;
-	Bit* b1;
-	Bit* b2;
-	Bit* c1;
-	
-	setIsZero(false);
+
+	Integer* p2 = getSignificand();
+	p2->setIsZero(false);
 	if(Sign)
 	{
-		setSign(true);
+		p2->setSign(true);
 	}
 	else
 	{
-		setSign(false);
+		p2->setSign(false);
 	}
+	
+	PositiveInteger* p1;
 	if(m==0)
 	{
-		b1 = new Bit;
-		b1->setDigit(1);
-		setLeftEnd(b1);
-		setRightEnd(b1);
+		p1 = new PositiveInteger(1);
 	}
 	else
 	{
 		p1 = new PositiveInteger(m);
 		
-		c1 = p1->getLeftEnd();
-		b1 = new Bit;
-		b1->setDigit(c1->getDigit());
-		setLeftEnd(b1);
-		while(!c1->isRightEnd())
-		{
-			c1 = c1->getRight();
-			b2 = new Bit;
-			b2->setDigit(c1->getDigit());
-			b1->setRight(b2);
-			b2->setLeft(b1);
-			b1 = b2;
-		}
-		b2 = new Bit;
-		b2->setDigit(1);
+		Byte* b1 = p1->getRightEnd();
+		b1->setIsRightEnd(false);
+		
+		Byte* b2 = new Byte;
+		b2->setByteOne();
 		b1->setRight(b2);
 		b2->setLeft(b1);
-		setRightEnd(b2);
-		delete p1;
+		b2->setIsRightEnd(true);
+		b2->setRight(nullptr);
+		p1->setRightEnd(b2);
 	}
+	p2->setMagnitude(p1);
+	setSignificand(p2);
 	
 	p2 = new Integer(e);
 	setExponent(p2);
 }
-
+/*
 bool RealNumberBound::isComplete()
 {
 	Bit* b1;

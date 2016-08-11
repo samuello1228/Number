@@ -24,6 +24,7 @@ public:
 	PositiveInteger* getMagnitude() const;
 	void setMagnitude(PositiveInteger* const&);
 	
+	void printByteAux() const;
 	void printByte() const;
 	void printDecimal(bool const);
 	Integer* copy() const;

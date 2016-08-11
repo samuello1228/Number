@@ -173,15 +173,20 @@ PositiveInteger* PositiveInteger::changeBase(const unsigned int base) const
 	return y;
 }
 
-void PositiveInteger::printByte() const
+void PositiveInteger::printByteAux() const
 {
-	Byte const * b1 = getLeftEnd();
+	Byte const * d1 = getLeftEnd();
 	while(true)
 	{
-		cout<<b1->getByteChar();
-		if(b1->getIsRightEnd()) break;
-		b1 = b1->getRight();
+		cout<<d1->getByteChar();
+		if(d1->getIsRightEnd()) break;
+		d1 = d1->getRight();
 	}
+}
+
+void PositiveInteger::printByte() const
+{
+	printByteAux();
 	cout<<endl;
 }
 

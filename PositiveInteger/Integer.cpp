@@ -12,8 +12,6 @@ using namespace std;
 
 Integer::Integer()
 {
-	//setIsZero(false);
-	//setSign(true);
 	setMagnitude(nullptr);
 }
 
@@ -21,7 +19,7 @@ Integer::~Integer()
 {
 	if(!getIsZero())
 	{
-		delete magnitude;
+		delete getMagnitude();
 	}
 }
 
@@ -80,21 +78,27 @@ void Integer::setMagnitude(PositiveInteger* const& newMagnitude)
 	magnitude = newMagnitude;
 }
 
-void Integer::printByte() const
+void Integer::printByteAux() const
 {
 	if(getIsZero())
 	{
-		cout<<"0"<<endl;
+		cout<<"0";
 	}
 	else if(getSign())
 	{
-		getMagnitude()->printByte();
+		getMagnitude()->printByteAux();
 	}
 	else
 	{
 		cout<<"-";
-		getMagnitude()->printByte();
+		getMagnitude()->printByteAux();
 	}
+}
+
+void Integer::printByte() const
+{
+	printByteAux();
+	cout<<endl;
 }
 /*
 void Integer::printDecimal(bool const overwrite)
@@ -463,7 +467,7 @@ bool Integer::VerifyCopy(int const max)
 	{
 		Integer const p1 = Integer(i);
 		//if(!p1->isComplete()) return false;
-		//p1->printByte();
+		p1.printByte();
 		Integer const * const p2 = p1.copy();
 		if(!p1.isSame(i)) return false;
 		if(!p2->isSame(i)) return false;

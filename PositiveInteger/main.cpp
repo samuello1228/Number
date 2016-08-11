@@ -205,7 +205,7 @@ int main()
 	delete a2;
 	*/
 	
-	///*
+	/*
 	if(!Integer::VerifyCopy(100)) cout<<"Error"<<endl;
 	if(!Integer::VerifyInteger(100)) cout<<"Error"<<endl;
 	if(!Integer::VerifyCompare(100)) cout<<"Error"<<endl;
@@ -217,19 +217,19 @@ int main()
 	if(!Integer::VerifySubtract(100,1)) cout<<"Error"<<endl;
 	if(!Integer::VerifyMultiply(100)) cout<<"Error"<<endl;
 	else cout<<"OK"<<endl;
-	//*/
+	*/
 	
-	/*
+	///*
 	RealNumberBound* a1;
 	RealNumberBound* a2;
 
-	a1 = new RealNumberBound("-1001","0");
+	a1 = new RealNumberBound("-101","0");
 	a1->printByte();
 	//a2 = a1->copy();
 	delete a1;
 	//a2->printByte();
 	//delete a2;
-	*/
+	//*/
 	
 	//if(!RealNumberBound::VerifyCopy(5)) cout<<"Error"<<endl;
 	//else cout<<"OK"<<endl;

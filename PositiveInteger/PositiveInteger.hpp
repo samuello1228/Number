@@ -26,6 +26,7 @@ public:
 	Byte* getRightEnd() const;
 	void setRightEnd(Byte* const&);
 	
+	void printByteAux() const;
 	void printByte() const;
 	struct Digit
 	{

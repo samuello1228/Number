@@ -18,21 +18,15 @@ public:
 	RealNumberBound(std::string,std::string);
 	~RealNumberBound();
 	
-	bool getIsZero();
-	void setIsZero(bool);
-	bool getSign();
-	void setSign(bool);
-	Bit* getLeftEnd();
-	void setLeftEnd(Bit*);
-	Bit* getRightEnd();
-	void setRightEnd(Bit*);
-	Integer* getExponent();
-	void setExponent(Integer*);
+	Integer* getSignificand() const;
+	void setSignificand(Integer* const&);
+	Integer* getExponent() const;
+	void setExponent(Integer* const&);
 	
-	void printBinary();
+	void printByte() const;
 	
 	//verification
-	RealNumberBound(bool IsZero,bool Sign=true,unsigned int m=0,int e=0);
+	RealNumberBound(bool IsZero,bool Sign,unsigned int m,int e);
 	bool isComplete();
 	bool isSame(bool IsZero,bool Sign=true,unsigned int m=0,int e=0);
 	
@@ -41,12 +35,7 @@ public:
 	
 	
 private:
-	bool isZero;
-	bool sign;
-	//true: positive
-	//false: negative
-	Bit* leftEnd;
-	Bit* rightEnd;
+	Integer* significand;
 	//1.0100101 * 2^3
 	Integer* exponent;
 };
