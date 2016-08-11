@@ -236,7 +236,7 @@ Integer* Integer::Add(Integer*& x1,Integer*& x2,bool const overwrite)
 		}
 		else
 		{
-			PositiveInteger* m3 = PositiveInteger::Add(*(x1->getMagnitude()),*(x2->getMagnitude()),false);
+			PositiveInteger* const m3 = PositiveInteger::Add(*(x1->getMagnitude()),*(x2->getMagnitude()),false);
 			Integer* const y = new Integer();
 			y->setIsZero(false);
 			y->setSign(x1->getSign());
@@ -357,33 +357,39 @@ Integer* Integer::Subtract(Integer*& x1,Integer*& x2,bool const overwrite)
 	else
 	{
 		x2->Negation(true);
-		Integer* y = Integer::Add(x1,x2,false);
+		Integer* const y = Integer::Add(x1,x2,false);
 		x2->Negation(true);
 		return y;
 	}
 }
-/*
-Integer* Integer::Multiply(Integer* x1,Integer* x2)
+
+Integer* Integer::Multiply(Integer const& x1,Integer const& x2)
 {
-	Integer* y;
-	if(x1->getIsZero() || x2->getIsZero())
+	if(x1.getIsZero() || x2.getIsZero())
 	{
-		y = new Integer("0");
+		std::string s="0";
+		Integer* const y = new Integer(s);
 		return y;
 	}
-	
-	y = new Integer();
-	//y->setIsZero(false);
-	if((x1->getSign() && !x2->getSign()) ||
-	   (!x1->getSign() && x2->getSign()) )
+	else
 	{
-		y->setSign(false);
+		Integer* const y = new Integer();
+		y->setIsZero(false);
+		if((x1.getSign() && !x2.getSign()) ||
+		   (!x1.getSign() && x2.getSign()) )
+		{
+			y->setSign(false);
+		}
+		else
+		{
+			y->setSign(true);
+		}
+		
+		PositiveInteger* const m1 = PositiveInteger::Multiply(*(x1.getMagnitude()),*(x2.getMagnitude()));
+		y->setMagnitude(m1);
+		return y;
 	}
-	PositiveInteger* m1 = PositiveInteger::Multiply(x1->getMagnitude(),x2->getMagnitude());
-	y->setMagnitude(m1);
-	return y;
 }
-*/
 
 //verification
 Integer::Integer(int const x)
@@ -606,23 +612,18 @@ bool Integer::VerifySubtract(int const max,bool const overwrite)
 
 bool Integer::VerifyMultiply(int const max)
 {
-	Integer* p1;
-	Integer* p2;
-	Integer* p3;
 	for(int i=-max;i<=max;i++)
 	{
 		for(int j=-max;j<=max;j++)
 		{
-			p1 = new Integer(i);
-			p2 = new Integer(j);
-			//p3 = Integer::Multiply(p1,p2);
-			if(!p1->isSame(i)) return false;
-			if(!p2->isSame(j)) return false;
+			Integer const p1 = Integer(i);
+			Integer const p2 = Integer(j);
+			Integer const * const p3 = Integer::Multiply(p1,p2);
+			if(!p1.isSame(i)) return false;
+			if(!p2.isSame(j)) return false;
 			if(!p3->isSame(i*j)) return false;
 			//p3->printByte();
-			
-			delete p1;
-			delete p2;
+
 			delete p3;
 		}
 		//cout<<endl;

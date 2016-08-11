@@ -31,7 +31,7 @@ public:
 	static Integer* Add(Integer*&,Integer*&,bool const);
 	Integer* Negation(bool const);
 	static Integer* Subtract(Integer*&,Integer*&,bool const);
-	static Integer* Multiply(Integer*,Integer*);
+	static Integer* Multiply(Integer const&,Integer const&);
 	
 	//verification
 	Integer(int const);
