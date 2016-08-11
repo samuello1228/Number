@@ -26,9 +26,9 @@ public:
 	void printByte() const;
 	
 	//verification
-	RealNumberBound(bool const IsZero,bool const Sign,unsigned int const m,int const e);
+	RealNumberBound(bool const,bool const,unsigned int const,unsigned int const,int const);
 	bool isComplete() const;
-	bool isSame(bool const IsZero,bool const Sign=true,unsigned int const m=0,int const e=0) const;
+	bool isSame(bool const,bool const,unsigned int const,unsigned int const,int const) const;
 	
 	static bool VerifyCopy(int const);
 	static bool VerifyRealNumberBound(int);

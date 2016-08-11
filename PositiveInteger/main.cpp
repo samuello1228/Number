@@ -12,7 +12,7 @@ using namespace std;
 
 int main()
 {
-	Byte::setBase(2);
+	Byte::setBase(3);
 	//Byte::setBase(1<<15);
 	
 	
