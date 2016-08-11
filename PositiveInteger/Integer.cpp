@@ -345,10 +345,9 @@ Integer* Integer::Negation(bool const overwrite)
 	}
 	return y;
 }
-/*
+
 Integer* Integer::Subtract(Integer*& x1,Integer*& x2,bool const overwrite)
 {
-	Integer* y;
 	if(overwrite)
 	{
 		x2->Negation(true);
@@ -358,11 +357,12 @@ Integer* Integer::Subtract(Integer*& x1,Integer*& x2,bool const overwrite)
 	else
 	{
 		x2->Negation(true);
-		y = Integer::Add(x1,x2,false);
+		Integer* y = Integer::Add(x1,x2,false);
 		x2->Negation(true);
 		return y;
 	}
 }
+/*
 Integer* Integer::Multiply(Integer* x1,Integer* x2)
 {
 	Integer* y;
@@ -573,19 +573,16 @@ bool Integer::VerifyNegation(int const max,bool const overwrite)
 	}
 	return true;
 }
-/*
+
 bool Integer::VerifySubtract(int const max,bool const overwrite)
 {
-	Integer* p1;
-	Integer* p2;
-	Integer* p3;
 	for(int i=-max;i<=max;i++)
 	{
 		for(int j=-max;j<=max;j++)
 		{
-			p1 = new Integer(i);
-			p2 = new Integer(j);
-			p3 = Integer::Subtract(p1,p2,overwrite);
+			Integer* p1 = new Integer(i);
+			Integer* p2 = new Integer(j);
+			Integer const * const p3 = Integer::Subtract(p1,p2,overwrite);
 			if(overwrite)
 			{
 				if(!p1->isSame(i-j)) return false;
@@ -606,6 +603,7 @@ bool Integer::VerifySubtract(int const max,bool const overwrite)
 	}
 	return true;
 }
+
 bool Integer::VerifyMultiply(int const max)
 {
 	Integer* p1;
@@ -617,7 +615,7 @@ bool Integer::VerifyMultiply(int const max)
 		{
 			p1 = new Integer(i);
 			p2 = new Integer(j);
-			p3 = Integer::Multiply(p1,p2);
+			//p3 = Integer::Multiply(p1,p2);
 			if(!p1->isSame(i)) return false;
 			if(!p2->isSame(j)) return false;
 			if(!p3->isSame(i*j)) return false;
@@ -631,4 +629,3 @@ bool Integer::VerifyMultiply(int const max)
 	}
 	return true;
 }
-*/
