@@ -91,9 +91,9 @@ void RealNumberBound::printByte() const
 }
 
 //verification
-RealNumberBound::RealNumberBound(bool const IsZero,bool const Sign,unsigned int const m,unsigned int const RightEnd,int const e)
+RealNumberBound::RealNumberBound(RealNumberBound::ID const& element)
 {
-	if(IsZero)
+	if(element.IsZero)
 	{
 		Integer* const p1 = new Integer(0);
 		setSignificand(p1);
@@ -104,7 +104,7 @@ RealNumberBound::RealNumberBound(bool const IsZero,bool const Sign,unsigned int 
 	{
 		Integer* const p1 = new Integer();
 		p1->setIsZero(false);
-		if(Sign)
+		if(element.Sign)
 		{
 			p1->setSign(true);
 		}
@@ -114,19 +114,19 @@ RealNumberBound::RealNumberBound(bool const IsZero,bool const Sign,unsigned int 
 		}
 		
 		PositiveInteger* p2;
-		if(m==0)
+		if(element.m==0)
 		{
-			p2 = new PositiveInteger(RightEnd);
+			p2 = new PositiveInteger(element.RightEnd);
 		}
 		else
 		{
-			p2 = new PositiveInteger(m);
+			p2 = new PositiveInteger(element.m);
 			
 			Byte* const b1 = p2->getRightEnd();
 			b1->setIsRightEnd(false);
 			
 			Byte* const b2 = new Byte;
-			b2->setByteInt(RightEnd);
+			b2->setByteInt(element.RightEnd);
 			b1->setRight(b2);
 			b2->setLeft(b1);
 			b2->setIsRightEnd(true);
@@ -138,7 +138,7 @@ RealNumberBound::RealNumberBound(bool const IsZero,bool const Sign,unsigned int 
 	}
 	
 	{
-		Integer* const p1 = new Integer(e);
+		Integer* const p1 = new Integer(element.e);
 		setExponent(p1);
 	}
 }
@@ -164,32 +164,32 @@ bool RealNumberBound::isComplete() const
 	return true;
 }
 
-bool RealNumberBound::isSame(bool const IsZero,bool const Sign,unsigned int const m,unsigned int const RightEnd,int const e) const
+bool RealNumberBound::isSame(RealNumberBound::ID const& element) const
 {
 	if(!isComplete()) {cout<<"Error Code: 32"<<endl; return false;}
 	Integer const * const p1 = getSignificand();
-	if(IsZero)
+	if(element.IsZero)
 	{
 		if(!p1->getIsZero()) {cout<<"Error Code: 33"<<endl; return false;}
 	}
 	else
 	{
-		if(p1->getSign()!=Sign) {cout<<"Error Code: 34"<<endl; return false;}
+		if(p1->getSign()!=element.Sign) {cout<<"Error Code: 34"<<endl; return false;}
 		
 		PositiveInteger const * const p2 = p1->getMagnitude();
-		if(m==0)
+		if(element.m==0)
 		{
-			if(!p2->isSame(RightEnd)) {cout<<"Error Code: 35"<<endl; return false;}
+			if(!p2->isSame(element.RightEnd)) {cout<<"Error Code: 35"<<endl; return false;}
 		}
 		else
 		{
-			PositiveInteger * const p3 = new PositiveInteger(m);
+			PositiveInteger * const p3 = new PositiveInteger(element.m);
 			{
 				Byte* const b1 = p3->getRightEnd();
 				b1->setIsRightEnd(false);
 				
 				Byte* const b2 = new Byte;
-				b2->setByteInt(RightEnd);
+				b2->setByteInt(element.RightEnd);
 				b1->setRight(b2);
 				b2->setLeft(b1);
 				b2->setIsRightEnd(true);
@@ -212,53 +212,21 @@ bool RealNumberBound::isSame(bool const IsZero,bool const Sign,unsigned int cons
 			delete p3;
 		}
 		
-		if(!getExponent()->isSame(e)) {cout<<"Error Code: 39"<<endl; return false;}
+		if(!getExponent()->isSame(element.e)) {cout<<"Error Code: 39"<<endl; return false;}
 	}
 	return true;
 }
 
 
-bool RealNumberBound::VerifyCopy(int const max)
+bool RealNumberBound::VerifyCopy(std::vector<RealNumberBound::ID>& list)
 {
+	for(unsigned int i=0;i<list.size();i++)
 	{
-		RealNumberBound const * const x1 = new RealNumberBound(true,true,0,0,0);
+		RealNumberBound const * const x1 = new RealNumberBound(list[i]);
 		if(!x1->isComplete()) return false;
 		x1->printByte();
-		if(!x1->isSame(true,true,0,0,0)) return false;
+		if(!x1->isSame(list[i])) return false;
 		delete x1;
-		cout<<endl;
-	}
-	
-	for(unsigned int i=0;i<=max;i++)
-	{
-		for(unsigned int j=1;j<=Byte::getBase()-1;j++)
-		{
-			for(int k=-max;k<=max;k++)
-			{
-				RealNumberBound const * const x1 = new RealNumberBound(false,true,i,j,k);
-				if(!x1->isComplete()) return false;
-				x1->printByte();
-				if(!x1->isSame(false,true,i,j,k)) return false;
-				delete x1;
-			}
-			cout<<endl;
-		}
-	}
-	
-	for(unsigned int i=0;i<=max;i++)
-	{
-		for(unsigned int j=1;j<=Byte::getBase()-1;j++)
-		{
-			for(int k=-max;k<=max;k++)
-			{
-				RealNumberBound const * const x1 = new RealNumberBound(false,false,i,j,k);
-				if(!x1->isComplete()) return false;
-				x1->printByte();
-				if(!x1->isSame(false,false,i,j,k)) return false;
-				delete x1;
-			}
-			cout<<endl;
-		}
 	}
 	
 	return true;

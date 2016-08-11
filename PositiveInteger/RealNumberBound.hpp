@@ -10,6 +10,7 @@
 #define RealNumberBound_hpp
 
 #include "Integer.hpp"
+#include <vector>
 
 class RealNumberBound
 {
@@ -26,11 +27,19 @@ public:
 	void printByte() const;
 	
 	//verification
-	RealNumberBound(bool const,bool const,unsigned int const,unsigned int const,int const);
+	struct ID
+	{
+		bool IsZero;
+		bool Sign;
+		unsigned int m;
+		unsigned int RightEnd;
+		int e;
+	};
+	RealNumberBound(RealNumberBound::ID const&);
 	bool isComplete() const;
-	bool isSame(bool const,bool const,unsigned int const,unsigned int const,int const) const;
+	bool isSame(RealNumberBound::ID const&) const;
 	
-	static bool VerifyCopy(int const);
+	static bool VerifyCopy(std::vector<RealNumberBound::ID>&);
 	static bool VerifyRealNumberBound(int);
 	
 	

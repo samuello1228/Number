@@ -8,11 +8,12 @@
 
 #include <iostream>
 #include "RealNumberBound.hpp"
+
 using namespace std;
 
 int main()
 {
-	Byte::setBase(3);
+	Byte::setBase(2);
 	//Byte::setBase(1<<15);
 	
 	
@@ -231,8 +232,57 @@ int main()
 	//delete a2;
 	*/
 	
-	if(!RealNumberBound::VerifyCopy(2)) cout<<"Error"<<endl;
+	///*
+	int const max = 2;
+	vector<RealNumberBound::ID> list;
+	
+	{
+		RealNumberBound::ID element;
+		element.IsZero = true;
+		element.Sign = true;
+		element.m = 0;
+		element.RightEnd = 0;
+		element.e = 0;
+		list.push_back(element);
+	}
+	
+	for(unsigned int i=0;i<=max;i++)
+	{
+		for(unsigned int j=1;j<=Byte::getBase()-1;j++)
+		{
+			for(int k=-max;k<=max;k++)
+			{
+				RealNumberBound::ID element;
+				element.IsZero = false;
+				element.Sign = true;
+				element.m = i;
+				element.RightEnd = j;
+				element.e = k;
+				list.push_back(element);
+			}
+		}
+	}
+	
+	for(unsigned int i=0;i<=max;i++)
+	{
+		for(unsigned int j=1;j<=Byte::getBase()-1;j++)
+		{
+			for(int k=-max;k<=max;k++)
+			{
+				RealNumberBound::ID element;
+				element.IsZero = false;
+				element.Sign = false;
+				element.m = i;
+				element.RightEnd = j;
+				element.e = k;
+				list.push_back(element);
+			}
+		}
+	}
+	
+	if(!RealNumberBound::VerifyCopy(list)) cout<<"Error"<<endl;
 	else cout<<"OK"<<endl;
-
+	//*/
+	
 	return 0;
 }
