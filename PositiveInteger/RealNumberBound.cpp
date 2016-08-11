@@ -14,7 +14,7 @@ RealNumberBound::RealNumberBound()
 {
 }
 
-RealNumberBound::RealNumberBound(std::string m,std::string e)
+RealNumberBound::RealNumberBound(std::string& m,std::string& e)
 {
 	Integer* p1 = new Integer(m);
 	setSignificand(p1);
@@ -71,7 +71,7 @@ void RealNumberBound::printByte() const
 	}
 	
 	{
-		Byte* d1 = getSignificand()->getMagnitude()->getLeftEnd();
+		Byte const* d1 = getSignificand()->getMagnitude()->getLeftEnd();
 		if(d1->getIsRightEnd())
 		{
 			cout<<"1";
@@ -94,58 +94,62 @@ void RealNumberBound::printByte() const
 }
 
 //verification
-RealNumberBound::RealNumberBound(bool IsZero,bool Sign,unsigned int m,int e)
+RealNumberBound::RealNumberBound(bool const IsZero,bool const Sign,unsigned int const m,int const e)
 {
 	if(IsZero)
 	{
-		Integer* p1 = new Integer(0);
+		Integer* const p1 = new Integer(0);
 		setSignificand(p1);
 		setExponent(nullptr);
 		return;
 	}
-
-	Integer* p1 = new Integer();
-	p1->setIsZero(false);
-	if(Sign)
+	
 	{
-		p1->setSign(true);
-	}
-	else
-	{
-		p1->setSign(false);
+		Integer* const p1 = new Integer();
+		p1->setIsZero(false);
+		if(Sign)
+		{
+			p1->setSign(true);
+		}
+		else
+		{
+			p1->setSign(false);
+		}
+		
+		PositiveInteger* p2;
+		if(m==0)
+		{
+			p2 = new PositiveInteger(1);
+		}
+		else
+		{
+			p2 = new PositiveInteger(m);
+			
+			Byte* const b1 = p2->getRightEnd();
+			b1->setIsRightEnd(false);
+			
+			Byte* const b2 = new Byte;
+			b2->setByteOne();
+			b1->setRight(b2);
+			b2->setLeft(b1);
+			b2->setIsRightEnd(true);
+			b2->setRight(nullptr);
+			p2->setRightEnd(b2);
+		}
+		p1->setMagnitude(p2);
+		setSignificand(p1);
 	}
 	
-	PositiveInteger* p2;
-	if(m==0)
 	{
-		p2 = new PositiveInteger(1);
+		Integer* const p1 = new Integer(e);
+		setExponent(p1);
 	}
-	else
-	{
-		p2 = new PositiveInteger(m);
-		
-		Byte* b1 = p2->getRightEnd();
-		b1->setIsRightEnd(false);
-		
-		Byte* b2 = new Byte;
-		b2->setByteOne();
-		b1->setRight(b2);
-		b2->setLeft(b1);
-		b2->setIsRightEnd(true);
-		b2->setRight(nullptr);
-		p2->setRightEnd(b2);
-	}
-	p1->setMagnitude(p2);
-	setSignificand(p1);
-	
-	p1 = new Integer(e);
-	setExponent(p1);
 }
 
 bool RealNumberBound::isComplete() const
 {
 	if(getSignificand()==nullptr) {cout<<"Error Code: 26"<<endl; return false;}
-	Integer* p1 = getSignificand();
+	Integer const * const p1 = getSignificand();
 	
 	if(p1->getIsZero())
 	{
@@ -163,10 +167,10 @@ bool RealNumberBound::isComplete() const
 	return true;
 }
 
-bool RealNumberBound::isSame(bool IsZero,bool Sign,unsigned int m,int e) const
+bool RealNumberBound::isSame(bool const IsZero,bool const Sign,unsigned int const m,int const e) const
 {
 	if(!isComplete()) return false;
-	Integer* p1 = getSignificand();
+	Integer const * const p1 = getSignificand();
 	if(IsZero)
 	{
 		if(!p1->getIsZero()) return false;
@@ -175,19 +179,19 @@ bool RealNumberBound::isSame(bool IsZero,bool Sign,unsigned int m,int e) const
 	{
 		if(p1->getSign()!=Sign) return false;
 		
-		PositiveInteger* p2 = p1->getMagnitude();
+		PositiveInteger const * const p2 = p1->getMagnitude();
 		if(m==0)
 		{
 			if(!p2->isSame(1)) return false;
 		}
 		else
 		{
-			PositiveInteger* p3 = new PositiveInteger(m);
+			PositiveInteger * const p3 = new PositiveInteger(m);
 			{
-				Byte* b1 = p3->getRightEnd();
+				Byte* const b1 = p3->getRightEnd();
 				b1->setIsRightEnd(false);
 				
-				Byte* b2 = new Byte;
+				Byte* const b2 = new Byte;
 				b2->setByteOne();
 				b1->setRight(b2);
 				b2->setLeft(b1);
@@ -196,8 +200,8 @@ bool RealNumberBound::isSame(bool IsZero,bool Sign,unsigned int m,int e) const
 				p3->setRightEnd(b2);
 			}
 			{
-				Byte* b1 = p2->getLeftEnd();
-				Byte* b2 = p3->getLeftEnd();
+				Byte const * b1 = p2->getLeftEnd();
+				Byte const * b2 = p3->getLeftEnd();
 				while(true)
 				{
 					if(!Byte::compare(*b1,*b2).isEqual()) return false;
@@ -213,25 +217,26 @@ bool RealNumberBound::isSame(bool IsZero,bool Sign,unsigned int m,int e) const
 		
 		if(!getExponent()->isSame(e)) return false;
 	}
-	
 	return true;
 }
 
 
-bool RealNumberBound::VerifyCopy(int max)
+bool RealNumberBound::VerifyCopy(int const max)
 {
-	RealNumberBound* x1 = new RealNumberBound(true,true,0,0);
-	if(!x1->isComplete()) return false;
-	x1->printByte();
-	if(!x1->isSame(true)) return false;
-	delete x1;
-	cout<<endl;
+	{
+		RealNumberBound const * const x1 = new RealNumberBound(true,true,0,0);
+		if(!x1->isComplete()) return false;
+		x1->printByte();
+		if(!x1->isSame(true)) return false;
+		delete x1;
+		cout<<endl;
+	}
 	
 	for(unsigned int i=0;i<=max;i++)
 	{
 		for(int j=-max;j<=max;j++)
 		{
-			x1 = new RealNumberBound(false,true,i,j);
+			RealNumberBound const * const x1 = new RealNumberBound(false,true,i,j);
 			if(!x1->isComplete()) return false;
 			x1->printByte();
 			if(!x1->isSame(false,true,i,j)) return false;
@@ -244,7 +249,7 @@ bool RealNumberBound::VerifyCopy(int max)
 	{
 		for(int j=-max;j<=max;j++)
 		{
-			x1 = new RealNumberBound(false,false,i,j);
+			RealNumberBound const * const x1 = new RealNumberBound(false,false,i,j);
 			if(!x1->isComplete()) return false;
 			x1->printByte();
 			if(!x1->isSame(false,false,i,j)) return false;

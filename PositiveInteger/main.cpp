@@ -231,7 +231,7 @@ int main()
 	//delete a2;
 	*/
 	
-	if(!RealNumberBound::VerifyCopy(5)) cout<<"Error"<<endl;
+	if(!RealNumberBound::VerifyCopy(2)) cout<<"Error"<<endl;
 	else cout<<"OK"<<endl;
 
 	return 0;

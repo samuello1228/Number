@@ -15,7 +15,7 @@ class RealNumberBound
 {
 public:
 	RealNumberBound();
-	RealNumberBound(std::string,std::string);
+	RealNumberBound(std::string&,std::string&);
 	~RealNumberBound();
 	
 	Integer* getSignificand() const;
@@ -26,11 +26,11 @@ public:
 	void printByte() const;
 	
 	//verification
-	RealNumberBound(bool IsZero,bool Sign,unsigned int m,int e);
+	RealNumberBound(bool const IsZero,bool const Sign,unsigned int const m,int const e);
 	bool isComplete() const;
-	bool isSame(bool IsZero,bool Sign=true,unsigned int m=0,int e=0) const;
+	bool isSame(bool const IsZero,bool const Sign=true,unsigned int const m=0,int const e=0) const;
 	
-	static bool VerifyCopy(int);
+	static bool VerifyCopy(int const);
 	static bool VerifyRealNumberBound(int);
 	
 	
