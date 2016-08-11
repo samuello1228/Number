@@ -207,7 +207,7 @@ int main()
 	
 	if(!Integer::VerifyCopy(100)) cout<<"Error"<<endl;
 	if(!Integer::VerifyInteger(100)) cout<<"Error"<<endl;
-	//if(!Integer::VerifyCompare(100)) cout<<"Error"<<endl;
+	if(!Integer::VerifyCompare(100)) cout<<"Error"<<endl;
 	//if(!Integer::VerifyAdd(100,0)) cout<<"Error"<<endl;
 	//if(!Integer::VerifyNegation(100,0)) cout<<"Error"<<endl;
 	//if(!Integer::VerifySubtract(100,0)) cout<<"Error"<<endl;

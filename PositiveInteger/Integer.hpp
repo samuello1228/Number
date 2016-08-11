@@ -25,12 +25,12 @@ public:
 	void setMagnitude(PositiveInteger* const&);
 	
 	void printByte() const;
-	void printDecimal(bool);
+	void printDecimal(bool const);
 	Integer* copy() const;
-	static CompareCode compare(Integer*,Integer*);
-	static Integer* Add(Integer*&,Integer*&,bool);
-	Integer* Negation(bool);
-	static Integer* Subtract(Integer*&,Integer*&,bool);
+	static CompareCode compare(Integer const&,Integer const&);
+	static Integer* Add(Integer*&,Integer*&,bool const);
+	Integer* Negation(bool const);
+	static Integer* Subtract(Integer*&,Integer*&,bool const);
 	static Integer* Multiply(Integer*,Integer*);
 	
 	//verification
@@ -40,11 +40,11 @@ public:
 	
 	static bool VerifyCopy(int const);
 	static bool VerifyInteger(int const);
-	static bool VerifyCompare(int);
-	static bool VerifyAdd(int,bool);
-	static bool VerifyNegation(int,bool);
-	static bool VerifySubtract(int,bool);
-	static bool VerifyMultiply(int);
+	static bool VerifyCompare(int const);
+	static bool VerifyAdd(int const,bool const);
+	static bool VerifyNegation(int const,bool const);
+	static bool VerifySubtract(int const,bool const);
+	static bool VerifyMultiply(int const);
 	
 	
 private:
