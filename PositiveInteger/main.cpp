@@ -219,7 +219,7 @@ int main()
 	else cout<<"OK"<<endl;
 	*/
 	
-	///*
+	/*
 	RealNumberBound* a1;
 	RealNumberBound* a2;
 
@@ -229,10 +229,10 @@ int main()
 	delete a1;
 	//a2->printByte();
 	//delete a2;
-	//*/
+	*/
 	
-	//if(!RealNumberBound::VerifyCopy(5)) cout<<"Error"<<endl;
-	//else cout<<"OK"<<endl;
+	if(!RealNumberBound::VerifyCopy(5)) cout<<"Error"<<endl;
+	else cout<<"OK"<<endl;
 
 	return 0;
 }
