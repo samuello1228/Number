@@ -15,10 +15,12 @@
 class RealNumberBound
 {
 public:
-	RealNumberBound();
+	//RealNumberBound();
 	RealNumberBound(std::string&,std::string&);
 	~RealNumberBound();
 	
+	bool getIsInfinity() const;
+	void setIsInfinity(bool const);
 	Integer* getSignificand() const;
 	void setSignificand(Integer* const&);
 	Integer* getExponent() const;
@@ -29,6 +31,7 @@ public:
 	//verification
 	struct ID
 	{
+		bool IsInfinity;
 		bool IsZero;
 		bool Sign;
 		unsigned int m;
@@ -40,10 +43,11 @@ public:
 	bool isSame(RealNumberBound::ID const&) const;
 	
 	static bool VerifyCopy(std::vector<RealNumberBound::ID>&);
-	static bool VerifyRealNumberBound(int);
+	static bool VerifyRealNumberBound(std::vector<RealNumberBound::ID>&);
 	
 	
 private:
+	bool isInfinity;
 	Integer* significand;
 	//1.0100101 * 2^3
 	Integer* exponent;

@@ -221,12 +221,11 @@ int main()
 	*/
 	
 	/*
-	RealNumberBound* a1;
-	RealNumberBound* a2;
-
-	a1 = new RealNumberBound("-101","0");
+	std::string s1 = "-inf";
+	std::string s2 = "0";
+	RealNumberBound* a1 = new RealNumberBound(s1,s2);
 	a1->printByte();
-	//a2 = a1->copy();
+	//RealNumberBound* a2 = a1->copy();
 	delete a1;
 	//a2->printByte();
 	//delete a2;
@@ -237,7 +236,31 @@ int main()
 	vector<RealNumberBound::ID> list;
 	
 	{
+		//inf
 		RealNumberBound::ID element;
+		element.IsInfinity = true;
+		element.IsZero = false;
+		element.Sign = true;
+		element.m = 0;
+		element.RightEnd = 0;
+		element.e = 0;
+		list.push_back(element);
+	}
+	{
+		//-inf
+		RealNumberBound::ID element;
+		element.IsInfinity = true;
+		element.IsZero = false;
+		element.Sign = false;
+		element.m = 0;
+		element.RightEnd = 0;
+		element.e = 0;
+		list.push_back(element);
+	}
+	{
+		//zero
+		RealNumberBound::ID element;
+		element.IsInfinity = false;
 		element.IsZero = true;
 		element.Sign = true;
 		element.m = 0;
@@ -253,6 +276,7 @@ int main()
 			for(int k=-max;k<=max;k++)
 			{
 				RealNumberBound::ID element;
+				element.IsInfinity = false;
 				element.IsZero = false;
 				element.Sign = true;
 				element.m = i;
@@ -270,6 +294,7 @@ int main()
 			for(int k=-max;k<=max;k++)
 			{
 				RealNumberBound::ID element;
+				element.IsInfinity = false;
 				element.IsZero = false;
 				element.Sign = false;
 				element.m = i;

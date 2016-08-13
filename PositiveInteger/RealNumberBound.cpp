@@ -9,35 +9,66 @@
 #include "RealNumberBound.hpp"
 #include <iostream>
 using namespace std;
-
+/*
 RealNumberBound::RealNumberBound()
 {
 }
-
+*/
 RealNumberBound::RealNumberBound(std::string& m,std::string& e)
 {
-	Integer* p1 = new Integer(m);
-	setSignificand(p1);
-	
-	if(p1->getIsZero())
+	if(m=="inf")
 	{
+		setIsInfinity(true);
+		Integer* p1 = new Integer;
+		p1->setIsZero(false);
+		p1->setSign(true);
+		//p1->setMagnitude(nullptr);
+		setSignificand(p1);
+		setExponent(nullptr);
+	}
+	else if(m=="-inf")
+	{
+		setIsInfinity(true);
+		Integer* p1 = new Integer;
+		p1->setIsZero(false);
+		p1->setSign(false);
+		//p1->setMagnitude(nullptr);
+		setSignificand(p1);
 		setExponent(nullptr);
 	}
 	else
 	{
-		p1 = new Integer(e);
-		setExponent(p1);
+		setIsInfinity(false);
+		Integer* p1 = new Integer(m);
+		setSignificand(p1);
+		if(p1->getIsZero())
+		{
+			setExponent(nullptr);
+		}
+		else
+		{
+			p1 = new Integer(e);
+			setExponent(p1);
+		}
 	}
 }
 RealNumberBound::~RealNumberBound()
 {
-	if(!getSignificand()->getIsZero())
+	if(!getIsInfinity() && !getSignificand()->getIsZero())
 	{
 		delete getExponent();
 	}
 	delete getSignificand();
 }
 
+bool RealNumberBound::getIsInfinity() const
+{
+	return isInfinity;
+}
+void RealNumberBound::setIsInfinity(bool const newIsInfinity)
+{
+	isInfinity = newIsInfinity;
+}
 
 Integer* RealNumberBound::getSignificand() const
 {
@@ -59,6 +90,20 @@ void RealNumberBound::setExponent(Integer* const& newExponent)
 
 void RealNumberBound::printByte() const
 {
+	if(getIsInfinity())
+	{
+		if(getSignificand()->getSign())
+		{
+			cout<<"inf"<<endl;
+			return;
+		}
+		else
+		{
+			cout<<"-inf"<<endl;
+			return;
+		}
+	}
+	
 	if(getSignificand()->getIsZero())
 	{
 		cout<<"0"<<endl;
@@ -93,8 +138,20 @@ void RealNumberBound::printByte() const
 //verification
 RealNumberBound::RealNumberBound(RealNumberBound::ID const& element)
 {
+	if(element.IsInfinity)
+	{
+		setIsInfinity(true);
+		Integer* p1 = new Integer;
+		p1->setIsZero(false);
+		p1->setSign(element.Sign);
+		//p1->setMagnitude(nullptr);
+		setSignificand(p1);
+		setExponent(nullptr);
+		return;
+	}
 	if(element.IsZero)
 	{
+		setIsInfinity(false);
 		Integer* const p1 = new Integer(0);
 		setSignificand(p1);
 		setExponent(nullptr);
@@ -102,6 +159,7 @@ RealNumberBound::RealNumberBound(RealNumberBound::ID const& element)
 	}
 	
 	{
+		setIsInfinity(false);
 		Integer* const p1 = new Integer();
 		p1->setIsZero(false);
 		if(element.Sign)
@@ -145,41 +203,52 @@ RealNumberBound::RealNumberBound(RealNumberBound::ID const& element)
 
 bool RealNumberBound::isComplete() const
 {
-	if(getSignificand()==nullptr) {cout<<"Error Code: 26"<<endl; return false;}
+	if(getSignificand()==nullptr) {cout<<"Error Code: 27"<<endl; return false;}
 	Integer const * const p1 = getSignificand();
 	
-	if(p1->getIsZero())
+	if(getIsInfinity())
 	{
-		if(!p1->isSame(0)) {cout<<"Error Code: 27"<<endl; return false;}
-		if(getExponent()!=nullptr) {cout<<"Error Code: 28"<<endl; return false;}
+		if(p1->getIsZero()) {cout<<"Error Code: 28"<<endl; return false;}
+		if(p1->getMagnitude()!=nullptr) {cout<<"Error Code: 29"<<endl; return false;}
+		if(getExponent()!=nullptr) {cout<<"Error Code: 30"<<endl; return false;}
+	}
+	else if(p1->getIsZero())
+	{
+		if(!p1->isSame(0)) {cout<<"Error Code: 31"<<endl; return false;}
+		if(getExponent()!=nullptr) {cout<<"Error Code: 32"<<endl; return false;}
 	}
 	else
 	{
-		if(!p1->isComplete()) {cout<<"Error Code: 29"<<endl; return false;}
-		if(p1->getMagnitude()->getRightEnd()->isZero()) {cout<<"Error Code: 30"<<endl; return false;}
+		if(!p1->isComplete()) {cout<<"Error Code: 33"<<endl; return false;}
+		if(p1->getMagnitude()->getRightEnd()->isZero()) {cout<<"Error Code: 34"<<endl; return false;}
 
-		if(getExponent()==nullptr) {cout<<"Error Code: 31"<<endl; return false;}
-		if(!getExponent()->isComplete()) {cout<<"Error Code: 32"<<endl; return false;}
+		if(getExponent()==nullptr) {cout<<"Error Code: 35"<<endl; return false;}
+		if(!getExponent()->isComplete()) {cout<<"Error Code: 36"<<endl; return false;}
 	}
 	return true;
 }
 
 bool RealNumberBound::isSame(RealNumberBound::ID const& element) const
 {
-	if(!isComplete()) {cout<<"Error Code: 32"<<endl; return false;}
+	if(!isComplete()) {cout<<"Error Code: 37"<<endl; return false;}
 	Integer const * const p1 = getSignificand();
-	if(element.IsZero)
+	if(element.IsInfinity)
 	{
-		if(!p1->getIsZero()) {cout<<"Error Code: 33"<<endl; return false;}
+		if(!getIsInfinity()) {cout<<"Error Code: 38"<<endl; return false;}
+		if(p1->getSign()!=element.Sign) {cout<<"Error Code: 39"<<endl; return false;}
+	}
+	else if(element.IsZero)
+	{
+		if(!p1->getIsZero()) {cout<<"Error Code: 40"<<endl; return false;}
 	}
 	else
 	{
-		if(p1->getSign()!=element.Sign) {cout<<"Error Code: 34"<<endl; return false;}
+		if(p1->getSign()!=element.Sign) {cout<<"Error Code: 41"<<endl; return false;}
 		
 		PositiveInteger const * const p2 = p1->getMagnitude();
 		if(element.m==0)
 		{
-			if(!p2->isSame(element.RightEnd)) {cout<<"Error Code: 35"<<endl; return false;}
+			if(!p2->isSame(element.RightEnd)) {cout<<"Error Code: 42"<<endl; return false;}
 		}
 		else
 		{
@@ -201,18 +270,18 @@ bool RealNumberBound::isSame(RealNumberBound::ID const& element) const
 				Byte const * b2 = p3->getLeftEnd();
 				while(true)
 				{
-					if(!Byte::compare(*b1,*b2).isEqual()) {cout<<"Error Code: 36"<<endl; return false;}
+					if(!Byte::compare(*b1,*b2).isEqual()) {cout<<"Error Code: 43"<<endl; return false;}
 					if(b1->getIsLeftEnd()) break;
-					if(b2->getIsLeftEnd()) {cout<<"Error Code: 37"<<endl; return false;}
+					if(b2->getIsLeftEnd()) {cout<<"Error Code: 44"<<endl; return false;}
 					b1 = b1->getRight();
 					b2 = b2->getRight();
 				}
-				if(!b2->getIsLeftEnd()) {cout<<"Error Code: 38"<<endl; return false;}
+				if(!b2->getIsLeftEnd()) {cout<<"Error Code: 45"<<endl; return false;}
 			}
 			delete p3;
 		}
 		
-		if(!getExponent()->isSame(element.e)) {cout<<"Error Code: 39"<<endl; return false;}
+		if(!getExponent()->isSame(element.e)) {cout<<"Error Code: 46"<<endl; return false;}
 	}
 	return true;
 }
