@@ -34,9 +34,9 @@ public:
 		bool IsInfinity;
 		bool IsZero;
 		bool Sign;
-		unsigned int m;
+		unsigned int Magnitude;
 		unsigned int RightEnd;
-		int e;
+		int Exponent;
 	};
 	RealNumberBound(RealNumberBound::ID const&);
 	bool isComplete() const;

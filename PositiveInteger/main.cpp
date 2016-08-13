@@ -241,9 +241,9 @@ int main()
 		element.IsInfinity = true;
 		element.IsZero = false;
 		element.Sign = true;
-		element.m = 0;
+		element.Magnitude = 0;
 		element.RightEnd = 0;
-		element.e = 0;
+		element.Exponent = 0;
 		list.push_back(element);
 	}
 	{
@@ -252,9 +252,9 @@ int main()
 		element.IsInfinity = true;
 		element.IsZero = false;
 		element.Sign = false;
-		element.m = 0;
+		element.Magnitude = 0;
 		element.RightEnd = 0;
-		element.e = 0;
+		element.Exponent = 0;
 		list.push_back(element);
 	}
 	{
@@ -263,9 +263,9 @@ int main()
 		element.IsInfinity = false;
 		element.IsZero = true;
 		element.Sign = true;
-		element.m = 0;
+		element.Magnitude = 0;
 		element.RightEnd = 0;
-		element.e = 0;
+		element.Exponent = 0;
 		list.push_back(element);
 	}
 	
@@ -279,9 +279,9 @@ int main()
 				element.IsInfinity = false;
 				element.IsZero = false;
 				element.Sign = true;
-				element.m = i;
+				element.Magnitude = i;
 				element.RightEnd = j;
-				element.e = k;
+				element.Exponent = k;
 				list.push_back(element);
 			}
 		}
@@ -297,15 +297,16 @@ int main()
 				element.IsInfinity = false;
 				element.IsZero = false;
 				element.Sign = false;
-				element.m = i;
+				element.Magnitude = i;
 				element.RightEnd = j;
-				element.e = k;
+				element.Exponent = k;
 				list.push_back(element);
 			}
 		}
 	}
 	
 	if(!RealNumberBound::VerifyCopy(list)) cout<<"Error"<<endl;
+	if(!RealNumberBound::VerifyRealNumberBound(list)) cout<<"Error"<<endl;
 	else cout<<"OK"<<endl;
 	//*/
 	

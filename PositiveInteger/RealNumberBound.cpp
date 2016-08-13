@@ -14,9 +14,9 @@ RealNumberBound::RealNumberBound()
 {
 }
 */
-RealNumberBound::RealNumberBound(std::string& m,std::string& e)
+RealNumberBound::RealNumberBound(std::string& Significand,std::string& Exponent)
 {
-	if(m=="inf")
+	if(Significand=="inf")
 	{
 		setIsInfinity(true);
 		Integer* p1 = new Integer;
@@ -26,7 +26,7 @@ RealNumberBound::RealNumberBound(std::string& m,std::string& e)
 		setSignificand(p1);
 		setExponent(nullptr);
 	}
-	else if(m=="-inf")
+	else if(Significand=="-inf")
 	{
 		setIsInfinity(true);
 		Integer* p1 = new Integer;
@@ -39,7 +39,7 @@ RealNumberBound::RealNumberBound(std::string& m,std::string& e)
 	else
 	{
 		setIsInfinity(false);
-		Integer* p1 = new Integer(m);
+		Integer* p1 = new Integer(Significand);
 		setSignificand(p1);
 		if(p1->getIsZero())
 		{
@@ -47,7 +47,7 @@ RealNumberBound::RealNumberBound(std::string& m,std::string& e)
 		}
 		else
 		{
-			p1 = new Integer(e);
+			p1 = new Integer(Exponent);
 			setExponent(p1);
 		}
 	}
@@ -141,7 +141,7 @@ RealNumberBound::RealNumberBound(RealNumberBound::ID const& element)
 	if(element.IsInfinity)
 	{
 		setIsInfinity(true);
-		Integer* p1 = new Integer;
+		Integer* const p1 = new Integer;
 		p1->setIsZero(false);
 		p1->setSign(element.Sign);
 		//p1->setMagnitude(nullptr);
@@ -172,13 +172,13 @@ RealNumberBound::RealNumberBound(RealNumberBound::ID const& element)
 		}
 		
 		PositiveInteger* p2;
-		if(element.m==0)
+		if(element.Magnitude==0)
 		{
 			p2 = new PositiveInteger(element.RightEnd);
 		}
 		else
 		{
-			p2 = new PositiveInteger(element.m);
+			p2 = new PositiveInteger(element.Magnitude);
 			
 			Byte* const b1 = p2->getRightEnd();
 			b1->setIsRightEnd(false);
@@ -196,7 +196,7 @@ RealNumberBound::RealNumberBound(RealNumberBound::ID const& element)
 	}
 	
 	{
-		Integer* const p1 = new Integer(element.e);
+		Integer* const p1 = new Integer(element.Exponent);
 		setExponent(p1);
 	}
 }
@@ -246,13 +246,13 @@ bool RealNumberBound::isSame(RealNumberBound::ID const& element) const
 		if(p1->getSign()!=element.Sign) {cout<<"Error Code: 41"<<endl; return false;}
 		
 		PositiveInteger const * const p2 = p1->getMagnitude();
-		if(element.m==0)
+		if(element.Magnitude==0)
 		{
 			if(!p2->isSame(element.RightEnd)) {cout<<"Error Code: 42"<<endl; return false;}
 		}
 		else
 		{
-			PositiveInteger * const p3 = new PositiveInteger(element.m);
+			PositiveInteger * const p3 = new PositiveInteger(element.Magnitude);
 			{
 				Byte* const b1 = p3->getRightEnd();
 				b1->setIsRightEnd(false);
@@ -281,7 +281,7 @@ bool RealNumberBound::isSame(RealNumberBound::ID const& element) const
 			delete p3;
 		}
 		
-		if(!getExponent()->isSame(element.e)) {cout<<"Error Code: 46"<<endl; return false;}
+		if(!getExponent()->isSame(element.Exponent)) {cout<<"Error Code: 46"<<endl; return false;}
 	}
 	return true;
 }
@@ -292,12 +292,82 @@ bool RealNumberBound::VerifyCopy(std::vector<RealNumberBound::ID>& list)
 	for(unsigned int i=0;i<list.size();i++)
 	{
 		RealNumberBound const * const x1 = new RealNumberBound(list[i]);
-		if(!x1->isComplete()) return false;
-		x1->printByte();
+		//if(!x1->isComplete()) return false;
+		//x1->printByte();
 		if(!x1->isSame(list[i])) return false;
 		delete x1;
 	}
 	
 	return true;
 }
+
+bool RealNumberBound::VerifyRealNumberBound(std::vector<RealNumberBound::ID>& list)
+{
+	for(unsigned int i=0;i<list.size();i++)
+	{
+		
+		std::string Significand;
+		std::string Exponent;
+		if(list[i].IsInfinity)
+		{
+			if(list[i].Sign)
+			{
+				Significand = "inf";
+			}
+			else
+			{
+				Significand = "-inf";
+			}
+		}
+		else if(list[i].IsZero)
+		{
+			Significand = "0";
+		}
+		else
+		{
+			Significand.clear();
+			if(!list[i].Sign) Significand.push_back('-');
+			
+			if(list[i].Magnitude>0)
+			{
+				PositiveInteger const p = PositiveInteger(list[i].Magnitude);
+				Byte const * d1 = p.getLeftEnd();
+				while(true)
+				{
+					Significand.push_back(d1->getByteChar());
+					if(d1->getIsRightEnd()) break;
+					d1 = d1->getRight();
+				}
+			}
+			{
+				PositiveInteger const p = PositiveInteger(list[i].RightEnd);
+				Significand.push_back(p.getLeftEnd()->getByteChar());
+			}
+			
+			if(list[i].Exponent==0) Exponent = "0";
+			else
+			{
+				Exponent.clear();
+				if(list[i].Exponent<0) Exponent.push_back('-');
+				
+				{
+					Integer const p = Integer(list[i].Exponent);
+					Byte const * d1 = p.getMagnitude()->getLeftEnd();
+					while(true)
+					{
+						Exponent.push_back(d1->getByteChar());
+						if(d1->getIsRightEnd()) break;
+						d1 = d1->getRight();
+					}
+				}
+			}
+		}
+		
+		RealNumberBound const * const x2 = new RealNumberBound(Significand,Exponent);
+		if(!x2->isSame(list[i])) return false;
+		delete x2;
+	}
+	return true;
+}
+
 
