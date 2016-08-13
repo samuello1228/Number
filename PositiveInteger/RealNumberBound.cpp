@@ -9,11 +9,11 @@
 #include "RealNumberBound.hpp"
 #include <iostream>
 using namespace std;
-/*
+
 RealNumberBound::RealNumberBound()
 {
 }
-*/
+
 RealNumberBound::RealNumberBound(std::string& Significand,std::string& Exponent)
 {
 	if(Significand=="inf")
@@ -133,6 +133,45 @@ void RealNumberBound::printByte() const
 
 	cout<<"e";
 	getExponent()->printByte();
+}
+
+RealNumberBound* RealNumberBound::copy() const
+{
+	Integer const * const p1 = getSignificand();
+	if(isInfinity)
+	{
+		if(p1->getSign())
+		{
+			std::string s = "inf";
+			RealNumberBound* const y = new RealNumberBound(s,s);
+			return y;
+		}
+		else
+		{
+			std::string s = "-inf";
+			RealNumberBound* const y = new RealNumberBound(s,s);
+			return y;
+		}
+	}
+	else if(p1->getIsZero())
+	{
+		std::string s = "0";
+		RealNumberBound* const y = new RealNumberBound(s,s);
+		return y;
+	}
+	else
+	{
+		RealNumberBound* const y = new RealNumberBound;
+		y->setIsInfinity(false);
+		
+		Integer * const p2 = p1->copy();
+		y->setSignificand(p2);
+		
+		Integer * const p3 = getExponent()->copy();
+		y->setExponent(p3);
+		
+		return y;
+	}
 }
 
 //verification
@@ -286,7 +325,6 @@ bool RealNumberBound::isSame(RealNumberBound::ID const& element) const
 	return true;
 }
 
-
 bool RealNumberBound::VerifyCopy(std::vector<RealNumberBound::ID>& list)
 {
 	for(unsigned int i=0;i<list.size();i++)
@@ -294,8 +332,13 @@ bool RealNumberBound::VerifyCopy(std::vector<RealNumberBound::ID>& list)
 		RealNumberBound const * const x1 = new RealNumberBound(list[i]);
 		//if(!x1->isComplete()) return false;
 		//x1->printByte();
+		
+		RealNumberBound const * const x2 = x1->copy();
 		if(!x1->isSame(list[i])) return false;
+		if(!x2->isSame(list[i])) return false;
+		//x2->printByte();
 		delete x1;
+		delete x2;
 	}
 	
 	return true;

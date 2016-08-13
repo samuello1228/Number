@@ -15,7 +15,7 @@
 class RealNumberBound
 {
 public:
-	//RealNumberBound();
+	RealNumberBound();
 	RealNumberBound(std::string&,std::string&);
 	~RealNumberBound();
 	
@@ -28,6 +28,7 @@ public:
 	
 	void printByte() const;
 	
+	RealNumberBound* copy() const;
 	//verification
 	struct ID
 	{
